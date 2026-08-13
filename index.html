@@ -3,22 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>المنصة الهندسية المتكاملة لمواصفات وتفييش وبرمجة أنظمة الطاقة الشمسية</title>
-
-    <!-- إعدادات تطبيق الموبايل (PWA) -->
+    <title>Solar OS Pro | المنصة الهندسية المتكاملة للطاقة الشمسية</title>
+    
+    <!-- PWA Web App Meta -->
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="theme-color" content="#0b0f17">
-    
+    <meta name="theme-color" content="#0b0f19">
+
     <style>
         :root {
-            --bg-dark: #0b0f17;
-            --panel-bg: #151c28;
-            --accent-green: #10b981;
+            --bg-dark: #0b0f19;
+            --panel-bg: #151d2a;
             --accent-blue: #0ea5e9;
+            --accent-green: #10b981;
             --accent-amber: #f59e0b;
-            --border-color: #232d3f;
+            --accent-red: #ef4444;
+            --border-color: #232f45;
             --text-main: #f8fafc;
             --text-sub: #94a3b8;
         }
@@ -32,54 +32,82 @@
             direction: rtl;
         }
 
-        .header-bar {
+        /* شريط العنوان */
+        .app-header {
             background: var(--panel-bg);
             border-bottom: 1px solid var(--border-color);
-            padding: 20px 20px;
-            text-align: center;
+            padding: 15px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .app-header h1 { margin: 0; font-size: 20px; color: var(--accent-blue); }
+
+        /* شريط التبويبات */
+        .tabs-nav {
+            display: flex;
+            background: #101725;
+            border-bottom: 1px solid var(--border-color);
+            overflow-x: auto;
+        }
+        .tab-btn {
+            padding: 14px 20px;
+            background: transparent;
+            border: none;
+            color: var(--text-sub);
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            white-space: nowrap;
+            transition: 0.2s;
+        }
+        .tab-btn.active {
+            color: var(--accent-blue);
+            border-bottom-color: var(--accent-blue);
+            background: var(--panel-bg);
         }
 
-        .header-bar h1 { margin: 0; font-size: 20px; color: var(--accent-blue); }
-
         .main-container {
-            width: 92%;
+            width: 94%;
             max-width: 1400px;
             margin: 20px auto;
         }
 
-        .grid-3 {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 16px;
-        }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
 
         .card {
             background: var(--panel-bg);
             border: 1px solid var(--border-color);
             border-radius: 12px;
             padding: 20px;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+            margin-bottom: 20px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
         }
 
         .card-title {
             font-size: 16px;
-            font-weight: 700;
+            font-weight: bold;
             color: var(--accent-blue);
             margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
             border-bottom: 1px solid var(--border-color);
-            padding-bottom: 10px;
+            padding-bottom: 8px;
         }
 
-        .form-group { margin-bottom: 15px; }
-        label { display: block; font-size: 13px; color: var(--text-sub); margin-bottom: 6px; font-weight: 600; }
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 15px;
+        }
+
+        .form-group { margin-bottom: 12px; }
+        label { display: block; font-size: 13px; color: var(--text-sub); margin-bottom: 6px; }
         
         select, input {
             width: 100%;
-            padding: 12px;
-            background: #0b0f17;
+            padding: 10px;
+            background: #0b0f19;
             border: 1px solid var(--border-color);
             border-radius: 8px;
             color: var(--text-main);
@@ -88,420 +116,376 @@
             outline: none;
         }
 
-        select:focus, input:focus { border-color: var(--accent-blue); }
-
-        .btn-submit {
+        .btn-action {
             width: 100%;
-            padding: 16px;
+            padding: 14px;
             background: linear-gradient(135deg, #0ea5e9, #0284c7);
             color: white;
             border: none;
-            border-radius: 10px;
-            font-size: 16px;
-            font-weight: 700;
-            cursor: pointer;
-            margin-top: 15px;
-            box-shadow: 0 4px 15px rgba(14, 165, 233, 0.4);
-        }
-
-        .btn-submit:active { transform: scale(0.98); }
-
-        /* الشاشة المحاكية */
-        .lcd-container {
-            background: #05080e;
-            border: 3px solid #334155;
-            border-radius: 14px;
-            padding: 15px;
-            margin-top: 15px;
-        }
-
-        .lcd-screen {
-            background: #001100;
-            border: 2px solid #00ffcc;
             border-radius: 8px;
-            padding: 15px;
-            color: #00ffcc;
-            font-family: monospace;
-            box-shadow: inset 0 0 10px rgba(0, 255, 204, 0.2);
+            font-weight: bold;
+            font-size: 15px;
+            cursor: pointer;
+            margin-top: 10px;
         }
 
-        .lcd-header {
+        /* محاكي شاشة الإنفرتر التفاعلي Real LCD */
+        .simulator-box {
+            background: #000;
+            border: 4px solid #334155;
+            border-radius: 16px;
+            padding: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+            box-shadow: 0 0 25px rgba(14, 165, 233, 0.2);
+        }
+
+        .lcd-display {
+            background: #041208;
+            border: 2px solid #00ff88;
+            border-radius: 10px;
+            padding: 15px;
+            color: #00ff88;
+            font-family: 'Courier New', monospace;
+            min-height: 200px;
+            box-shadow: inset 0 0 15px rgba(0, 255, 136, 0.3);
+        }
+
+        .lcd-header-bar {
             display: flex;
             justify-content: space-between;
-            border-bottom: 1px dashed #00ffcc;
-            padding-bottom: 6px;
-            margin-bottom: 12px;
-            font-size: 12px;
+            border-bottom: 1px dashed #00ff88;
+            padding-bottom: 5px;
+            font-weight: bold;
+            font-size: 13px;
         }
 
-        .lcd-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 8px;
+        .lcd-body {
+            margin-top: 15px;
             text-align: center;
         }
 
-        .lcd-box {
-            border: 1px solid #00ffcc;
-            padding: 8px 4px;
-            border-radius: 6px;
-            background: rgba(0, 255, 204, 0.04);
-            font-size: 11px;
-        }
+        .lcd-param-title { font-size: 14px; color: #a7f3d0; margin-bottom: 5px; }
+        .lcd-param-val { font-size: 28px; font-weight: bold; color: #fff; background: rgba(0,255,136,0.1); padding: 8px; border-radius: 6px; display: inline-block; min-width: 140px; }
+        .lcd-status { margin-top: 15px; font-size: 12px; color: #f59e0b; }
 
-        .lcd-val { font-size: 15px; font-weight: bold; color: #fff; margin-top: 4px; }
-
-        .inv-buttons {
+        .keypad {
             display: flex;
             justify-content: center;
-            gap: 10px;
-            margin-top: 12px;
+            gap: 12px;
+            margin-top: 20px;
         }
 
-        .inv-btn {
+        .key-btn {
             background: #1e293b;
             border: 1px solid var(--accent-blue);
-            color: #fff;
-            padding: 8px 12px;
-            border-radius: 6px;
-            font-size: 11px;
+            color: white;
+            padding: 10px 18px;
+            border-radius: 8px;
             font-weight: bold;
+            cursor: pointer;
+            transition: 0.1s;
         }
+        .key-btn:active { background: var(--accent-blue); transform: scale(0.95); }
 
-        .res-table {
+        /* جداول التفييش */
+        .table-custom {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 12px;
-            background: var(--panel-bg);
-            border-radius: 8px;
-            overflow: hidden;
-            font-size: 13px;
-        }
-
-        .res-table th, .res-table td {
-            padding: 10px;
-            border: 1px solid var(--border-color);
-            text-align: center;
-        }
-
-        .res-table th { background: #1a2332; color: var(--accent-blue); }
-
-        .info-box {
-            background: #0b0f17;
-            border-radius: 8px;
-            padding: 15px;
             margin-top: 10px;
-            line-height: 1.7;
+        }
+        .table-custom th, .table-custom td {
+            border: 1px solid var(--border-color);
+            padding: 10px;
+            text-align: center;
             font-size: 13px;
         }
+        .table-custom th { background: #101725; color: var(--accent-blue); }
 
-        .pin-tag {
-            display: inline-block;
-            padding: 2px 6px;
-            background: #1e293b;
-            border: 1px solid var(--accent-blue);
+        .badge {
+            padding: 3px 8px;
             border-radius: 4px;
-            color: #00ffcc;
             font-weight: bold;
+            font-size: 11px;
         }
-
-        /* حاوية النتائج مخفية افتراضياً */
-        #results {
-            display: none;
-            margin-top: 30px;
-            padding-top: 10px;
-            border-top: 2px dashed var(--border-color);
-        }
+        .badge-green { background: rgba(16, 185, 129, 0.2); color: var(--accent-green); border: 1px solid var(--accent-green); }
+        .badge-amber { background: rgba(245, 158, 11, 0.2); color: var(--accent-amber); border: 1px solid var(--accent-amber); }
     </style>
 </head>
 <body>
 
-<div class="header-bar">
-    <h1>☀️ SOLAR OS | حاسبة وتفييش وبرمجة أنظمة الطاقة الشمسية</h1>
+<div class="app-header">
+    <h1>☀️ Solar OS Pro | المنصة الهندسية المتكاملة</h1>
+    <span class="badge badge-green">v3.0 Interactive</span>
+</div>
+
+<!-- شريط التبويبات الرئيسي -->
+<div class="tabs-nav">
+    <button class="tab-btn active" onclick="switchTab('tab-calculator')">🧮 حاسبة الأحمال والنظام</button>
+    <button class="tab-btn" onclick="switchTab('tab-pinout')">🔌 مصفوفة تفييش BMS</button>
+    <button class="tab-btn" onclick="switchTab('tab-simulator')">🖥️ محاكي شاشة الإنفرتر 1:1</button>
+    <button class="tab-btn" onclick="switchTab('tab-knowledge')">📚 دليل الأعطال والمواصفات</button>
 </div>
 
 <div class="main-container">
-    
-    <div class="grid-3">
-        
-        <!-- 1. الإنفرتر -->
+
+    <!-- TAB 1: حاسبة الأحمال -->
+    <div id="tab-calculator" class="tab-content active">
         <div class="card">
-            <div class="card-title">⚡ 1. قدرة الإنفرتر والماركة</div>
-            <div class="form-group">
-                <label>قدرة الإنفرتر (kW):</label>
-                <input type="number" id="sys-kw" value="5.0" step="0.1">
+            <div class="card-title">1. حساب أحمال المنزل والتكييف</div>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>إنارة وأجهزة خفيفة (Watt):</label>
+                    <input type="number" id="load-light" value="500">
+                </div>
+                <div class="form-group">
+                    <label>ثلاجات وفريزر (Watt):</label>
+                    <input type="number" id="load-fridge" value="600">
+                </div>
+                <div class="form-group">
+                    <label>مكيفات (عدد المكيفات 1.5 حصان):</label>
+                    <input type="number" id="load-ac" value="1">
+                </div>
+                <div class="form-group">
+                    <label>مضخة مياه / سخان (Watt):</label>
+                    <input type="number" id="load-pump" value="1000">
+                </div>
             </div>
-            <div class="form-group">
-                <label>ماركة الإنفرتر:</label>
-                <select id="inv-brand">
-                    <option value="Deye" selected>Deye Hybrid (داي هجين)</option>
-                    <option value="Growatt">Growatt SPF/SPH (غروات)</option>
-                    <option value="Felicity-Inv">Felicitysolar (فيليستي)</option>
-                    <option value="Voltronic">Voltronic Axpert / Must (أكسبرت)</option>
-                    <option value="Victron">Victron Energy (فيكترون)</option>
-                    <option value="Luxpower">Luxpower SNA/LXP (لكس باور)</option>
-                </select>
-            </div>
+            <button class="btn-action" onclick="calculateSystem()">حساب المواصفات الهندسية المطلوبة ⚡</button>
         </div>
 
-        <!-- 2. الألواح -->
-        <div class="card">
-            <div class="card-title">☀️ 2. نوع وقدرة الألواح</div>
-            <div class="form-group">
-                <label>موديل اللوح الشمسي:</label>
-                <select id="panel-model">
-                    <option value="550-Longi">Longi Solar 550W Hi-MO 5</option>
-                    <option value="580-Jinko" selected>Jinko Solar 580W N-Type Tiger Neo</option>
-                    <option value="600-Canadian">Canadian Solar 600W HiKu7</option>
-                    <option value="670-Trina">Trina Solar 670W Vertex</option>
-                    <option value="570-JA">JA Solar 570W DeepBlue 4.0</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label>طول كابل الألواح DC (متر):</label>
-                <input type="number" id="dc-cable-len" value="25">
-            </div>
+        <div id="calc-results" class="card" style="display:none; border-color: var(--accent-green);">
+            <div class="card-title" style="color:var(--accent-green);">نتائج التصميم والتوصية الهندسية:</div>
+            <div id="calc-summary-text"></div>
         </div>
-
-        <!-- 3. البطارية -->
-        <div class="card">
-            <div class="card-title">🔋 3. خيارات التخزين والـ BMS</div>
-            <div class="form-group">
-                <label>سعة البطارية (kWh):</label>
-                <input type="number" id="batt-kwh" value="10.0" step="0.5">
-            </div>
-            <div class="form-group">
-                <label>نوع وماركة البطارية:</label>
-                <select id="batt-brand">
-                    <option value="Felicity-Batt" selected>Felicity LiFePO4 (فيليستي ليثيوم)</option>
-                    <option value="Pylontech">Pylontech (بايلونتيك US3000C/US5000)</option>
-                    <option value="Deye-Batt">Deye Wall-Mounted (داي ليثيوم)</option>
-                    <option value="Narada-Dyness">Narada / Dyness (نارادا / داينس)</option>
-                    <option value="GEL-Generic">بطاريات جل / Tubular GEL (بدون BMS)</option>
-                </select>
-            </div>
-        </div>
-
     </div>
 
-    <button class="btn-submit" onclick="generateSystemDesign()">توليد التقرير الهندسي والمحاكاة التفاعلية 🚀</button>
-
-    <!-- قسم النتائج -->
-    <div id="results">
-        <div class="card-title" style="margin-top: 10px;">🖥️ محاكاة واجهة وبرمجة إنفرتر (<span id="inv-display-title">Deye</span>)</div>
-        
-        <div class="lcd-container">
-            <div class="lcd-screen" id="lcd-screen-box"></div>
-            <div class="inv-buttons">
-                <button class="inv-btn" onclick="lcdNavigate('ESC')">ESC / BACK</button>
-                <button class="inv-btn" onclick="lcdNavigate('UP')">▲ UP</button>
-                <button class="inv-btn" onclick="lcdNavigate('DOWN')">▼ DOWN</button>
-                <button class="inv-btn" onclick="lcdNavigate('ENTER')">ENTER / SET</button>
+    <!-- TAB 2: مصفوفة تفييش البطاريات والإنفرترات -->
+    <div id="tab-pinout" class="tab-content">
+        <div class="card">
+            <div class="card-title">اختر الإنفرتر والبطارية بشكل مستقل تماماً:</div>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>ماركة الإنفرتر المستهدف:</label>
+                    <select id="pin-inv" onchange="updatePinoutTable()">
+                        <option value="Deye">Deye Hybrid</option>
+                        <option value="Growatt">Growatt SPF/SPH</option>
+                        <option value="Voltronic">Voltronic Axpert / Must</option>
+                        <option value="Victron">Victron Energy</option>
+                        <option value="Luxpower">Luxpower SNA/LXP</option>
+                        <option value="Felicity-Inv">Felicity Inverter</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>ماركة البطارية الليثيوم:</label>
+                    <select id="pin-batt" onchange="updatePinoutTable()">
+                        <option value="Felicity">Felicity LiFePO4</option>
+                        <option value="Pylontech">Pylontech (US3000C/US5000)</option>
+                        <option value="Dyness">Dyness / Narada</option>
+                        <option value="Deye-Batt">Deye Lithium</option>
+                        <option value="Shoto">Shoto Lithium</option>
+                    </select>
+                </div>
             </div>
         </div>
 
-        <div class="card-title" style="margin-top: 25px;">⚙️ دليل البرمجة والإعدادات (Configuration Guide)</div>
-        <div class="info-box" id="config-guide-box" style="border:1px solid var(--accent-amber);"></div>
+        <div class="card">
+            <div class="card-title">مخطط تفييش كابل التواصل BMS (RJ45 Cable Mapping)</div>
+            <div id="pinout-matrix-container"></div>
+        </div>
+    </div>
 
-        <div class="card-title" style="margin-top: 25px;">🔌 خريطة تفييش كابل BMS المخصص (RJ45 Cable Pinout)</div>
-        <div class="info-box" id="bms-pinout-box" style="border:1px solid var(--accent-green);"></div>
+    <!-- TAB 3: محاكي الشاشة التفاعلي -->
+    <div id="tab-simulator" class="tab-content">
+        <div class="card">
+            <div class="card-title">اختر الإنفرتر للبدء بالمحاكاة التفاعلية للشاشة:</div>
+            <div style="max-width: 300px; margin-bottom: 15px;">
+                <select id="sim-inv-brand" onchange="initSimulator()">
+                    <option value="Deye">Deye Touch/Menu Interface</option>
+                    <option value="Growatt">Growatt SPF 3-Button Screen</option>
+                    <option value="Voltronic">Voltronic Axpert LCD Menu</option>
+                </select>
+            </div>
 
-        <div class="card-title" style="margin-top: 25px;">📱 تطبيق الموبايل وإعداد الإنترنت</div>
-        <div class="info-box" id="app-setup-box" style="border:1px solid var(--accent-blue);"></div>
+            <!-- الشاشة التفاعلية -->
+            <div class="simulator-box">
+                <div class="lcd-display">
+                    <div class="lcd-header-bar">
+                        <span id="sim-header-title">DEYE HYBRID</span>
+                        <span id="sim-header-mode">MODE: MAIN</span>
+                    </div>
+                    <div class="lcd-body">
+                        <div class="lcd-param-title" id="sim-param-title">OUTPUT PRIORITY</div>
+                        <div class="lcd-param-val" id="sim-param-val">SUB</div>
+                        <div class="lcd-status" id="sim-status-text">اضغط ENTER للدخول إلى القوائم والبرمجة</div>
+                    </div>
+                </div>
+
+                <div class="keypad">
+                    <button class="key-btn" onclick="simKeyPress('ESC')">ESC</button>
+                    <button class="key-btn" onclick="simKeyPress('UP')">▲ UP</button>
+                    <button class="key-btn" onclick="simKeyPress('DOWN')">▼ DOWN</button>
+                    <button class="key-btn" onclick="simKeyPress('ENTER')">ENTER / SET</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TAB 4: دليل الأعطال والمواصفات -->
+    <div id="tab-knowledge" class="tab-content">
+        <div class="card">
+            <div class="card-title">📚 جدول أكواد الأعطال الشائعة (Fault Codes) وكيفية معالجتها</div>
+            <table class="table-custom">
+                <thead>
+                    <tr>
+                        <th>رمز العطل</th>
+                        <th>المعنى الهندسي</th>
+                        <th>السبب المحتمل</th>
+                        <th>الإجراء المطلوبة للموقع</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="badge badge-amber">F04 / F56</span></td>
+                        <td>Battery Voltage Low</td>
+                        <td>انخفاض جهد البطارية تحت الحد المسموح</td>
+                        <td>افحص مفتاح البطارية، تأكد من ضبط Cut-off Voltage.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge badge-amber">F13 / F58</span></td>
+                        <td>BMS Communication Error</td>
+                        <td>فقدان الاتصال بين الإنفرتر والبطارية</td>
+                        <td>افحص كابل الـ RJ45 والدبابيس (Pins) وبروتوكول Communication.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge badge-amber">F20 / F52</span></td>
+                        <td>Bus Volt High / Overload</td>
+                        <td>ارتفاع مفاجئ في الجهد الداخلي أو الحمل</td>
+                        <td>افصل الأحمال الثقيلة وإعادة تشغيل الإنفرتر.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 
 </div>
 
 <script>
-    function generateSystemDesign() {
-        try {
-            // جلب القيم بأمان مع حماية من الأخطاء
-            let invKwElem = document.getElementById('sys-kw');
-            let invBrandElem = document.getElementById('inv-brand');
-            let battBrandElem = document.getElementById('batt-brand');
-
-            let invKw = invKwElem ? parseFloat(invKwElem.value) || 5.0 : 5.0;
-            let invBrand = invBrandElem ? invBrandElem.value : "Deye";
-            let battBrand = battBrandElem ? battBrandElem.value : "Felicity-Batt";
-
-            document.getElementById('inv-display-title').innerText = invBrand;
-
-            // بناء المكونات
-            renderLcdScreen(invBrand, battBrand, invKw);
-            renderConfigGuide(invBrand, battBrand);
-            renderPinoutGuide(invBrand, battBrand);
-            renderAppSetup(invBrand);
-
-            // إظهار النتائج
-            let resultsDiv = document.getElementById('results');
-            resultsDiv.style.display = 'block';
-
-            // التمرير التلقائي للأسفل للتركيز على التقرير مباشرة
-            resultsDiv.scrollIntoView({ behavior: 'smooth' });
-
-        } catch (err) {
-            alert("حدث خطأ أثناء توليد التقرير: " + err.message);
-        }
+    // التنقل بين التبويبات
+    function switchTab(tabId) {
+        document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+        
+        document.getElementById(tabId).classList.add('active');
+        event.currentTarget.classList.add('active');
     }
 
-    function renderLcdScreen(invBrand, battBrand, invKw) {
-        let box = document.getElementById('lcd-screen-box');
-        let battStatus = (battBrand === 'GEL-Generic') ? "LEAD-ACID (NO BMS)" : "BMS: COMM_OK";
+    // 1. منطق حساب الأحمال
+    function calculateSystem() {
+        let light = parseFloat(document.getElementById('load-light').value) || 0;
+        let fridge = parseFloat(document.getElementById('load-fridge').value) || 0;
+        let acCount = parseFloat(document.getElementById('load-ac').value) || 0;
+        let pump = parseFloat(document.getElementById('load-pump').value) || 0;
 
-        if (invBrand === "Deye") {
-            box.style.borderColor = "#00ffcc";
-            box.style.background = "#001100";
-            box.innerHTML = `
-                <div class="lcd-header">
-                    <span>DEYE HYBRID INVERTER [${invKw}kW]</span>
-                    <span style="color:#10b981;">${battStatus}</span>
-                </div>
-                <div class="lcd-grid">
-                    <div class="lcd-box"><div>PV POWER</div><div class="lcd-val">${Math.round(invKw*800)} W</div></div>
-                    <div class="lcd-box"><div>LOAD</div><div class="lcd-val">${Math.round(invKw*500)} W</div></div>
-                    <div class="lcd-box"><div>BATTERY</div><div class="lcd-val">96% (53.2V)</div></div>
-                </div>
-            `;
-        } else if (invBrand === "Growatt") {
-            box.style.borderColor = "#f59e0b";
-            box.style.background = "#1a1000";
-            box.innerHTML = `
-                <div class="lcd-header">
-                    <span style="color:#f59e0b;">GROWATT SPF/SPH SYSTEM</span>
-                    <span>ONLINE</span>
-                </div>
-                <div class="lcd-grid">
-                    <div class="lcd-box"><div>INPUT PV</div><div class="lcd-val" style="color:#f59e0b;">${Math.round(invKw*800)} W</div></div>
-                    <div class="lcd-box"><div>OUTPUT AC</div><div class="lcd-val">230V / 50Hz</div></div>
-                    <div class="lcd-box"><div>Li-BMS</div><div class="lcd-val">${battStatus}</div></div>
-                </div>
-            `;
-        } else if (invBrand === "Voltronic") {
-            box.style.borderColor = "#0ea5e9";
-            box.style.background = "#000f1a";
-            box.innerHTML = `
-                <div class="lcd-header">
-                    <span style="color:#0ea5e9;">AXPERT / MUST SOLAR</span>
-                    <span>MODE: HYBRID</span>
-                </div>
-                <div class="lcd-grid">
-                    <div class="lcd-box"><div>SOLAR A</div><div class="lcd-val">380V DC</div></div>
-                    <div class="lcd-box"><div>INV LOAD</div><div class="lcd-val">45%</div></div>
-                    <div class="lcd-box"><div>BATT TYPE</div><div class="lcd-val">P12: LIB</div></div>
-                </div>
-            `;
-        } else {
-            box.style.borderColor = "#10b981";
-            box.style.background = "#001a0d";
-            box.innerHTML = `
-                <div class="lcd-header">
-                    <span>${invBrand.toUpperCase()} SYSTEM</span>
-                    <span>STATUS: NORMAL</span>
-                </div>
-                <div class="lcd-grid">
-                    <div class="lcd-box"><div>GEN POWER</div><div class="lcd-val">${Math.round(invKw*850)} W</div></div>
-                    <div class="lcd-box"><div>CONSUMPTION</div><div class="lcd-val">${Math.round(invKw*400)} W</div></div>
-                    <div class="lcd-box"><div>SOC</div><div class="lcd-val">98%</div></div>
-                </div>
-            `;
-        }
-    }
-
-    function renderConfigGuide(invBrand, battBrand) {
-        let cfg = "";
-        if (invBrand === "Deye") {
-            cfg = `
-                <p><b>خطوات برمجة شاشة Deye للتعرف على البطارية (${battBrand}):</b></p>
-                <ol>
-                    <li>اضغط على رمز العجلة (Settings) في الشاشة الرئيسية.</li>
-                    <li>اختر <b>Battery Setting</b> ثم اذهب لتبويب <b>Batt Mode</b>.</li>
-                    <li>اختر <b>Lithium</b> وحدد الكود (Protocol Code):
-                        <ul>
-                            <li>إذا كانت البطارية Felicity: اضبط الرقم على <b>00</b> أو <b>12</b>.</li>
-                            <li>إذا كانت Pylontech: اضبط الرقم على <b>00</b>.</li>
-                        </ul>
-                    </li>
-                    <li>اختر تبويب <b>Max Charge / Discharge</b> وحدد أمبير الشحن المسموح (مثلاً 50A إلى 100A).</li>
-                    <li>اضغط <b>AGREE / OK</b> لحفظ الإعدادات.</li>
-                </ol>
-            `;
-        } else if (invBrand === "Growatt") {
-            cfg = `
-                <p><b>خطوات برمجة شاشة Growatt (باستخدام الأزرار):</b></p>
-                <ol>
-                    <li>اضغط مع الاستمرار على زر <b>ENTER</b> لمدة 3 ثوانٍ للدخول إلى قائمة البرمجة.</li>
-                    <li>انتقل برقم الخيار إلى <b>Program 05 (Battery Type)</b> واضغط ENTER.</li>
-                    <li>غير القيمة من <code>USE / AGN</code> إلى <b style="color:var(--accent-blue);">LI</b> واضغط ENTER.</li>
-                    <li>سيظهر خيار <b>Program 36 (Protocol Code)</b>: اختر كود التواصل (مثلاً <code>L51</code> لبطاريات Felicity أو <code>L01</code> لبطاريات Pylontech).</li>
-                    <li>اضغط <b>ESC</b> للخروج والحفظ.</li>
-                </ol>
-            `;
-        } else if (invBrand === "Voltronic") {
-            cfg = `
-                <p><b>خطوات برمجة إنفرتر Voltronic / Axpert:</b></p>
-                <ol>
-                    <li>اضغط استمرار على زر <b>ENTER</b> لمدة 3 ثوانٍ.</li>
-                    <li>انتقل إلى <b>Program 05</b>: قم بتغييره إلى <b>LIB / PYL</b> (Lithium Battery Protocol).</li>
-                    <li>انتقل إلى <b>Program 02</b> (أقصى أمبير شحن): حدد القيمة الموصى بها (مثلاً 60A).</li>
-                    <li>انتقل إلى <b>Program 12 / 13</b> لتحديد جهود الرجوع إلى الشبكة والانفصال.</li>
-                </ol>
-            `;
-        } else {
-            cfg = `
-                <p><b>إعدادات البرمجة العامة لـ ${invBrand}:</b></p>
-                <ul>
-                    <li>تأكد من ضبط نوع البطارية على <b>Lithium / BMS Mode</b>.</li>
-                    <li>ضبط جهد Cut-off للبطارية عند 44.0V لإنفرترات 48V.</li>
-                    <li>تأكد من تفعيل بروتوكول CAN / RS485 المباشر من القائمة الداخلية.</li>
-                </ul>
-            `;
-        }
-        document.getElementById('config-guide-box').innerHTML = cfg;
-    }
-
-    function renderPinoutGuide(invBrand, battBrand) {
-        let invPinCANH = "Pin 4", invPinCANL = "Pin 5";
-        let battPinCANH = "Pin 4", battPinCANL = "Pin 5";
-
-        if (invBrand === "Victron") { invPinCANH = "Pin 7"; invPinCANL = "Pin 8"; }
-        if (invBrand === "Voltronic") { invPinCANH = "Pin 1"; invPinCANL = "Pin 2"; }
-
-        if (battBrand === "Narada-Dyness") { battPinCANH = "Pin 2"; battPinCANL = "Pin 1"; }
+        let totalLoadWatts = light + fridge + (acCount * 1500) + pump;
+        let invKwNeeded = (totalLoadWatts * 1.25 / 1000).toFixed(1);
+        let panelsCount = Math.ceil((totalLoadWatts * 5) / 580); // ألواح 580 واط
+        let battKwhNeeded = ((totalLoadWatts * 8) / 1000 / 0.8).toFixed(1); // تخزين 8 ساعات
 
         let html = `
-            <p><b>ترتيب كابل الـ RJ45 بين إنفرتر (${invBrand}) وبطارية (${battBrand}):</b></p>
-            <table class="res-table">
+            <p><b>مجموع الأحمال اللحظية:</b> ${totalLoadWatts} Watt</p>
+            <p>⚡ <b>قدرة الإنفرتر الموصى بها:</b> <span style="color:var(--accent-blue); font-weight:bold;">${invKwNeeded} kW</span> (أو أقرب طراز أعلى مثل 6kW / 8kW)</p>
+            <p>☀️ <b>عدد الألواح الشمسية (580W N-Type):</b> <span style="color:var(--accent-amber); font-weight:bold;">${panelsCount} ألواح</span></p>
+            <p>🔋 <b>سعة البطاريات المطلوب تخزينها:</b> <span style="color:var(--accent-green); font-weight:bold;">${battKwhNeeded} kWh</span> (بطارية ليثيوم 48V بسعة 200Ah تقريباً)</p>
+            <p>🔌 <b>قاطع DC للألواح:</b> 25A 600V/1000V DC | <b>قاطع البطارية:</b> 125A to 200A DC MCCB</p>
+        `;
+        document.getElementById('calc-summary-text').innerHTML = html;
+        document.getElementById('calc-results').style.display = 'block';
+    }
+
+    // 2. منطق مصفوفة التفييش المباشرة
+    function updatePinoutTable() {
+        let inv = document.getElementById('pin-inv').value;
+        let batt = document.getElementById('pin-batt').value;
+
+        let invPinH = "Pin 4", invPinL = "Pin 5";
+        let battPinH = "Pin 4", battPinL = "Pin 5";
+
+        if (inv === "Victron") { invPinH = "Pin 7"; invPinL = "Pin 8"; }
+        if (inv === "Voltronic") { invPinH = "Pin 1 (RS485-A)"; invPinL = "Pin 2 (RS485-B)"; }
+
+        if (batt === "Dyness") { battPinH = "Pin 2"; battPinL = "Pin 1"; }
+
+        let html = `
+            <p>جدول التوصيل المباشر بين <b>${inv}</b> و <b>${batt}</b>:</p>
+            <table class="table-custom">
                 <thead>
                     <tr>
-                        <th>جهة الإنفرتر (${invBrand})</th>
-                        <th>جهة البطارية (${battBrand})</th>
+                        <th>جهة الإنفرتر (${inv})</th>
+                        <th>جهة البطارية (${batt})</th>
                         <th>نوع الإشارة</th>
-                        <th>لون السلك (T568B Standard)</th>
+                        <th>معيار لون السلك (T568B)</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td><span class="pin-tag">${invPinCANH}</span></td>
-                        <td><span class="pin-tag">${battPinCANH}</span></td>
-                        <td><b>CAN_H</b></td>
+                        <td><b>${invPinH}</b></td>
+                        <td><b>${battPinH}</b></td>
+                        <td><span class="badge badge-green">CAN_H / RS485_A</span></td>
                         <td>أزرق (Blue)</td>
                     </tr>
                     <tr>
-                        <td><span class="pin-tag">${invPinCANL}</span></td>
-                        <td><span class="pin-tag">${battPinCANL}</span></td>
-                        <td><b>CAN_L</b></td>
-                        <td>أزرق / أبيض (Blue/White)</td>
+                        <td><b>${invPinL}</b></td>
+                        <td><b>${battPinL}</b></td>
+                        <td><span class="badge badge-green">CAN_L / RS485_B</span></td>
+                        <td>أزرق/أبيض (Blue/White)</td>
+                    </tr>
+                    <tr>
+                        <td>Pin 8 (GND)</td>
+                        <td>Pin 2 / 8 (GND)</td>
+                        <td>Ground Signal</td>
+                        <td>بني (Brown)</td>
                     </tr>
                 </tbody>
             </table>
+            <p style="margin-top:10px; font-size:12px; color:var(--accent-amber);">⚠️ ملاحظة: تأكد من ضبط مفاتيح الـ DIP Switches على بطارية ${batt} برقم العنوان Master Address = 1.</p>
         `;
-        document.getElementById('bms-pinout-box').innerHTML = html;
+        document.getElementById('pinout-matrix-container').innerHTML = html;
     }
 
-    function renderAppSetup(invBrand) {
-        let appName = "Solarman Smart";
-        if (invBrand === "Growatt") appName = "ShinePhone";
-        if (invBrand === "Victron") appName = "VictronConnect VRM";
-        if (invBrand === "Luxpower") appName = "LuxpowerView";
+    // 3. محاكي الشاشة التفاعلي (State Machine)
+    let simState = {
+        mode: 'MAIN', // MAIN, MENU, EDIT
+        paramIndex: 0,
+        params: [
+            { code: 'P01: Output Priority', val: 'SUB', options: ['SUB', 'USB', 'SBU'] },
+            { code: 'P05: Battery Type', val: 'LI', options: ['LI', 'USE', 'AGM', 'FLD'] },
+            { code: 'P12: Back to Grid Volt', val: '48.0V', options: ['46.0V', '48.0V', '50.0V'] },
+            { code: 'P36: BMS Protocol', val: 'L51', options: ['L51', 'L01', '00', '12'] }
+        ]
+    };
 
-        document.getElementById('app-setup-b
+    function initSimulator() {
+        simState.mode = 'MAIN';
+        simState.paramIndex = 0;
+        updateSimDisplay();
+    }
+
+    function updateSimDisplay() {
+        let brand = document.getElementById('sim-inv-brand').value;
+        document.getElementById('sim-header-title').innerText = brand.toUpperCase();
+        document.getElementById('sim-header-mode').innerText = "MODE: " + simState.mode;
+
+        let currentParam = simState.params[simState.paramIndex];
+
+        if (simState.mode === 'MAIN') {
+            document.getElementById('sim-param-title').innerText = "SYSTEM STATUS";
+            document.getElementById('sim-param-val').innerText = "READY / 230V";
+            document.getElementById('sim-status-text').innerText = "اضغط ENTER للدخول لقائمة البرمجة والبرامترات";
+        } else if (simState.mode === 'MENU') {
+            document.getElementById('sim-param-title').innerText = currentParam.code;
+            document.getElementById('sim-param-val').innerText = currentParam.val;
+            document.getElementById('sim-status-text').innerText = "استخدم ▲ ▼ للتنقل | اضغط ENTER لتعديل الخيار";
+        } else if (simState.mode === 'EDIT') {
+            document.getElementById('sim-param-title').innerText = "EDITING: " + currentParam.code;
+            document.getElementById('sim-param-val').innerText = "► " + currentPar
