@@ -3,451 +3,468 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>المحاكي والمهندس الشامل لأنظمة الطاقة الشمسية</title>
+    <title>المنصة الهندسية لتصميم ومحاكاة أنظمة الطاقة الشمسية</title>
     <style>
         :root {
-            --bg-main: #090d16;
-            --card-bg: #111827;
-            --accent: #10b981;
-            --accent-blue: #38bdf8;
-            --accent-yellow: #f59e0b;
-            --text-main: #f3f4f6;
-            --text-muted: #9ca3af;
-            --border-color: #1f2937;
+            --bg-dark: #0b0f17;
+            --panel-bg: #151c28;
+            --accent-green: #10b981;
+            --accent-blue: #0ea5e9;
+            --accent-amber: #f59e0b;
+            --border-color: #232d3f;
+            --text-main: #f8fafc;
+            --text-sub: #94a3b8;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-main);
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-dark);
             color: var(--text-main);
             margin: 0;
-            padding: 20px;
+            padding: 0;
             direction: rtl;
         }
 
-        /* جعل الموقع ضخماً وممتداً على كامل الشاشة */
-        .wrapper {
-            width: 98%;
-            max-width: 1800px;
-            margin: 0 auto;
+        .header-bar {
+            background: var(--panel-bg);
+            border-bottom: 1px solid var(--border-color);
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        h1 {
-            text-align: center;
+        .header-bar h1 {
+            margin: 0;
+            font-size: 22px;
             color: var(--accent-blue);
-            font-size: 28px;
-            margin-bottom: 25px;
-            border-bottom: 2px solid var(--border-color);
-            padding-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
-        .section-title {
-            background: #1f2937;
-            padding: 12px 20px;
-            border-radius: 8px;
-            color: var(--accent-blue);
-            font-size: 18px;
-            font-weight: bold;
-            margin-top: 30px;
-            margin-bottom: 15px;
-            border-right: 5px solid var(--accent-blue);
+        .main-container {
+            width: 96%;
+            max-width: 1700px;
+            margin: 30px auto;
         }
 
-        .grid-layout {
+        .grid-3 {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
             gap: 20px;
         }
 
         .card {
-            background: var(--card-bg);
-            padding: 20px;
-            border-radius: 12px;
+            background: var(--panel-bg);
             border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.3);
         }
 
-        .form-group { margin-bottom: 15px; }
-        label { display: block; font-weight: 600; margin-bottom: 8px; color: var(--text-muted); font-size: 14px; }
-        input, select {
+        .card-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--accent-blue);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+        }
+
+        .form-group { margin-bottom: 18px; }
+        label { display: block; font-size: 13px; color: var(--text-sub); margin-bottom: 8px; font-weight: 600; }
+        
+        select, input {
             width: 100%;
-            padding: 12px;
+            padding: 12px 14px;
+            background: #0b0f17;
             border: 1px solid var(--border-color);
             border-radius: 8px;
-            background: #0b0f19;
             color: var(--text-main);
+            font-size: 14px;
             box-sizing: border-box;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        select:focus, input:focus { border-color: var(--accent-blue); }
+
+        .btn-submit {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #0ea5e9, #0284c7);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: opacity 0.2s;
+        }
+
+        .btn-submit:hover { opacity: 0.9; }
+
+        /* شاشة الانفرتر الاحترافية LCD */
+        .lcd-display {
+            background: #000;
+            border: 4px solid #334155;
+            border-radius: 16px;
+            padding: 25px;
+            color: #00ffcc;
+            font-family: 'Consolas', 'Courier New', monospace;
+            box-shadow: inset 0 0 20px rgba(0, 255, 204, 0.15);
+            margin-top: 25px;
+        }
+
+        .lcd-header {
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px dashed #00ffcc;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
             font-size: 14px;
         }
 
-        /* جدول الأحمال الشامل */
-        .table-responsive { overflow-x: auto; }
-        .load-table { width: 100%; border-collapse: collapse; margin-top: 10px; background: var(--card-bg); }
-        .load-table th, .load-table td { border: 1px solid var(--border-color); padding: 10px; text-align: center; font-size: 14px; }
-        .load-table th { background: #1f2937; color: var(--accent-blue); }
-
-        .btn-calc {
-            width: 100%;
-            padding: 18px;
-            background: linear-gradient(135deg, #059669, #10b981);
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-size: 20px;
-            font-weight: bold;
-            cursor: pointer;
-            margin-top: 30px;
-            box-shadow: 0 4px 20px rgba(16, 185, 129, 0.3);
-        }
-
-        /* ---------------- محاكي شاشة الانفرتر ---------------- */
-        .inverter-screen {
-            background: #000000;
-            border: 10px solid #334155;
-            border-radius: 20px;
-            padding: 25px;
-            color: #00ffcc;
-            font-family: 'Courier New', Courier, monospace;
-            box-shadow: inset 0 0 15px rgba(0,255,204,0.2), 0 10px 30px rgba(0,0,0,0.8);
-            margin-top: 20px;
-        }
-
-        .screen-header {
-            display: flex;
-            justify-content: space-between;
-            border-bottom: 2px dashed #00ffcc;
-            padding-bottom: 10px;
-            margin-bottom: 20px;
-            font-weight: bold;
-        }
-
-        .flow-diagram {
+        .lcd-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
+            grid-template-columns: repeat(3, 1fr);
             gap: 15px;
             text-align: center;
-            align-items: center;
         }
 
-        .flow-box {
-            border: 2px solid #00ffcc;
-            padding: 15px;
-            border-radius: 10px;
-            background: rgba(0, 255, 204, 0.05);
+        .lcd-box {
+            border: 1px solid #00ffcc;
+            padding: 12px;
+            border-radius: 8px;
+            background: rgba(0, 255, 204, 0.03);
         }
 
-        .flow-arrow { font-size: 24px; color: var(--accent-yellow); animation: pulse 1.5s infinite; }
+        .lcd-value { font-size: 20px; font-weight: bold; margin-top: 5px; color: #fff; }
 
-        @keyframes pulse {
-            0% { opacity: 0.3; }
-            50% { opacity: 1; }
-            100% { opacity: 0.3; }
+        /* جداول النتائج الرسمية */
+        .res-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            background: var(--panel-bg);
+            border-radius: 8px;
+            overflow: hidden;
         }
 
-        .results-section { display: none; margin-top: 30px; }
-        table.res-table { width: 100%; border-collapse: collapse; margin-top: 10px; background: var(--card-bg); }
-        table.res-table th, table.res-table td { padding: 12px; border: 1px solid var(--border-color); text-align: center; }
-        table.res-table th { background-color: #1f2937; color: var(--accent); }
+        .res-table th, .res-table td {
+            padding: 14px 16px;
+            border: 1px solid var(--border-color);
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .res-table th { background: #1a2332; color: var(--accent-blue); font-weight: 600; }
+
+        .results-wrapper { display: none; margin-top: 35px; }
     </style>
 </head>
 <body>
 
-<div class="wrapper">
-    <h1>☀️ المنظومة الهندسية الكاملة لتصميم أنظمة الطاقة الشمسية ومحاكاة الانفرتر</h1>
+<div class="header-bar">
+    <h1>☀️ SOLAR OS | المنظومة الهندسية الكاملة لإعداد وتصميم أنظمة الطاقة الشمسية</h1>
+    <span style="color: var(--text-sub); font-size: 13px;">إصدار الأنظمة الهجينة والأوف جريد الاحترافية</span>
+</div>
 
-    <!-- 1. الأحمال الشاملة -->
-    <div class="section-title">1️⃣ جدول حصر الأحمال التفصيلي (المنزلية والصناعية)</div>
-    <div class="table-responsive">
-        <table class="load-table">
+<div class="main-container">
+    
+    <!-- مدخلات المنظومة السريعة -->
+    <div class="grid-3">
+        
+        <!-- 1. القدرة والانفرتر -->
+        <div class="card">
+            <div class="card-title">⚡ 1. تحديد قدرة الانفرتر بالنظام</div>
+            
+            <div class="form-group">
+                <label>اختر قدرة المنظومة المباشرة:</label>
+                <select id="sys-capacity" onchange="toggleCustomCap()">
+                    <option value="3.6">3.6 kW System (سكني صغير)</option>
+                    <option value="5.0" selected>5.0 kW System (سكني متوسط)</option>
+                    <option value="8.0">8.0 kW System (سكني كبير / فيلا)</option>
+                    <option value="12.0">12.0 kW System (تجاري / ثلاثي الأطوار)</option>
+                    <option value="custom">قيمة مخصصة (Custom KW)</option>
+                </select>
+            </div>
+
+            <div class="form-group" id="custom-cap-box" style="display: none;">
+                <label>أدخل القدرة المطلوبة (kW):</label>
+                <input type="number" id="custom-kw" value="6.0" step="0.5">
+            </div>
+
+            <div class="form-group">
+                <label>علامة الانفرتر التجارية:</label>
+                <select id="inv-brand">
+                    <option value="Deye">Deye Hybrid (داي هجين High Efficiency)</option>
+                    <option value="Growatt">Growatt SPF / SPH (غروات)</option>
+                    <option value="Victron">Victron Energy MultiPlus (فيكترون)</option>
+                    <option value="Voltronic">Voltronic Axpert (أكسبرت)</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- 2. الألواح الشمسية -->
+        <div class="card">
+            <div class="card-title">☀️ 2. حقل الألواح الشمسية (PV Array)</div>
+            
+            <div class="form-group">
+                <label>قدرة اللوح الشمسي:</label>
+                <select id="panel-watt">
+                    <option value="550">550 Watt Mono-PERC</option>
+                    <option value="580" selected>580 Watt N-Type TopCon</option>
+                    <option value="670">670 Watt Trina Bifacial</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>طول مسار كابلات DC (متر):</label>
+                <input type="number" id="dc-cable-len" value="25">
+            </div>
+        </div>
+
+        <!-- 3. بنك البطاريات -->
+        <div class="card">
+            <div class="card-title">🔋 3. بنك التخزين والبطاريات</div>
+            
+            <div class="form-group">
+                <label>تقنية البطارية:</label>
+                <select id="batt-tech">
+                    <option value="Lithium" selected>ليثيوم LiFePO4 (مع BMS الذكي)</option>
+                    <option value="GEL">جل / Tubular GEL</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>ساعات التغطية المستهدفة (باستخدام البطارية):</label>
+                <select id="backup-hours">
+                    <option value="4">4 ساعات (تغطية أساسية)</option>
+                    <option value="8" selected>8 ساعات (تغطية ليليّة كاملة)</option>
+                    <option value="12">12 ساعة (استقلالية كاملة)</option>
+                </select>
+            </div>
+        </div>
+
+    </div>
+
+    <button class="btn-submit" onclick="generateSystemDesign()">توليد تقرير المنظومة والبدء بالمحاكاة 🚀</button>
+
+    <!-- تقرير النتائج والمحاكاة -->
+    <div class="results-wrapper" id="results">
+        
+        <!-- شاشة الانفرتر LCD -->
+        <div class="card-title" style="margin-top: 20px;">📺 محاكي شاشة الانفرتر التفاعلي (Inverter LCD Display Panel)</div>
+        <div class="lcd-display">
+            <div class="lcd-header">
+                <span id="lcd-brand">DEYE SUN-HYBRID</span>
+                <span id="lcd-status" style="color:#00ffcc;">STATUS: NORMAL (ON-GRID)</span>
+                <span>VOLTAGE: 230V | 50.0Hz</span>
+            </div>
+
+            <div class="lcd-grid">
+                <div class="lcd-box">
+                    <div>☀️ PV INPUT</div>
+                    <div class="lcd-value" id="lcd-pv-power">4,200 W</div>
+                    <div style="font-size: 11px; margin-top:5px;" id="lcd-pv-volt">380 V DC</div>
+                </div>
+
+                <div class="lcd-box">
+                    <div>🏠 HOUSE LOAD</div>
+                    <div class="lcd-value" id="lcd-load-power">3,500 W</div>
+                    <div style="font-size: 11px; margin-top:5px;" id="lcd-load-pct">LOAD: 70%</div>
+                </div>
+
+                <div class="lcd-box">
+                    <div>🔋 BATTERY (BMS)</div>
+                    <div class="lcd-value" id="lcd-batt-soc">98%</div>
+                    <div style="font-size: 11px; margin-top:5px;" id="lcd-batt-status">53.2V | CHARGING</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- الجدول 1: مكونات النظام -->
+        <div class="card-title" style="margin-top: 30px;">📋 1️⃣ الجدول التنفيذي لمكونات المنظومة</div>
+        <table class="res-table">
             <thead>
                 <tr>
-                    <th>اسم الجهاز / الحمل</th>
-                    <th>العدد</th>
-                    <th>القدرة (Watt)</th>
-                    <th>ساعات التشغيل نهاراً</th>
-                    <th>ساعات التشغيل ليلاً</th>
-                    <th>حمل البدء (Surge Factor)</th>
+                    <th>المكون</th>
+                    <th>المواصفات المختارة</th>
+                    <th>مخطط التوصيل والتركيب الهندسي</th>
                 </tr>
             </thead>
-            <tbody id="load-rows">
+            <tbody>
                 <tr>
-                    <td>ثلاجة / براد انفرتر كبير</td>
-                    <td><input type="number" class="l-qty" value="1"></td>
-                    <td><input type="number" class="l-watt" value="220"></td>
-                    <td><input type="number" class="l-day" value="8"></td>
-                    <td><input type="number" class="l-night" value="10"></td>
-                    <td><select class="l-surge"><option value="1.5">1.5x</option><option value="3">3x (موتور)</option></select></td>
+                    <td>الانفرتر (Inverter)</td>
+                    <td id="res-inv-capacity"></td>
+                    <td id="res-inv-notes"></td>
                 </tr>
                 <tr>
-                    <td>مكيف انفرتر 1.5 حصان (9000 BTU)</td>
-                    <td><input type="number" class="l-qty" value="1"></td>
-                    <td><input type="number" class="l-watt" value="1200"></td>
-                    <td><input type="number" class="l-day" value="5"></td>
-                    <td><input type="number" class="l-night" value="3"></td>
-                    <td><select class="l-surge"><option value="1.5">1.5x</option><option value="2">2x</option></select></td>
+                    <td>حقل الألواح (PV Array)</td>
+                    <td id="res-pv-capacity"></td>
+                    <td id="res-pv-string"></td>
                 </tr>
                 <tr>
-                    <td>مضخة مياه (1 حصان)</td>
-                    <td><input type="number" class="l-qty" value="1"></td>
-                    <td><input type="number" class="l-watt" value="750"></td>
-                    <td><input type="number" class="l-day" value="1"></td>
-                    <td><input type="number" class="l-night" value="0"></td>
-                    <td><select class="l-surge" selected><option value="3">3x (موتور)</option></select></td>
-                </tr>
-                <tr>
-                    <td>إضاءة منزلية LED بالكامل</td>
-                    <td><input type="number" class="l-qty" value="12"></td>
-                    <td><input type="number" class="l-watt" value="15"></td>
-                    <td><input type="number" class="l-day" value="2"></td>
-                    <td><input type="number" class="l-night" value="6"></td>
-                    <td><select class="l-surge"><option value="1">1x</option></select></td>
-                </tr>
-                <tr>
-                    <td>شاشة + راوتر + أجهزة إلكترونية</td>
-                    <td><input type="number" class="l-qty" value="2"></td>
-                    <td><input type="number" class="l-watt" value="100"></td>
-                    <td><input type="number" class="l-day" value="6"></td>
-                    <td><input type="number" class="l-night" value="6"></td>
-                    <td><select class="l-surge"><option value="1">1x</option></select></td>
+                    <td>بنك البطاريات (Storage)</td>
+                    <td id="res-batt-capacity"></td>
+                    <td id="res-batt-detail"></td>
                 </tr>
             </tbody>
         </table>
-    </div>
 
-    <!-- 2. تحديد خيارات الأجهزة -->
-    <div class="section-title">2️⃣ اختيار معدات المنظومة والانفرتر</div>
-    <div class="grid-layout">
-        <div class="card">
-            <div class="form-group">
-                <label>ماركة الانفرتر:</label>
-                <select id="inv-brand">
-                    <option value="Deye SUN">Deye Hybrid (داي هجين)</option>
-                    <option value="Growatt SPF">Growatt (غروات)</option>
-                    <option value="Voltronic Axpert">Voltronic Axpert (أكسبرت)</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label>نظام الفولتية المطلوبة:</label>
-                <select id="sys-voltage">
-                    <option value="auto">اختيار تلقائي بناءً على الحمل</option>
-                    <option value="24">24 Volt System</option>
-                    <option value="48">48 Volt System</option>
-                </select>
-            </div>
-        </div>
+        <!-- الجدول 2: برمجة BMS والانفرتر -->
+        <div class="card-title" style="margin-top: 30px;">⚙️ 2️⃣ إعدادات البرمجة الموصى بها (Inverter & BMS Parameters)</div>
+        <div class="card" style="background: #0b0f17;" id="bms-params-box"></div>
 
-        <div class="card">
-            <div class="form-group">
-                <label>قدرة اللوح الشمسي (واط):</label>
-                <select id="panel-watt">
-                    <option value="550">550 W (Jinko / Longi Mono)</option>
-                    <option value="580" selected>580 W (N-Type High Eff)</option>
-                    <option value="670">670 W (Trina Bifacial)</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label>مسافة مسار كابل الألواح (متر):</label>
-                <input type="number" id="pv-dist" value="30">
-            </div>
-        </div>
-
-        <div class="card">
-            <div class="form-group">
-                <label>نوع بنك البطاريات:</label>
-                <select id="batt-tech">
-                    <option value="Lithium" selected>ليثيوم LiFePO4 (مع BMS الذكي)</option>
-                    <option value="GEL">جل / أنبوبي Tubular</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label>عمق التفريغ المسموح (DoD):</label>
-                <select id="batt-dod">
-                    <option value="0.8">80% (موصى به لليثيوم)</option>
-                    <option value="0.5">50% (للحفاظ على بطاريات الجل)</option>
-                </select>
-            </div>
-        </div>
-    </div>
-
-    <button class="btn-calc" onclick="processFullSystem()">تشغيل المحاكاة وحساب المنظومة بالكامل 🚀</button>
-
-    <!-- 3. النتائج والمحاكي -->
-    <div class="results-section" id="results">
-        
-        <!-- محاكي شاشة الانفرتر -->
-        <div class="section-title">📺 محاكاة حيّة لشاشة الانفرتر (Inverter LCD Display Simulation)</div>
-        <div class="inverter-screen">
-            <div class="screen-header">
-                <span id="disp-brand">DEYE HYBRID INVERTER</span>
-                <span id="disp-status">STATUS: NORMAL / ON-GRID</span>
-                <span id="disp-time">220V - 50.0Hz</span>
-            </div>
-
-            <div class="flow-diagram">
-                <!-- الألواح -->
-                <div class="flow-box">
-                    <div>☀️ PV INPUT</div>
-                    <div id="disp-pv-v">410.5 V</div>
-                    <div id="disp-pv-w">3450 W</div>
-                </div>
-
-                <div class="flow-arrow">➡️ ⚡ ➡️</div>
-
-                <!-- الانفرتر / الحمل -->
-                <div class="flow-box">
-                    <div>🏠 LOAD OUTPUT</div>
-                    <div id="disp-load-w">1850 W</div>
-                    <div id="disp-load-pct">LOAD: 37%</div>
-                </div>
-            </div>
-
-            <br>
-
-            <div class="flow-diagram">
-                <!-- البطارية -->
-                <div class="flow-box" style="grid-column: span 3;">
-                    <div>🔋 BATTERY / BMS STATUS (<span id="disp-bms-comm">CAN BUS: OK</span>)</div>
-                    <div style="display: flex; justify-content: space-around; margin-top: 10px;">
-                        <div>VOLTAGE: <b id="disp-batt-v">53.2 V</b></div>
-                        <div>SOC: <b id="disp-batt-soc">95%</b></div>
-                        <div>CHARGE CURR: <b id="disp-batt-a">30.0 A</b></div>
-                        <div>TEMP: <b>28°C</b></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- جداول الحسابات والكابلات -->
-        <div class="section-title">📊 1️⃣ المواصفات الميكانيكية والكهربائية للمنظومة</div>
+        <!-- الجدول 3: مخطط الكابلات والقواطع -->
+        <div class="card-title" style="margin-top: 30px;">🛡️ 3️⃣ مواصفات الكابلات، القواطع، والحماية الهندسية</div>
         <table class="res-table">
-            <tr><th>المكون</th><th>السعة / الحسابات المطلوب تركيبها</th><th>تفاصيل التوصيل والتشغيل</th></tr>
-            <tr><td>قدرة الانفرتر المناسب</td><td id="res-inv-cap"></td><td id="res-inv-detail"></td></tr>
-            <tr><td>حقل الألواح الشمسية</td><td id="res-pv-count"></td><td id="res-pv-string"></td></tr>
-            <tr><td>سعة بنك التخزين (البطاريات)</td><td id="res-batt-cap"></td><td id="res-batt-detail"></td></tr>
-        </table>
-
-        <div class="section-title">⚙️ 2️⃣ إعدادات شاشة الانفرتر والبرمجة (BMS Configuration)</div>
-        <div class="card" id="bms-config-box" style="background:#0b0f19;"></div>
-
-        <div class="section-title">🛡️ 3️⃣ المخطط الهندسي للكابلات والحماية والتأريض</div>
-        <table class="res-table">
-            <tr><th>الخط الكهرومغناطيسي</th><th>سماكة الكابل النحاسي</th><th>القاطع المطلوب (Breaker)</th><th>معدات الحماية والأمان</th></tr>
-            <tr><td>خط الألواح (DC PV)</td><td id="res-c-pv"></td><td id="res-b-pv"></td><td>DC Breaker + SPD مانع صواعق DC</td></tr>
-            <tr><td>خط البطارية (DC Battery)</td><td id="res-c-batt"></td><td id="res-b-batt"></td><td>DC Fuse / MCCB سريع الفصل</td></tr>
-            <tr><td>الخرج للمنزل (AC Output)</td><td id="res-c-out"></td><td id="res-b-out"></td><td>2P AC Breaker + RCD للحماية من الصعق</td></tr>
-            <tr><td>الدخل من المولد/الشبكة (AC In)</td><td id="res-c-in"></td><td id="res-b-in"></td><td>2P AC Breaker + Surge Protector AC</td></tr>
-            <tr><td>خط التأريض (Earth Ground)</td><td>16 mm² (أخضر/أصفر)</td><td>حربة تأريض 1.5m</td><td>ربط هيكل الألواح وقاعدة الانفرتر بالground</td></tr>
+            <thead>
+                <tr>
+                    <th>القطاع / المسار</th>
+                    <th>مقاس الكابل النحاسي (IEC)</th>
+                    <th>سعة القاطع (Breakers)</th>
+                    <th>تجهيزات الأمان والحماية</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>خط الألواح (DC PV Line)</td>
+                    <td id="res-c-pv"></td>
+                    <td id="res-b-pv"></td>
+                    <td>DC Breaker + مانع صواعق SPD (1000V DC)</td>
+                </tr>
+                <tr>
+                    <td>خط البطارية (DC Battery Line)</td>
+                    <td id="res-c-batt"></td>
+                    <td id="res-b-batt"></td>
+                    <td>DC Fuse/MCCB مرن عالي السعة</td>
+                </tr>
+                <tr>
+                    <td>خروج الحمل (AC Load Output)</td>
+                    <td id="res-c-out"></td>
+                    <td id="res-b-out"></td>
+                    <td>2P AC Breaker + قاطع تسريب أرضي RCD</td>
+                </tr>
+                <tr>
+                    <td>دخول الشبكة/المولد (AC Grid In)</td>
+                    <td id="res-c-in"></td>
+                    <td id="res-b-in"></td>
+                    <td>2P AC Breaker + مانع ارتفاع الجهد Surge Protector</td>
+                </tr>
+                <tr>
+                    <td>نظام التأريض (Earthing System)</td>
+                    <td>كابل 16 mm² (أخضر/أصفر)</td><td>حربة تأريض 1.5m</td>
+                    <td>ربط هيكل الألواح والهيكل المعدني للانفرتر بالground</td>
+                </tr>
+            </tbody>
         </table>
 
     </div>
+
 </div>
 
 <script>
-    function processFullSystem() {
-        // 1. جمع بيانات الأحمال
-        let rows = document.querySelectorAll("#load-rows tr");
-        let totalWatts = 0;
-        let dayWh = 0;
-        let nightWh = 0;
-        let maxSurge = 0;
+    function toggleCustomCap() {
+        let val = document.getElementById('sys-capacity').value;
+        document.getElementById('custom-cap-box').style.display = (val === 'custom') ? 'block' : 'none';
+    }
 
-        rows.forEach(row => {
-            let q = parseFloat(row.querySelector(".l-qty").value) || 0;
-            let w = parseFloat(row.querySelector(".l-watt").value) || 0;
-            let d = parseFloat(row.querySelector(".l-day").value) || 0;
-            let n = parseFloat(row.querySelector(".l-night").value) || 0;
-            let s = parseFloat(row.querySelector(".l-surge").value) || 1;
-
-            let itemWatt = q * w;
-            totalWatts += itemWatt;
-            dayWh += (itemWatt * d);
-            nightWh += (itemWatt * n);
-
-            if ((itemWatt * s) > maxSurge) {
-                maxSurge = itemWatt * s;
-            }
-        });
-
-        // 2. تحديد فولتية وحجم الانفرتر
-        let userSysVolt = document.getElementById("sys-voltage").value;
-        let sysVolt = 48;
-        if (userSysVolt === "auto") {
-            sysVolt = (totalWatts > 3200) ? 48 : 24;
+    function generateSystemDesign() {
+        // 1. تحديد القدرة
+        let capChoice = document.getElementById('sys-capacity').value;
+        let invKw = 5.0;
+        if (capChoice === 'custom') {
+            invKw = parseFloat(document.getElementById('custom-kw').value) || 5.0;
         } else {
-            sysVolt = parseInt(userSysVolt);
+            invKw = parseFloat(capChoice);
         }
 
-        let brand = document.getElementById("inv-brand").value;
-        let requiredKw = (totalWatts * 1.25) / 1000;
-        let invKw = 5;
+        let brand = document.getElementById('inv-brand').value;
+        let sysVolt = (invKw <= 3.6) ? 24 : 48;
 
-        if (requiredKw <= 3.2 && sysVolt === 24) invKw = 3.6;
-        else if (requiredKw <= 6) invKw = 5.5;
-        else if (requiredKw <= 9) invKw = 8;
-        else invKw = 12;
+        // تحديث جدول الانفرتر
+        document.getElementById('res-inv-capacity').innerText = invKw + " kW - " + sysVolt + "V System (" + brand + ")";
+        document.getElementById('res-inv-notes').innerText = "انفرتر " + brand + " هجين عالي الكفاءة، يغطي حمل مستمر حتى " + (invKw * 1000) + " واط وقدرة ذروية " + (invKw * 2) + " kW.";
 
-        document.getElementById("res-inv-cap").innerText = invKw + " kW (" + sysVolt + "V System)";
-        document.getElementById("res-inv-detail").innerText = "انفرتر " + brand + " بقدرة مستمرة " + invKw + "kW ويتحمل ذروة تشغيل حتى " + (invKw * 2) + "kW.";
-
-        // 3. حساب الألواح
-        let pWatt = parseFloat(document.getElementById("panel-watt").value);
-        let totalDailyWh = (dayWh + nightWh) * 1.25; // فقدان الكفاءة
-        let requiredPvWatt = Math.max(totalDailyWh / 4.5, invKw * 1000 * 0.9);
-        let panelCount = Math.ceil(requiredPvWatt / pWatt);
+        // 2. حساب الألواح
+        let pWatt = parseFloat(document.getElementById('panel-watt').value);
+        let targetPvWatts = invKw * 1000 * 1.25; // 125% ओवर-سعة الألواح
+        let panelCount = Math.ceil(targetPvWatts / pWatt);
         if (panelCount % 2 !== 0) panelCount++;
 
-        document.getElementById("res-pv-count").innerText = panelCount + " لوح (" + (panelCount * pWatt) + " واط إجمالي)";
-        document.getElementById("res-pv-string").innerText = "توصيل " + panelCount + " ألواح على التوالي (Single String) للوصول إلى فولتية MPPT المثالية.";
+        let totalPvKw = ((panelCount * pWatt) / 1000).toFixed(2);
+        document.getElementById('res-pv-capacity').innerText = panelCount + " ألواح (" + totalPvKw + " kWp)";
+        document.getElementById('res-pv-string').innerText = "توصيل " + panelCount + " ألواح على التوالي (1 Single String) لرفع الفولتية وتقليل الفقد في التيار.";
 
-        // 4. حساب البطارية
-        let battTech = document.getElementById("batt-tech").value;
-        let dod = parseFloat(document.getElementById("batt-dod").value);
-        let requiredKwh = (nightWh / 1000) / dod;
-        requiredKwh = Math.max(requiredKwh, 5.12);
+        // 3. حساب البطارية
+        let battTech = document.getElementById('batt-tech').value;
+        let hours = parseFloat(document.getElementById('backup-hours').value);
+        let requiredKwh = (invKw * 0.5) * hours; // متوسط استهلاك 50% من الحمل
+        requiredKwh = Math.max(requiredKwh, (sysVolt === 48 ? 5.12 : 2.56));
 
-        document.getElementById("res-batt-cap").innerText = requiredKwh.toFixed(2) + " kWh (" + battTech + ")";
+        document.getElementById('res-batt-capacity').innerText = requiredKwh.toFixed(2) + " kWh (" + battTech + ")";
         let battAh = Math.ceil((requiredKwh * 1000) / sysVolt);
-        document.getElementById("res-batt-detail").innerText = "بنك بطاريات بسعة " + battAh + " Ah عند جهد " + sysVolt + "V لضمان تغطية الأحمال الليلية بالكامل.";
+        document.getElementById('res-batt-detail').innerText = "بنك بطاريات بسعة " + battAh + " Ah عند جهد " + sysVolt + "V لتغطية تشغيل نهار/ليل بسلاسة.";
 
-        // 5. محاكاة شاشة الانفرتر
-        document.getElementById("disp-brand").innerText = brand.toUpperCase() + " LCD DISPLAY";
-        document.getElementById("disp-pv-w").innerText = Math.round(requiredPvWatt * 0.75) + " W";
-        document.getElementById("disp-pv-v").innerText = (sysVolt === 48) ? "380.4 V" : "190.2 V";
-        document.getElementById("disp-load-w").innerText = totalWatts + " W";
-        document.getElementById("disp-load-pct").innerText = "LOAD: " + Math.round((totalWatts / (invKw * 1000)) * 100) + "%";
-        document.getElementById("disp-batt-v").innerText = (sysVolt === 48) ? "53.6 V" : "26.8 V";
-        document.getElementById("disp-batt-soc").innerText = "96%";
+        // 4. محاكاة شاشة الانفرتر LCD
+        document.getElementById('lcd-brand').innerText = brand.toUpperCase() + " SYSTEM DISPLAY";
+        document.getElementById('lcd-pv-power').innerText = Math.round(targetPvWatts * 0.8) + " W";
+        document.getElementById('lcd-pv-volt').innerText = (sysVolt === 48) ? "375 V DC" : "185 V DC";
+        document.getElementById('lcd-load-power').innerText = Math.round(invKw * 1000 * 0.6) + " W";
+        document.getElementById('lcd-load-pct').innerText = "LOAD: 60%";
+        document.getElementById('lcd-batt-soc').innerText = "95%";
+        document.getElementById('lcd-batt-status').innerText = (sysVolt === 48 ? "53.2V" : "26.6V") + " | BMS ONLINE";
 
-        // 6. تفاصيل BMS
+        // 5. إعدادات البرمجة BMS
         let bmsHtml = "";
         if (battTech === "Lithium") {
             bmsHtml = `
-                <p style="color:#10b981;"><b>• بروتوكول اتصال BMS الموصى به:</b></p>
-                <ul>
-                    <li><b>Mode:</b> Lithium / LiFePO4</li>
-                    <li><b>Protocol:</b> CAN Bus / RS485 (بروتوكول Pylontech / Deye)</li>
-                    <li><b>Bulk Charge Volt:</b> ${(sysVolt === 48) ? '56.0 V' : '28.0 V'}</li>
-                    <li><b>Float Volt:</b> ${(sysVolt === 48) ? '54.0 V' : '27.0 V'}</li>
-                    <li><b>Low Cut-off Volt:</b> ${(sysVolt === 48) ? '46.0 V' : '23.0 V'}</li>
-                </ul>`;
+                <ul style="line-height: 1.8; font-size:14px; color: var(--text-main);">
+                    <li><b>نوع البطارية (Battery Type):</b> Lithium / LiFePO4</li>
+                    <li><b>بروتوكول الاتصال (BMS Protocol):</b> CAN Bus / RS485 (Pylontech/Deye Protocol)</li>
+                    <li><b>جهد الشحن النهائي (Bulk Charge):</b> ${(sysVolt === 48) ? '56.0 V' : '28.0 V'}</li>
+                    <li><b>جهد الطفو (Float Charge):</b> ${(sysVolt === 48) ? '54.0 V' : '27.0 V'}</li>
+                    <li><b>قطع الانخفاض (Low DC Cut-off):</b> ${(sysVolt === 48) ? '46.0 V' : '23.0 V'}</li>
+                </ul>
+            `;
         } else {
             bmsHtml = `
-                <p style="color:#f59e0b;"><b>• إعدادات البطاريات الجل (Lead-Acid / USER Mode):</b></p>
-                <ul>
-                    <li><b>Mode:</b> Lead-Acid / USER</li>
-                    <li><b>Bulk Charge Volt:</b> ${(sysVolt === 48) ? '57.6 V' : '28.8 V'}</li>
-                    <li><b>Float Volt:</b> ${(sysVolt === 48) ? '54.4 V' : '27.2 V'}</li>
-                    <li><b>Low Cut-off Volt:</b> ${(sysVolt === 48) ? '42.0 V' : '21.0 V'}</li>
-                </ul>`;
+                <ul style="line-height: 1.8; font-size:14px; color: var(--text-main);">
+                    <li><b>نوع البطارية (Battery Type):</b> Lead-Acid / GEL (USER Mode)</li>
+                    <li><b>جهد الشحن النهائي (Bulk Charge):</b> ${(sysVolt === 48) ? '57.6 V' : '28.8 V'}</li>
+                    <li><b>جهد الطفو (Float Charge):</b> ${(sysVolt === 48) ? '54.4 V' : '27.2 V'}</li>
+                    <li><b>قطع الانخفاض (Low DC Cut-off):</b> ${(sysVolt === 48) ? '42.0 V' : '21.0 V'}</li>
+                </ul>
+            `;
         }
-        document.getElementById("bms-config-box").innerHTML = bmsHtml;
+        document.getElementById('bms-params-box').innerHTML = bmsHtml;
 
-        // 7. الكابلات والحماية
-        let dist = parseFloat(document.getElementById("pv-dist").value);
-        document.getElementById("res-c-pv").innerText = (dist > 25) ? "6 mm² Solar Cable" : "4 mm² Solar Cable";
-        document.getElementById("res-b-pv").innerText = "20A / 1000V DC Breaker";
+        // 6. الكابلات والقواطع
+        let cableLen = parseFloat(document.getElementById('dc-cable-len').value);
+        document.getElementById('res-c-pv').innerText = (cableLen > 25) ? "6 mm² Solar Cable" : "4 mm² Solar Cable";
+        document.getElementById('res-b-pv').innerText = "20A / 1000V DC Breaker";
 
         let battAmps = Math.ceil((invKw * 1000) / sysVolt * 1.25);
-        document.getElementById("res-c-batt").innerText = (battAmps > 150) ? "50 mm² - 70 mm²" : "35 mm²";
-        document.getElementById("res-b-batt").innerText = battAmps + "A DC MCCB Breaker";
+        document.getElementById('res-c-batt').innerText = (battAmps > 160) ? "70 mm²" : (battAmps > 100) ? "50 mm²" : "35 mm²";
+        document.getElementById('res-b-batt').innerText = battAmps + "A DC Breaker / MCCB";
 
-        let acAmps = Math.ceil((invKw * 1000) / 220
+        let acAmps = Math.ceil((invKw * 1000) / 220);
+        document.getElementById('res-c-out').innerText = (acAmps > 32) ? "6 mm²" : "4 mm²";
+        document.getElementById('res-b-out').innerText = acAmps + "A AC Breaker (2P)";
+
+        document.getElementById('res-c-in').innerText = (acAmps > 32) ? "10 mm²" : "6 mm²";
+        document.getElementById('res-b-in').innerText = Math.ceil(acAmps * 1.25) + "A AC Breaker (2P)";
+
+        document.getElementById('results').style.display = 'block';
+    }
+</script>
+
+</body>
+</html>
