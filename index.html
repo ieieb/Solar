@@ -1,1 +1,70 @@
 
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>حاسبة وتصميم أنظمة الطاقة الشمسية</title>
+    <style>
+        * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: #f4f7f9; margin: 0; padding: 20px; color: #333; }
+        .container { max-width: 750px; margin: auto; background: #ffffff; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        h1 { text-align: center; color: #2c3e50; margin-bottom: 5px; }
+        p.subtitle { text-align: center; color: #7f8c8d; margin-bottom: 25px; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; font-weight: bold; margin-bottom: 5px; color: #34495e; }
+        input, select { width: 100%; padding: 12px; border: 1px solid #bdc3c7; border-radius: 6px; font-size: 15px; }
+        .btn-calc { width: 100%; padding: 14px; background-color: #27ae60; color: white; border: none; border-radius: 6px; font-size: 17px; font-weight: bold; cursor: pointer; transition: 0.3s; margin-top: 10px; }
+        .btn-calc:hover { background-color: #219150; }
+        .results-section { margin-top: 30px; display: none; }
+        .results-section h2 { color: #2c3e50; border-bottom: 2px solid #27ae60; padding-bottom: 8px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        table, th, td { border: 1px solid #ddd; }
+        th, td { padding: 12px; text-align: right; }
+        th { background-color: #ecf0f1; color: #2c3e50; }
+        .btn-print { width: 100%; padding: 12px; background-color: #2980b9; color: white; border: none; border-radius: 6px; font-size: 15px; font-weight: bold; cursor: pointer; margin-top: 20px; }
+        @media print { .form-group, .btn-calc, .btn-print, p.subtitle { display: none; } }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>حاسبة الطاقة الشمسية المتكاملة</h1>
+    <p class="subtitle">تصميم وتحديد مكونات النظام الشمسي</p>
+    <div class="form-group"><label>إجمالي الحمل (واط):</label><input type="number" id="load" value="3000"></div>
+    <div class="form-group"><label>ساعات التشغيل (ساعة):</label><input type="number" id="hours" value="6"></div>
+    <div class="form-group"><label>جهد النظام:</label><select id="voltage"><option value="24">24 فولت</option><option value="48" selected>48 فولت</option></select></div>
+    <div class="form-group"><label>قدرة اللوح (واط):</label><input type="number" id="panelWatt" value="550"></div>
+    <button class="btn-calc" onclick="calculateSystem()">حساب مكونات النظام</button>
+    <div class="results-section" id="results">
+        <h2>تقرير التجهيزات:</h2>
+        <table>
+            <tr><th>المكون</th><th>المواصفات</th></tr>
+            <tr><td><b>الإنفرتر</b></td><td id="res-inverter">-</td></tr>
+            <tr><td><b>البطاريات</b></td><td id="res-battery">-</td></tr>
+            <tr><td><b>الألواح</b></td><td id="res-panels">-</td></tr>
+            <tr><td><b>قاطع البطارية</b></td><td id="res-batt-breaker">-</td></tr>
+            <tr><td><b>كابلات البطارية</b></td><td id="res-batt-cable">-</td></tr>
+        </table>
+        <button class="btn-print" onclick="window.print()">طباعة التقرير</button>
+    </div>
+</div>
+<script>
+function calculateSystem() {
+    let load = parseFloat(document.getElementById('load').value);
+    let hours = parseFloat(document.getElementById('hours').value);
+    let voltage = parseFloat(document.getElementById('voltage').value);
+    let panelWatt = parseFloat(document.getElementById('panelWatt').value);
+    let inverterKw = ((load * 1.25) / 1000).toFixed(1);
+    let batteryAh = Math.ceil((load * hours) / (voltage * 0.8));
+    let panelCount = Math.ceil((load * hours) / (5 * 0.75 * panelWatt));
+    let battCurrent = (load * 1.25) / voltage;
+    document.getElementById('res-inverter').innerText = inverterKw + " kW";
+    document.getElementById('res-battery').innerText = batteryAh + " Ah";
+    document.getElementById('res-panels').innerText = panelCount + " لوح";
+    document.getElementById('res-batt-breaker').innerText = Math.ceil(battCurrent) + " A DC";
+    document.getElementById('res-batt-cable').innerText = battCurrent > 100 ? "50 mm²" : "25 mm²";
+    document.getElementById('results').style.display = 'block';
+}
+</script>
+</body>
+</html>
