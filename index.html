@@ -3,14 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Deye Inverter Screen Simulator</title>
+    <title>Deye Official LCD Simulator</title>
     <style>
         :root {
             --deye-blue: #0284c7;
             --deye-bg: #0b132b;
-            --lcd-bg: #061826;
-            --lcd-text: #00ffcc;
+            --lcd-bg: #031322;
+            --lcd-text: #00f0ff;
             --btn-bg: #1c2541;
+            --deye-orange: #ff9900;
         }
 
         body {
@@ -30,112 +31,119 @@
             background: #1c2541;
             padding: 15px 25px;
             border-radius: 10px;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             border: 1px solid #3a506b;
             display: flex;
             align-items: center;
             gap: 15px;
         }
 
-        .control-panel label {
-            font-weight: bold;
-            color: #5bc0be;
-        }
-
+        .control-panel label { font-weight: bold; color: #5bc0be; }
         .control-panel select {
             padding: 8px 15px;
             border-radius: 6px;
             background: #0b132b;
             color: white;
             border: 1px solid #5bc0be;
-            font-size: 16px;
+            font-size: 15px;
             outline: none;
         }
 
-        /* جسم الإنفرتر */
+        /* هيكل الإنفرتر الخارجي */
         .inverter-body {
-            background: linear-gradient(145deg, #ffffff, #dcdcdc);
-            border-radius: 20px;
+            background: linear-gradient(145deg, #f0f0f0, #c8c8c8);
+            border-radius: 24px;
             padding: 30px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.6);
-            width: 360px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.7);
+            width: 380px;
             text-align: center;
-            border: 4px solid #b0b0b0;
+            border: 5px solid #a0a0a0;
         }
 
         .deye-logo {
             font-weight: 900;
-            font-size: 28px;
+            font-size: 32px;
             color: #0284c7;
             letter-spacing: 2px;
-            margin-bottom: 5px;
+            margin-bottom: 2px;
+            text-transform: uppercase;
         }
 
         .model-subtitle {
-            font-size: 12px;
-            color: #666;
+            font-size: 11px;
+            color: #555;
             font-weight: bold;
-            margin-bottom: 20px;
+            margin-bottom: 18px;
+            letter-spacing: 1px;
         }
 
-        /* الشاشة الدائرية لإنفرتر Deye */
+        /* إطار الشاشة الدائرية الشهير لـ Deye */
         .screen-bezel {
             background: #111;
-            width: 280px;
-            height: 280px;
+            width: 300px;
+            height: 300px;
             margin: 0 auto;
             border-radius: 50%;
-            border: 8px solid #333;
+            border: 8px solid #282828;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: inset 0 0 15px rgba(0,0,0,0.8);
-            position: relative;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.9);
         }
 
         .lcd-display {
             background: var(--lcd-bg);
-            width: 200px;
-            height: 200px;
-            border-radius: 12px;
-            border: 2px solid #00ffcc;
-            padding: 15px;
+            width: 220px;
+            height: 220px;
+            border-radius: 14px;
+            border: 2px solid var(--deye-blue);
+            padding: 12px;
             box-sizing: border-box;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
             color: var(--lcd-text);
-            font-family: 'Courier New', Courier, monospace;
-            box-shadow: 0 0 10px rgba(0, 255, 204, 0.2);
+            font-family: 'Segoe UI', Arial, sans-serif;
+            box-shadow: 0 0 15px rgba(2, 132, 199, 0.3);
         }
 
         .lcd-header {
             font-size: 11px;
-            border-bottom: 1px dashed #00ffcc;
+            border-bottom: 1px solid #0284c7;
             padding-bottom: 4px;
             display: flex;
             justify-content: space-between;
+            font-weight: bold;
+            color: #fff;
         }
 
         .lcd-content {
-            margin: 10px 0;
+            margin: 8px 0;
             text-align: center;
+        }
+
+        .menu-title {
+            font-size: 13px;
+            color: var(--deye-orange);
+            font-weight: bold;
+            margin-bottom: 6px;
+            text-transform: uppercase;
         }
 
         .param-title {
             font-size: 12px;
             color: #ffffff;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
         }
 
         .param-value {
-            font-size: 22px;
+            font-size: 18px;
             font-weight: bold;
-            color: #ffcc00;
-            background: rgba(255, 204, 0, 0.1);
-            padding: 5px;
-            border-radius: 4px;
-            border: 1px solid #ffcc00;
+            color: #00ffcc;
+            background: rgba(0, 255, 204, 0.08);
+            padding: 6px;
+            border-radius: 6px;
+            border: 1px solid #00ffcc;
         }
 
         .lcd-footer {
@@ -143,21 +151,23 @@
             display: flex;
             justify-content: space-between;
             color: #888;
+            border-top: 1px dashed #333;
+            padding-top: 4px;
         }
 
-        /* لوحة الأزرار الأربعة على اليمين واليسار */
+        /* لوحة الأزرار */
         .keypad-container {
             display: flex;
             justify-content: space-between;
-            margin-top: 25px;
+            margin-top: 22px;
             padding: 0 10px;
         }
 
         .btn-deye {
             background: #222;
             color: white;
-            border: 2px solid #555;
-            padding: 10px 15px;
+            border: 2px solid #444;
+            padding: 10px 14px;
             border-radius: 8px;
             font-weight: bold;
             cursor: pointer;
@@ -167,55 +177,51 @@
         }
 
         .btn-deye:active {
-            transform: translateY(4px);
-            box-shadow: 0 0 0 #000;
+            transform: translateY(3px);
+            box-shadow: 0 1px 0 #000;
         }
 
-        .btn-up-down {
-            display: flex;
-            gap: 10px;
-        }
+        .btn-up-down { display: flex; gap: 8px; }
     </style>
 </head>
 <body>
 
-    <!-- خيار تحديد قدرة الإنفرتر -->
+    <!-- اختيار القدرة -->
     <div class="control-panel">
-        <label>حدد قدرة إنفرتر Deye:</label>
+        <label>قدرة إنفرتر Deye:</label>
         <select id="kw-selector" onchange="changeInverterKW()">
-            <option value="3.6">Deye 3.6 kW (Single Phase)</option>
-            <option value="5" selected>Deye 5.0 kW (Single Phase)</option>
-            <option value="8">Deye 8.0 kW (Single Phase)</option>
-            <option value="12">Deye 12.0 kW (Three Phase)</option>
+            <option value="5">Deye SUN-5K-SG04LP1 (5kW)</option>
+            <option value="8" selected>Deye SUN-8K-SG04LP1 (8kW)</option>
+            <option value="12">Deye SUN-12K-SG04LP3 (12kW 3P)</option>
         </select>
     </div>
 
-    <!-- واجهة الإنفرتر -->
+    <!-- شاشة الإنفرتر -->
     <div class="inverter-body">
         <div class="deye-logo">Deye</div>
-        <div class="model-subtitle" id="display-model-name">SUN-5K-SG04LP1</div>
+        <div class="model-subtitle" id="display-model-name">HYBRID INVERTER</div>
 
-        <!-- الشاشة الدائرية -->
         <div class="screen-bezel">
             <div class="lcd-display">
                 <div class="lcd-header">
-                    <span id="lcd-mode">STATUS</span>
-                    <span id="lcd-kw-tag">5.0kW</span>
+                    <span id="lcd-mode-title">MAIN MENU</span>
+                    <span id="lcd-kw-tag">8.0kW</span>
                 </div>
 
                 <div class="lcd-content">
-                    <div class="param-title" id="param-name">MAIN SCREEN</div>
-                    <div class="param-value" id="param-val">230V / NORMAL</div>
+                    <div class="menu-title" id="menu-category">WORK MODE</div>
+                    <div class="param-title" id="param-name">Selling First</div>
+                    <div class="param-value" id="param-val">ENABLED</div>
                 </div>
 
                 <div class="lcd-footer">
-                    <span>Li-BMS: OK</span>
-                    <span id="page-num">1/5</span>
+                    <span id="sub-status">Li-BMS: OK</span>
+                    <span id="page-num">1/10</span>
                 </div>
             </div>
         </div>
 
-        <!-- أزرار التحكم الحقيقية -->
+        <!-- أزرار التحكم -->
         <div class="keypad-container">
             <button class="btn-deye" onclick="pressButton('ESC')">ESC</button>
             <div class="btn-up-down">
@@ -227,43 +233,48 @@
     </div>
 
 <script>
-    // بيانات ومواصفات البرامترات لإنفرتر Deye
-    let currentKW = 5.0;
-    let mode = 'MAIN'; // MAIN or MENU or EDIT
+    let currentKW = 8.0;
+    let mode = 'MENU'; // MENU or EDIT
     let currentIndex = 0;
 
+    // القوائم التفصيلية الرسمية لـ Deye (Work Mode, Charge, Generator)
     let settings = [
-        { title: "01. Max Sell Power", val: 5000, unit: "W", step: 500, max: 5000 },
-        { title: "02. Max Charge Current", val: 100, unit: "A", step: 10, max: 120 },
-        { title: "03. Max Discharge Current", val: 100, unit: "A", step: 10, max: 120 },
-        { title: "04. Battery Type", val: "Lithium", options: ["Lithium", "Lead-Acid", "No-Batt"] },
-        { title: "05. Lithium Protocol (BMS)", val: "00 (Pylon)", options: ["00 (Pylon)", "12 (Felicity)", "05 (Dyness)"] }
+        // --- WORK MODE SETTINGS ---
+        { category: "WORK MODE", title: "01. Selling First", val: "OFF", options: ["OFF", "ON"] },
+        { category: "WORK MODE", title: "02. Zero Export To Load", val: "ON", options: ["OFF", "ON"] },
+        { category: "WORK MODE", title: "03. Max Sell Power", val: 8000, unit: "W", step: 500, max: 8000 },
+        { category: "WORK MODE", title: "04. Energy Pattern", val: "BATT FIRST", options: ["BATT FIRST", "LOAD FIRST"] },
+        
+        // --- BATTERY CHARGE & PRIORITY ---
+        { category: "BATT CHARGE", title: "05. Max Charge Current", val: 120, unit: "A", step: 10, max: 190 },
+        { category: "BATT CHARGE", title: "06. Grid Charge Enable", val: "ENABLED", options: ["ENABLED", "DISABLED"] },
+        { category: "BATT CHARGE", title: "07. Grid Charge Current", val: 60, unit: "A", step: 5, max: 120 },
+        { category: "BATT CHARGE", title: "08. Charge Off Volt/SoC", val: "95%", options: ["90%", "95%", "100%"] },
+
+        // --- GENERATOR (AUX) SETUP ---
+        { category: "GEN PORT SETUP", title: "09. AUX Output Mode", val: "MicroInv", options: ["Generator", "MicroInv", "Smart Load"] },
+        { category: "GEN PORT SETUP", title: "10. Gen Charge Power", val: 4000, unit: "W", step: 500, max: 8000 },
+        { category: "GEN PORT SETUP", title: "11. Gen Signal Auto-Start", val: "ON", options: ["OFF", "ON"] }
     ];
 
     function changeInverterKW() {
         currentKW = parseFloat(document.getElementById('kw-selector').value);
         
-        // تعديل القيم القصوى حسب الكيلوواط المختار
-        if (currentKW === 3.6) {
-            document.getElementById('display-model-name').innerText = "SUN-3.6K-SG04LP1";
-            settings[0].val = 3600; settings[0].max = 3600;
-            settings[1].val = 70; settings[1].max = 90;
-            settings[2].val = 70; settings[2].max = 90;
-        } else if (currentKW === 5) {
+        if (currentKW === 5) {
             document.getElementById('display-model-name').innerText = "SUN-5K-SG04LP1";
-            settings[0].val = 5000; settings[0].max = 5000;
-            settings[1].val = 100; settings[1].max = 120;
-            settings[2].val = 100; settings[2].max = 120;
+            settings[2].val = 5000; settings[2].max = 5000;
+            settings[4].val = 100; settings[4].max = 120;
+            settings[9].val = 3500; settings[9].max = 5000;
         } else if (currentKW === 8) {
             document.getElementById('display-model-name').innerText = "SUN-8K-SG04LP1";
-            settings[0].val = 8000; settings[0].max = 8000;
-            settings[1].val = 150; settings[1].max = 190;
-            settings[2].val = 150; settings[2].max = 190;
+            settings[2].val = 8000; settings[2].max = 8000;
+            settings[4].val = 120; settings[4].max = 190;
+            settings[9].val = 5000; settings[9].max = 8000;
         } else if (currentKW === 12) {
-            document.getElementById('display-model-name').innerText = "SUN-12K-SG04LP3 (3-Phase)";
-            settings[0].val = 12000; settings[0].max = 12000;
-            settings[1].val = 200; settings[1].max = 240;
-            settings[2].val = 200; settings[2].max = 240;
+            document.getElementById('display-model-name').innerText = "SUN-12K-SG04LP3";
+            settings[2].val = 12000; settings[2].max = 12000;
+            settings[4].val = 160; settings[4].max = 240;
+            settings[9].val = 8000; settings[9].max = 12000;
         }
 
         document.getElementById('lcd-kw-tag').innerText = currentKW + "kW";
@@ -273,42 +284,26 @@
     function updateDisplay() {
         let item = settings[currentIndex];
 
-        if (mode === 'MAIN') {
-            document.getElementById('lcd-mode').innerText = "STATUS";
-            document.getElementById('param-name').innerText = "GRID / SOLAR STATUS";
-            document.getElementById('param-val').innerText = "230V / " + currentKW + "kW";
-            document.getElementById('page-num').innerText = "--/--";
-        } else if (mode === 'MENU' || mode === 'EDIT') {
-            document.getElementById('lcd-mode').innerText = (mode === 'EDIT') ? "SETTING [EDIT]" : "MENU [SELECT]";
-            document.getElementById('param-name').innerText = item.title;
-            
-            if (typeof item.val === 'number') {
-                document.getElementById('param-val').innerText = item.val + " " + item.unit;
-            } else {
-                document.getElementById('param-val').innerText = item.val;
-            }
+        document.getElementById('lcd-mode-title').innerText = (mode === 'EDIT') ? "SETTING [EDIT]" : "MAIN MENU";
+        document.getElementById('menu-category').innerText = item.category;
+        document.getElementById('param-name').innerText = item.title;
 
-            document.getElementById('page-num').innerText = (currentIndex + 1) + "/" + settings.length;
+        if (typeof item.val === 'number') {
+            document.getElementById('param-val').innerText = item.val + " " + item.unit;
+        } else {
+            document.getElementById('param-val').innerText = item.val;
         }
+
+        document.getElementById('page-num').innerText = (currentIndex + 1) + "/" + settings.length;
     }
 
     function pressButton(btn) {
         let item = settings[currentIndex];
 
         if (btn === 'ENTER') {
-            if (mode === 'MAIN') {
-                mode = 'MENU';
-            } else if (mode === 'MENU') {
-                mode = 'EDIT';
-            } else if (mode === 'EDIT') {
-                mode = 'MENU'; // حفظ الخيار
-            }
+            mode = (mode === 'MENU') ? 'EDIT' : 'MENU';
         } else if (btn === 'ESC') {
-            if (mode === 'EDIT') {
-                mode = 'MENU';
-            } else if (mode === 'MENU') {
-                mode = 'MAIN';
-            }
+            mode = 'MENU';
         } else if (btn === 'UP') {
             if (mode === 'MENU') {
                 currentIndex = (currentIndex > 0) ? currentIndex - 1 : settings.length - 1;
@@ -338,7 +333,6 @@
         updateDisplay();
     }
 
-    // التهيئة عند التحميل
     window.onload = changeInverterKW;
 </script>
 
