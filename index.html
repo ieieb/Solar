@@ -17,7 +17,6 @@
             --accent-blue: #0ea5e9;
             --accent-green: #10b981;
             --accent-amber: #f59e0b;
-            --accent-red: #ef4444;
             --border-color: #232f45;
             --text-main: #f8fafc;
             --text-sub: #94a3b8;
@@ -32,18 +31,16 @@
             direction: rtl;
         }
 
-        /* شريط العنوان */
         .app-header {
             background: var(--panel-bg);
             border-bottom: 1px solid var(--border-color);
-            padding: 15px 25px;
+            padding: 15px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
-        .app-header h1 { margin: 0; font-size: 20px; color: var(--accent-blue); }
+        .app-header h1 { margin: 0; font-size: 18px; color: var(--accent-blue); }
 
-        /* شريط التبويبات */
         .tabs-nav {
             display: flex;
             background: #101725;
@@ -51,16 +48,15 @@
             overflow-x: auto;
         }
         .tab-btn {
-            padding: 14px 20px;
+            padding: 14px 18px;
             background: transparent;
             border: none;
             color: var(--text-sub);
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 600;
             cursor: pointer;
             border-bottom: 3px solid transparent;
             white-space: nowrap;
-            transition: 0.2s;
         }
         .tab-btn.active {
             color: var(--accent-blue);
@@ -69,8 +65,8 @@
         }
 
         .main-container {
-            width: 94%;
-            max-width: 1400px;
+            width: 92%;
+            max-width: 1200px;
             margin: 20px auto;
         }
 
@@ -97,16 +93,16 @@
 
         .form-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 15px;
         }
 
-        .form-group { margin-bottom: 12px; }
+        .form-group { margin-bottom: 10px; }
         label { display: block; font-size: 13px; color: var(--text-sub); margin-bottom: 6px; }
         
         select, input {
             width: 100%;
-            padding: 10px;
+            padding: 12px;
             background: #0b0f19;
             border: 1px solid var(--border-color);
             border-radius: 8px;
@@ -118,26 +114,24 @@
 
         .btn-action {
             width: 100%;
-            padding: 14px;
+            padding: 15px;
             background: linear-gradient(135deg, #0ea5e9, #0284c7);
             color: white;
             border: none;
-            border-radius: 8px;
+            border-radius: 10px;
             font-weight: bold;
-            font-size: 15px;
+            font-size: 16px;
             cursor: pointer;
-            margin-top: 10px;
+            margin-top: 15px;
         }
 
-        /* محاكي شاشة الإنفرتر التفاعلي Real LCD */
         .simulator-box {
             background: #000;
-            border: 4px solid #334155;
+            border: 3px solid #334155;
             border-radius: 16px;
             padding: 20px;
-            max-width: 600px;
+            max-width: 550px;
             margin: 0 auto;
-            box-shadow: 0 0 25px rgba(14, 165, 233, 0.2);
         }
 
         .lcd-display {
@@ -146,9 +140,8 @@
             border-radius: 10px;
             padding: 15px;
             color: #00ff88;
-            font-family: 'Courier New', monospace;
-            min-height: 200px;
-            box-shadow: inset 0 0 15px rgba(0, 255, 136, 0.3);
+            font-family: monospace;
+            min-height: 180px;
         }
 
         .lcd-header-bar {
@@ -156,39 +149,30 @@
             justify-content: space-between;
             border-bottom: 1px dashed #00ff88;
             padding-bottom: 5px;
-            font-weight: bold;
-            font-size: 13px;
+            font-size: 12px;
         }
 
-        .lcd-body {
-            margin-top: 15px;
-            text-align: center;
-        }
-
-        .lcd-param-title { font-size: 14px; color: #a7f3d0; margin-bottom: 5px; }
-        .lcd-param-val { font-size: 28px; font-weight: bold; color: #fff; background: rgba(0,255,136,0.1); padding: 8px; border-radius: 6px; display: inline-block; min-width: 140px; }
-        .lcd-status { margin-top: 15px; font-size: 12px; color: #f59e0b; }
+        .lcd-body { margin-top: 15px; text-align: center; }
+        .lcd-param-title { font-size: 13px; color: #a7f3d0; }
+        .lcd-param-val { font-size: 26px; font-weight: bold; color: #fff; margin-top: 8px; }
 
         .keypad {
             display: flex;
             justify-content: center;
-            gap: 12px;
-            margin-top: 20px;
+            gap: 10px;
+            margin-top: 15px;
         }
 
         .key-btn {
             background: #1e293b;
             border: 1px solid var(--accent-blue);
             color: white;
-            padding: 10px 18px;
+            padding: 10px 15px;
             border-radius: 8px;
             font-weight: bold;
             cursor: pointer;
-            transition: 0.1s;
         }
-        .key-btn:active { background: var(--accent-blue); transform: scale(0.95); }
 
-        /* جداول التفييش */
         .table-custom {
             width: 100%;
             border-collapse: collapse;
@@ -207,24 +191,22 @@
             border-radius: 4px;
             font-weight: bold;
             font-size: 11px;
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--accent-green);
         }
-        .badge-green { background: rgba(16, 185, 129, 0.2); color: var(--accent-green); border: 1px solid var(--accent-green); }
-        .badge-amber { background: rgba(245, 158, 11, 0.2); color: var(--accent-amber); border: 1px solid var(--accent-amber); }
     </style>
 </head>
 <body>
 
 <div class="app-header">
     <h1>☀️ Solar OS Pro | المنصة الهندسية المتكاملة</h1>
-    <span class="badge badge-green">v3.0 Interactive</span>
+    <span class="badge">v3.1 Fixed</span>
 </div>
 
-<!-- شريط التبويبات الرئيسي -->
 <div class="tabs-nav">
-    <button class="tab-btn active" onclick="switchTab('tab-calculator')">🧮 حاسبة الأحمال والنظام</button>
-    <button class="tab-btn" onclick="switchTab('tab-pinout')">🔌 مصفوفة تفييش BMS</button>
-    <button class="tab-btn" onclick="switchTab('tab-simulator')">🖥️ محاكي شاشة الإنفرتر 1:1</button>
-    <button class="tab-btn" onclick="switchTab('tab-knowledge')">📚 دليل الأعطال والمواصفات</button>
+    <button class="tab-btn active" onclick="switchTab(this, 'tab-calculator')">🧮 حاسبة الأحمال والنظام</button>
+    <button class="tab-btn" onclick="switchTab(this, 'tab-pinout')">🔌 مصفوفة تفييش BMS</button>
+    <button class="tab-btn" onclick="switchTab(this, 'tab-simulator')">🖥️ محاكي شاشة الإنفرتر 1:1</button>
 </div>
 
 <div class="main-container">
@@ -255,25 +237,24 @@
         </div>
 
         <div id="calc-results" class="card" style="display:none; border-color: var(--accent-green);">
-            <div class="card-title" style="color:var(--accent-green);">نتائج التصميم والتوصية الهندسية:</div>
+            <div class="card-title" style="color:var(--accent-green);">التقرير الهندسي والمواصفات الموصى بها:</div>
             <div id="calc-summary-text"></div>
         </div>
     </div>
 
-    <!-- TAB 2: مصفوفة تفييش البطاريات والإنفرترات -->
+    <!-- TAB 2: مصفوفة BMS -->
     <div id="tab-pinout" class="tab-content">
         <div class="card">
-            <div class="card-title">اختر الإنفرتر والبطارية بشكل مستقل تماماً:</div>
+            <div class="card-title">اختر الإنفرتر والبطارية بشكل مستقل:</div>
             <div class="form-grid">
                 <div class="form-group">
-                    <label>ماركة الإنفرتر المستهدف:</label>
+                    <label>ماركة الإنفرتر:</label>
                     <select id="pin-inv" onchange="updatePinoutTable()">
                         <option value="Deye">Deye Hybrid</option>
                         <option value="Growatt">Growatt SPF/SPH</option>
                         <option value="Voltronic">Voltronic Axpert / Must</option>
                         <option value="Victron">Victron Energy</option>
                         <option value="Luxpower">Luxpower SNA/LXP</option>
-                        <option value="Felicity-Inv">Felicity Inverter</option>
                     </select>
                 </div>
                 <div class="form-group">
@@ -283,7 +264,6 @@
                         <option value="Pylontech">Pylontech (US3000C/US5000)</option>
                         <option value="Dyness">Dyness / Narada</option>
                         <option value="Deye-Batt">Deye Lithium</option>
-                        <option value="Shoto">Shoto Lithium</option>
                     </select>
                 </div>
             </div>
@@ -295,10 +275,10 @@
         </div>
     </div>
 
-    <!-- TAB 3: محاكي الشاشة التفاعلي -->
+    <!-- TAB 3: محاكي الشاشة -->
     <div id="tab-simulator" class="tab-content">
         <div class="card">
-            <div class="card-title">اختر الإنفرتر للبدء بالمحاكاة التفاعلية للشاشة:</div>
+            <div class="card-title">محاكي شاشة الإنفرتر التفاعلي:</div>
             <div style="max-width: 300px; margin-bottom: 15px;">
                 <select id="sim-inv-brand" onchange="initSimulator()">
                     <option value="Deye">Deye Touch/Menu Interface</option>
@@ -307,7 +287,6 @@
                 </select>
             </div>
 
-            <!-- الشاشة التفاعلية -->
             <div class="simulator-box">
                 <div class="lcd-display">
                     <div class="lcd-header-bar">
@@ -315,9 +294,8 @@
                         <span id="sim-header-mode">MODE: MAIN</span>
                     </div>
                     <div class="lcd-body">
-                        <div class="lcd-param-title" id="sim-param-title">OUTPUT PRIORITY</div>
-                        <div class="lcd-param-val" id="sim-param-val">SUB</div>
-                        <div class="lcd-status" id="sim-status-text">اضغط ENTER للدخول إلى القوائم والبرمجة</div>
+                        <div class="lcd-param-title" id="sim-param-title">SYSTEM STATUS</div>
+                        <div class="lcd-param-val" id="sim-param-val">READY / 230V</div>
                     </div>
                 </div>
 
@@ -331,79 +309,96 @@
         </div>
     </div>
 
-    <!-- TAB 4: دليل الأعطال والمواصفات -->
-    <div id="tab-knowledge" class="tab-content">
-        <div class="card">
-            <div class="card-title">📚 جدول أكواد الأعطال الشائعة (Fault Codes) وكيفية معالجتها</div>
-            <table class="table-custom">
-                <thead>
-                    <tr>
-                        <th>رمز العطل</th>
-                        <th>المعنى الهندسي</th>
-                        <th>السبب المحتمل</th>
-                        <th>الإجراء المطلوبة للموقع</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><span class="badge badge-amber">F04 / F56</span></td>
-                        <td>Battery Voltage Low</td>
-                        <td>انخفاض جهد البطارية تحت الحد المسموح</td>
-                        <td>افحص مفتاح البطارية، تأكد من ضبط Cut-off Voltage.</td>
-                    </tr>
-                    <tr>
-                        <td><span class="badge badge-amber">F13 / F58</span></td>
-                        <td>BMS Communication Error</td>
-                        <td>فقدان الاتصال بين الإنفرتر والبطارية</td>
-                        <td>افحص كابل الـ RJ45 والدبابيس (Pins) وبروتوكول Communication.</td>
-                    </tr>
-                    <tr>
-                        <td><span class="badge badge-amber">F20 / F52</span></td>
-                        <td>Bus Volt High / Overload</td>
-                        <td>ارتفاع مفاجئ في الجهد الداخلي أو الحمل</td>
-                        <td>افصل الأحمال الثقيلة وإعادة تشغيل الإنفرتر.</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-
 </div>
 
 <script>
-    // التنقل بين التبويبات
-    function switchTab(tabId) {
+    // التنقل بين التبويبات بدون أخطاء متصفحات الموبايل
+    function switchTab(btn, tabId) {
         document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
         document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
         
-        document.getElementById(tabId).classList.add('active');
-        event.currentTarget.classList.add('active');
+        let targetTab = document.getElementById(tabId);
+        if (targetTab) targetTab.classList.add('active');
+        if (btn) btn.classList.add('active');
     }
 
-    // 1. منطق حساب الأحمال
+    // حساب النظام وإظهار المواصفات كاملة
     function calculateSystem() {
-        let light = parseFloat(document.getElementById('load-light').value) || 0;
-        let fridge = parseFloat(document.getElementById('load-fridge').value) || 0;
-        let acCount = parseFloat(document.getElementById('load-ac').value) || 0;
-        let pump = parseFloat(document.getElementById('load-pump').value) || 0;
+        try {
+            let light = parseFloat(document.getElementById('load-light').value) || 0;
+            let fridge = parseFloat(document.getElementById('load-fridge').value) || 0;
+            let acCount = parseFloat(document.getElementById('load-ac').value) || 0;
+            let pump = parseFloat(document.getElementById('load-pump').value) || 0;
 
-        let totalLoadWatts = light + fridge + (acCount * 1500) + pump;
-        let invKwNeeded = (totalLoadWatts * 1.25 / 1000).toFixed(1);
-        let panelsCount = Math.ceil((totalLoadWatts * 5) / 580); // ألواح 580 واط
-        let battKwhNeeded = ((totalLoadWatts * 8) / 1000 / 0.8).toFixed(1); // تخزين 8 ساعات
+            let totalWatts = light + fridge + (acCount * 1500) + pump;
+            if (totalWatts <= 0) {
+                alert("يرجى إدخال أرقام أحمال صالحة");
+                return;
+            }
 
-        let html = `
-            <p><b>مجموع الأحمال اللحظية:</b> ${totalLoadWatts} Watt</p>
-            <p>⚡ <b>قدرة الإنفرتر الموصى بها:</b> <span style="color:var(--accent-blue); font-weight:bold;">${invKwNeeded} kW</span> (أو أقرب طراز أعلى مثل 6kW / 8kW)</p>
-            <p>☀️ <b>عدد الألواح الشمسية (580W N-Type):</b> <span style="color:var(--accent-amber); font-weight:bold;">${panelsCount} ألواح</span></p>
-            <p>🔋 <b>سعة البطاريات المطلوب تخزينها:</b> <span style="color:var(--accent-green); font-weight:bold;">${battKwhNeeded} kWh</span> (بطارية ليثيوم 48V بسعة 200Ah تقريباً)</p>
-            <p>🔌 <b>قاطع DC للألواح:</b> 25A 600V/1000V DC | <b>قاطع البطارية:</b> 125A to 200A DC MCCB</p>
-        `;
-        document.getElementById('calc-summary-text').innerHTML = html;
-        document.getElementById('calc-results').style.display = 'block';
+            let totalKw = totalWatts / 1000;
+            let recKw = totalKw * 1.25;
+            
+            let invSize = 3.6;
+            if (recKw > 3.6 && recKw <= 6.0) invSize = 5.0;
+            else if (recKw > 6.0 && recKw <= 9.0) invSize = 8.0;
+            else if (recKw > 9.0 && recKw <= 14.0) invSize = 12.0;
+            else if (recKw > 14.0) invSize = Math.ceil(recKw);
+
+            let panelsCount = Math.ceil((totalWatts * 4.5) / 580);
+            if (panelsCount < 4) panelsCount = 4;
+
+            let battKwh = Math.max(5.0, Math.ceil((totalWatts * 6) / 1000 / 0.8));
+
+            let dcBreaker = invSize > 6 ? "32A DC 1000V" : "20A DC 1000V";
+            let battBreaker = invSize >= 8 ? "200A DC MCCB" : "125A DC MCCB";
+            let battCable = invSize >= 8 ? "35mm² to 50mm²" : "25mm²";
+
+            let html = `
+                <div style="line-height: 1.8;">
+                    <p><b>⚡ إجمالي الأحمال اللحظية:</b> <span style="color:var(--accent-amber); font-weight:bold;">${totalWatts} W (${totalKw.toFixed(2)} kW)</span></p>
+                    <hr style="border-color:var(--border-color); margin:10px 0;">
+                    
+                    <p><b>🎯 قدرة الإنفرتر الموصى به:</b> <span style="color:var(--accent-blue); font-weight:bold;">${invSize} kW (48V Hybrid)</span></p>
+                    <ul style="margin-top:5px; margin-bottom:15px; color:var(--text-sub);">
+                        <li><b>الماركات المقترحة:</b> Deye SUN-${invSize}K-SG04 / Growatt SPF ${invSize}000T / Luxpower SNA ${invSize}000</li>
+                        <li><b>قدرة الإقلاع المفاجئ (Surge Power):</b> يتحمل حتى ${invSize * 2} kW لمدة 10 ثوانٍ لتشغيل الضواغط.</li>
+                    </ul>
+
+                    <p><b>☀️ مصفوفة الألواح الشمسية:</b> <span style="color:var(--accent-green); font-weight:bold;">${panelsCount} ألواح (قدرة 580W N-Type)</span></p>
+                    <ul style="margin-top:5px; margin-bottom:15px; color:var(--text-sub);">
+                        <li><b>إجمالي القدرة الشمسية:</b> ${(panelsCount * 0.58).toFixed(2)} kWp</li>
+                        <li><b>التوصيل (Stringing):</b> سلسلة واحدة (1 String) مكونة من ${panelsCount} ألواح توالي على مدخل MPPT1.</li>
+                    </ul>
+
+                    <p><b>🔋 بنك البطاريات المطلوب:</b> <span style="color:var(--accent-amber); font-weight:bold;">${battKwh} kWh (ليثيوم LiFePO4)</span></p>
+                    <ul style="margin-top:5px; margin-bottom:15px; color:var(--text-sub);">
+                        <li><b>السعة بالأمبير:</b> 1x 48V 100Ah/200Ah Pack مع نظام BMS متصل بالإنفرتر.</li>
+                    </ul>
+
+                    <p><b>🛡️ القواطع والكابلات المطلوبة:</b></p>
+                    <ul style="margin-top:5px; color:var(--text-sub);">
+                        <li><b>قاطع الألواح (DC Breaker):</b> ${dcBreaker}</li>
+                        <li><b>قاطع البطارية (Battery Breaker):</b> ${battBreaker}</li>
+                        <li><b>كابل الألواح (Solar Cable):</b> 6mm² DC Cable</li>
+                        <li><b>كابل البطارية الرئيسي:</b> ${battCable} النحاسي</li>
+                    </ul>
+                </div>
+            `;
+
+            let resDiv = document.getElementById('calc-results');
+            document.getElementById('calc-summary-text').innerHTML = html;
+            resDiv.style.display = 'block';
+
+            // التمرير التلقائي الفوري إلى شاشة النتائج
+            resDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+        } catch (err) {
+            alert("حدث خطأ أثناء الحساب: " + err.message);
+        }
     }
 
-    // 2. منطق مصفوفة التفييش المباشرة
+    // مصفوفة التفييش
     function updatePinoutTable() {
         let inv = document.getElementById('pin-inv').value;
         let batt = document.getElementById('pin-batt').value;
@@ -413,61 +408,50 @@
 
         if (inv === "Victron") { invPinH = "Pin 7"; invPinL = "Pin 8"; }
         if (inv === "Voltronic") { invPinH = "Pin 1 (RS485-A)"; invPinL = "Pin 2 (RS485-B)"; }
-
         if (batt === "Dyness") { battPinH = "Pin 2"; battPinL = "Pin 1"; }
 
         let html = `
-            <p>جدول التوصيل المباشر بين <b>${inv}</b> و <b>${batt}</b>:</p>
             <table class="table-custom">
                 <thead>
                     <tr>
                         <th>جهة الإنفرتر (${inv})</th>
                         <th>جهة البطارية (${batt})</th>
-                        <th>نوع الإشارة</th>
-                        <th>معيار لون السلك (T568B)</th>
+                        <th>الإشارة</th>
+                        <th>لون السلك (T568B)</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
                         <td><b>${invPinH}</b></td>
                         <td><b>${battPinH}</b></td>
-                        <td><span class="badge badge-green">CAN_H / RS485_A</span></td>
+                        <td><span class="badge">CAN_H / RS485_A</span></td>
                         <td>أزرق (Blue)</td>
                     </tr>
                     <tr>
                         <td><b>${invPinL}</b></td>
                         <td><b>${battPinL}</b></td>
-                        <td><span class="badge badge-green">CAN_L / RS485_B</span></td>
+                        <td><span class="badge">CAN_L / RS485_B</span></td>
                         <td>أزرق/أبيض (Blue/White)</td>
-                    </tr>
-                    <tr>
-                        <td>Pin 8 (GND)</td>
-                        <td>Pin 2 / 8 (GND)</td>
-                        <td>Ground Signal</td>
-                        <td>بني (Brown)</td>
                     </tr>
                 </tbody>
             </table>
-            <p style="margin-top:10px; font-size:12px; color:var(--accent-amber);">⚠️ ملاحظة: تأكد من ضبط مفاتيح الـ DIP Switches على بطارية ${batt} برقم العنوان Master Address = 1.</p>
         `;
         document.getElementById('pinout-matrix-container').innerHTML = html;
     }
 
-    // 3. محاكي الشاشة التفاعلي (State Machine)
+    // المحاكي
     let simState = {
-        mode: 'MAIN', // MAIN, MENU, EDIT
+        mode: 'MAIN',
         paramIndex: 0,
         params: [
-            { code: 'P01: Output Priority', val: 'SUB', options: ['SUB', 'USB', 'SBU'] },
-            { code: 'P05: Battery Type', val: 'LI', options: ['LI', 'USE', 'AGM', 'FLD'] },
-            { code: 'P12: Back to Grid Volt', val: '48.0V', options: ['46.0V', '48.0V', '50.0V'] },
-            { code: 'P36: BMS Protocol', val: 'L51', options: ['L51', 'L01', '00', '12'] }
+            { code: 'P01: Output Priority', val: 'SUB' },
+            { code: 'P05: Battery Type', val: 'LI' },
+            { code: 'P36: BMS Protocol', val: 'L51' }
         ]
     };
 
     function initSimulator() {
         simState.mode = 'MAIN';
-        simState.paramIndex = 0;
         updateSimDisplay();
     }
 
@@ -476,16 +460,32 @@
         document.getElementById('sim-header-title').innerText = brand.toUpperCase();
         document.getElementById('sim-header-mode').innerText = "MODE: " + simState.mode;
 
-        let currentParam = simState.params[simState.paramIndex];
-
+        let p = simState.params[simState.paramIndex];
         if (simState.mode === 'MAIN') {
             document.getElementById('sim-param-title').innerText = "SYSTEM STATUS";
             document.getElementById('sim-param-val').innerText = "READY / 230V";
-            document.getElementById('sim-status-text').innerText = "اضغط ENTER للدخول لقائمة البرمجة والبرامترات";
-        } else if (simState.mode === 'MENU') {
-            document.getElementById('sim-param-title').innerText = currentParam.code;
-            document.getElementById('sim-param-val').innerText = currentParam.val;
-            document.getElementById('sim-status-text').innerText = "استخدم ▲ ▼ للتنقل | اضغط ENTER لتعديل الخيار";
-        } else if (simState.mode === 'EDIT') {
-            document.getElementById('sim-param-title').innerText = "EDITING: " + currentParam.code;
-            document.getElementById('sim-param-val').innerText = "► " + currentPar
+        } else {
+            document.getElementById('sim-param-title').innerText = p.code;
+            document.getElementById('sim-param-val').innerText = p.val;
+        }
+    }
+
+    function simKeyPress(key) {
+        if (key === 'ENTER') {
+            simState.mode = (simState.mode === 'MAIN') ? 'MENU' : 'MAIN';
+        } else if (key === 'UP' || key === 'DOWN') {
+            if (simState.mode === 'MENU') {
+                simState.paramIndex = (simState.paramIndex + 1) % simState.params.length;
+            }
+        }
+        updateSimDisplay();
+    }
+
+    window.onload = function() {
+        updatePinoutTable();
+        initSimulator();
+    };
+</script>
+
+</body>
+</html>
