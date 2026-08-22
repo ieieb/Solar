@@ -3,288 +3,102 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>حاسبة برمجة الإنفرتر الذكية</title>
+    <title>حاسبة إعدادات الإنفرتر الذكية</title>
     <style>
-        :root {
-            --primary-color: #0f172a;
-            --accent-color: #1e3a8a;
-            --highlight-color: #d97706;
-            --bg-color: #f8fafc;
-            --border-color: #cbd5e1;
-        }
-
-        body {
-            font-family: system-ui, -apple-system, sans-serif;
-            background-color: var(--bg-color);
-            color: #334155;
-            margin: 0;
-            padding: 20px;
-            direction: rtl;
-        }
-
-        .container {
-            max-width: 650px;
-            margin: 0 auto;
-            background: #ffffff;
-            padding: 25px;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-            border: 1px solid var(--border-color);
-        }
-
-        h2 {
-            color: var(--primary-color);
-            margin-top: 0;
-            border-bottom: 3px solid var(--accent-color);
-            padding-bottom: 10px;
-            font-size: 1.4rem;
-        }
-
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        label {
-            display: block;
-            font-weight: bold;
-            margin-bottom: 6px;
-            color: var(--primary-color);
-            font-size: 0.95rem;
-        }
-
-        input[type="number"], select {
-            width: 100%;
-            padding: 11px;
-            border: 1px solid #94a3b8;
-            border-radius: 8px;
-            box-sizing: border-box;
-            font-size: 1rem;
-            background-color: #fff;
-        }
-
-        input[type="number"]:focus, select:focus {
-            outline: none;
-            border-color: var(--accent-color);
-        }
-
-        .input-group {
-            display: flex;
-            gap: 10px;
-        }
-
-        .input-group input {
-            flex: 2;
-        }
-
-        .input-group select {
-            flex: 1;
-        }
-
-        .btn-calc {
-            width: 100%;
-            padding: 12px;
-            background-color: var(--accent-color);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-weight: bold;
-            font-size: 1.05rem;
-            cursor: pointer;
-            margin-top: 10px;
-            transition: background-color 0.2s;
-        }
-
-        .btn-calc:hover {
-            background-color: #1d4ed8;
-        }
-
-        .info-box {
-            background-color: #f1f5f9;
-            padding: 12px 15px;
-            border-radius: 8px;
-            border-right: 4px solid var(--accent-color);
-            margin-bottom: 15px;
-            font-size: 0.95rem;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 15px;
-            background: #ffffff;
-            border-radius: 8px;
-            overflow: hidden;
-            border: 1px solid var(--border-color);
-        }
-
-        th {
-            background-color: var(--primary-color);
-            color: white;
-            padding: 10px;
-            text-align: right;
-            font-size: 0.9rem;
-        }
-
-        td {
-            padding: 10px;
-            border-bottom: 1px solid #e2e8f0;
-            font-size: 0.9rem;
-        }
-
-        tr:nth-child(even) {
-            background-color: #f8fafc;
-        }
-
-        .setting-code {
-            font-weight: bold;
-            color: var(--primary-color);
-        }
-
-        .setting-val {
-            font-weight: bold;
-            color: var(--highlight-color);
-        }
+        :root { --primary-color: #0f172a; --accent-color: #1e3a8a; --highlight-color: #d97706; --bg-color: #f8fafc; --border-color: #cbd5e1; }
+        body { font-family: sans-serif; background-color: var(--bg-color); padding: 20px; }
+        .container { max-width: 650px; margin: 0 auto; background: #ffffff; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; font-weight: bold; margin-bottom: 6px; }
+        select, input { width: 100%; padding: 10px; border: 1px solid #94a3b8; border-radius: 8px; }
+        .btn-calc { width: 100%; padding: 12px; background-color: var(--accent-color); color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th { background-color: var(--primary-color); color: white; padding: 10px; text-align: right; }
+        td { padding: 10px; border-bottom: 1px solid #e2e8f0; }
+        .setting-val { font-weight: bold; color: var(--highlight-color); }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h2>مولّد إعدادات الإنفرتر الذكي</h2>
+    <h2>حاسبة إعدادات الإنفرتر</h2>
 
     <div class="form-group">
-        <label for="kwInput">قدرة الإنفرتر (W أو kW):</label>
-        <input type="number" id="kwInput" step="0.1" value="" placeholder="مثال: 3 أو 3000">
+        <label>قدرة الإنفرتر (kW):</label>
+        <input type="number" id="kwInput" step="0.1" placeholder="مثال: 5">
     </div>
 
     <div class="form-group">
-        <label for="batTypeSelect">نوع البطارية:</label>
+        <label>نوع البطارية:</label>
         <select id="batTypeSelect">
-            <option value="tubular">أنبوبية سائلة (Tubular / Flooded)</option>
-            <option value="gel">جل / AGM (Gel / Sealed)</option>
-            <option value="lithium">ليثيوم (LiFePO4)</option>
+            <option value="tubular">سائلة (Tubular)</option>
+            <option value="gel">جل / AGM (Gel)</option>
+            <option value="lithium_manual">ليثيوم بدون اتصال (Manual Setup - USE)</option>
+            <option value="lithium_bms">ليثيوم مع اتصال (BMS Communication)</option>
         </select>
     </div>
 
     <div class="form-group">
-        <label for="batValueInput">سعة/حجم بنك البطاريات:</label>
-        <div class="input-group">
-            <input type="number" id="batValueInput" step="0.1" value="" placeholder="أدخل القيمة هنا">
-            <select id="batUnitSelect">
-                <option value="ah">أمبير (Ah)</option>
-                <option value="kwh">كيلوواط (kWh)</option>
-            </select>
-        </div>
+        <label>سعة البطارية (Ah):</label>
+        <input type="number" id="batValueInput" placeholder="أدخل سعة البطارية">
     </div>
 
-    <div class="form-group">
-        <label for="chargePrioritySelect">أولوية مصدر الشحن (الإعداد 16):</label>
-        <select id="chargePrioritySelect">
-            <option value="CSO">الشمس أولاً (CSO - Solar First)</option>
-            <option value="CUB">الشبكة / المولد أولاً (CUB - Utility First)</option>
-            <option value="SNU">الشمس والشبكة معاً (SNU - Solar & Utility)</option>
-            <option value="OSO">الشمس فقط (OSO - Only Solar)</option>
-        </select>
-    </div>
-
-    <button class="btn-calc" onclick="autoCalculateSettings()">توليد الإعدادات تلقائياً</button>
+    <button class="btn-calc" onclick="calculate()">توليد الإعدادات</button>
 
     <div id="settingsResult"></div>
 </div>
 
 <script>
-function autoCalculateSettings() {
-    const kwInputVal = document.getElementById('kwInput').value;
-    const batValueVal = document.getElementById('batValueInput').value;
-    const batUnit = document.getElementById('batUnitSelect').value;
-    const chargePriority = document.getElementById('chargePrioritySelect').value;
-
-    if (!kwInputVal || kwInputVal <= 0) {
-        alert("يرجى إدخال قدرة الإنفرتر أولاً.");
-        return;
-    }
-
-    let rawKw = parseFloat(kwInputVal);
-    let kw = rawKw >= 50 ? rawKw / 1000 : rawKw;
-
+function calculate() {
+    const kw = parseFloat(document.getElementById('kwInput').value);
+    const ah = parseFloat(document.getElementById('batValueInput').value);
     const type = document.getElementById('batTypeSelect').value;
-    let rawBatVal = parseFloat(batValueVal) || (batUnit === 'kwh' ? 4.8 : 200);
 
-    // 1. تحديد فولتية النظام تلقائياً
-    let sysVolt = 24;
-    if (kw <= 1.5) {
-        sysVolt = 12;
-    } else if (kw > 1.5 && kw <= 3.6) {
-        sysVolt = 24;
+    let sysVolt = (kw <= 1.5) ? 12 : (kw <= 3.6 ? 24 : 48);
+
+    let data = {
+        01: "SOL / SBU",
+        02: "", 05: "", 11: "10 A", 12: "", 13: "",
+        26: "", 27: "", 29: ""
+    };
+
+    if (type === 'lithium_bms') {
+        data[02] = "Auto (BMS)";
+        data[05] = "LIB / PYL (حسب نوع البطارية)";
+        data[11] = "Auto (BMS)";
+        data[12] = (sysVolt === 48 ? "50.0 V" : (sysVolt === 24 ? "25.0 V" : "12.5 V"));
+        data[13] = (sysVolt === 48 ? "53.6 V" : (sysVolt === 24 ? "26.8 V" : "13.3 V"));
+        data[26] = "Auto (BMS)";
+        data[27] = "Auto (BMS)";
+        data[29] = "Auto (BMS)";
     } else {
-        sysVolt = 48;
+        // منطق القيم اليدوية (Manual)
+        let maxC = Math.round(ah * (type === 'lithium_manual' ? 0.3 : 0.15));
+        data[02] = Math.min(maxC, 100) + " A";
+        data[05] = "USE";
+        
+        if (sysVolt === 48) {
+            data[26] = (type === 'lithium_manual' ? "56.8 V" : "57.6 V");
+            data[27] = (type === 'lithium_manual' ? "54.0 V" : "54.4 V");
+            data[29] = (type === 'lithium_manual' ? "48.0 V" : "43.0 V");
+            data[12] = "46.0 V";
+            data[13] = "53.0 V";
+        }
+        // يمكن إضافة منطق 12V و 24V بنفس الطريقة هنا
     }
 
-    // 2. حساب السعة بالأمبير بناءً على الوحدة المختارة
-    let ah = rawBatVal;
-    if (batUnit === 'kwh') {
-        ah = Math.round((rawBatVal * 1000) / sysVolt);
+    let html = `<table><tr><th>الرمز</th><th>الإعداد</th><th>القيمة</th></tr>`;
+    for (let key in data) {
+        html += `<tr><td>${key}</td><td>${getLabel(key)}</td><td class="setting-val">${data[key]}</td></tr>`;
     }
-
-    // 3. حساب تيار الشحن الأقصى
-    let maxCharge = Math.round(ah * (type === 'lithium' ? 0.30 : 0.15));
-    if (maxCharge < 10) maxCharge = 10;
-    if (maxCharge > 100) maxCharge = 100;
-
-    // 4. الفولتيات الثابتة
-    let bulk, floatV, cutoff, backUtl, backBat;
-
-    if (sysVolt === 12) {
-        if (type === 'tubular')     { bulk = 14.4; floatV = 13.6; cutoff = 10.8; backUtl = 11.5; backBat = 13.2; }
-        else if (type === 'gel')    { bulk = 14.2; floatV = 13.5; cutoff = 11.0; backUtl = 11.8; backBat = 13.0; }
-        else                        { bulk = 14.2; floatV = 13.5; cutoff = 12.0; backUtl = 12.5; backBat = 13.3; }
-    } else if (sysVolt === 24) {
-        if (type === 'tubular')     { bulk = 28.8; floatV = 27.2; cutoff = 21.5; backUtl = 23.0; backBat = 26.5; }
-        else if (type === 'gel')    { bulk = 28.4; floatV = 27.0; cutoff = 22.0; backUtl = 23.5; backBat = 26.0; }
-        else                        { bulk = 28.4; floatV = 27.0; cutoff = 24.0; backUtl = 25.0; backBat = 26.8; }
-    } else if (sysVolt === 48) {
-        if (type === 'tubular')     { bulk = 57.6; floatV = 54.4; cutoff = 43.0; backUtl = 46.0; backBat = 53.0; }
-        else if (type === 'gel')    { bulk = 56.8; floatV = 54.0; cutoff = 44.0; backUtl = 47.0; backBat = 52.0; }
-        else                        { bulk = 56.8; floatV = 54.0; cutoff = 48.0; backUtl = 50.0; backBat = 53.6; }
-    }
-
-    const html = `
-        <div class="info-box" style="margin-top: 20px;">
-            <strong>فولتية النظام المكتشفة:</strong> <span style="color: #1e3a8a; font-weight: bold;">${sysVolt}&nbsp;Volt</span> 
-            <br><span style="color: #64748b; font-size: 0.85em;">(الإنفرتر: ${kw}&nbsp;kW | سعة البطارية المحسوبة: ${ah}&nbsp;Ah)</span>
-        </div>
-        <table>
-            <thead>
-                <tr>
-                    <th style="width: 15%;">الرمز</th>
-                    <th style="width: 55%;">اسم الإعداد</th>
-                    <th style="width: 30%;">القيمة المطلوبة</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr><td class="setting-code">01</td><td>Output Source Priority</td><td class="setting-val">SOL / SBU</td></tr>
-                <tr><td class="setting-code">02</td><td>Max Charge Current</td><td class="setting-val">${maxCharge}&nbsp;A</td></tr>
-                <tr><td class="setting-code">03</td><td>AC Input Voltage Range</td><td class="setting-val">APL</td></tr>
-                <tr><td class="setting-code">05</td><td>Battery Type</td><td class="setting-val">USE</td></tr>
-                <tr><td class="setting-code">06</td><td>Auto Restart Overload</td><td class="setting-val">LRE</td></tr>
-                <tr><td class="setting-code">07</td><td>Auto Restart Overtemp</td><td class="setting-val">tRE</td></tr>
-                <tr><td class="setting-code">09</td><td>Output Frequency</td><td class="setting-val">50&nbsp;Hz</td></tr>
-                <tr><td class="setting-code">11</td><td>Max Utility Charge Current</td><td class="setting-val">10&nbsp;A</td></tr>
-                <tr><td class="setting-code">12</td><td>Back to Utility Voltage</td><td class="setting-val">${backUtl}&nbsp;V</td></tr>
-                <tr><td class="setting-code">13</td><td>Back to Battery Voltage</td><td class="setting-val">${backBat}&nbsp;V</td></tr>
-                <tr><td class="setting-code">16</td><td>Charger Source Priority</td><td class="setting-val">${chargePriority}</td></tr>
-                <tr><td class="setting-code">18</td><td>Alarm Control (Buzzer)</td><td class="setting-val">BON</td></tr>
-                <tr><td class="setting-code">22</td><td>Backlight Control</td><td class="setting-val">LON</td></tr>
-                <tr><td class="setting-code">23</td><td>Overload Bypass</td><td class="setting-val">BYE</td></tr>
-                <tr><td class="setting-code">26</td><td>Bulk Charging Voltage</td><td class="setting-val">${bulk}&nbsp;V</td></tr>
-                <tr><td class="setting-code">27</td><td>Floating Charging Voltage</td><td class="setting-val">${floatV}&nbsp;V</td></tr>
-                <tr><td class="setting-code">29</td><td>Low Cut-off Voltage</td><td class="setting-val">${cutoff}&nbsp;V</td></tr>
-            </tbody>
-        </table>
-    `;
-
+    html += `</table>`;
     document.getElementById('settingsResult').innerHTML = html;
 }
-</script>
 
+function getLabel(key) {
+    const labels = {01: "Priority", 02: "Max Charge", 05: "Battery Type", 11: "AC Charge", 12: "Back to Utility", 13: "Back to Battery", 26: "Bulk Volts", 27: "Float Volts", 29: "Cut-off"};
+    return labels[key] || "إعداد";
+}
+</script>
 </body>
 </html>
