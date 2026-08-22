@@ -3,126 +3,247 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>حاسبة التوافق وإعدادات الإنفرتر الذكية</title>
+  <title>مولّد إعدادات الإنفرتر الذكي</title>
   <style>
-    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f4f6f9; margin: 0; padding: 20px; direction: rtl; }
-    .card { max-width: 600px; margin: auto; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-    h2 { color: #1a2a3a; text-align: center; margin-top: 0; }
-    .form-group { margin-bottom: 15px; }
-    label { display: block; margin-bottom: 6px; font-weight: bold; color: #333; }
-    input, select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; font-size: 14px; }
-    button { width: 100%; background: #27ae60; color: white; padding: 12px; border: none; border-radius: 6px; font-size: 16px; font-weight: bold; cursor: pointer; }
-    button:hover { background: #219150; }
-    #warning { margin-top: 15px; padding: 10px; border-radius: 6px; font-weight: bold; display: none; }
-    #output { margin-top: 20px; background: #f8f9fa; padding: 15px; border-radius: 6px; border: 1px solid #ddd; white-space: pre-line; line-height: 1.6; }
+    :root {
+      --bg-dark: #0f172a;
+      --panel-bg: #1e293b;
+      --accent-orange: #f97316;
+      --accent-blue: #38bdf8;
+      --accent-green: #22c55e;
+      --text-light: #f8fafc;
+      --border-color: #334155;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--bg-dark);
+      color: var(--text-light);
+      margin: 0;
+      padding: 20px;
+      direction: rtl;
+    }
+
+    .container {
+      max-width: 650px;
+      margin: 0 auto;
+      background-color: var(--panel-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 25px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    }
+
+    .header {
+      text-align: center;
+      border-bottom: 2px solid var(--accent-orange);
+      padding-bottom: 12px;
+      margin-bottom: 20px;
+    }
+
+    .header h1 {
+      margin: 0;
+      color: var(--accent-orange);
+      font-size: 22px;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: var(--accent-blue);
+      font-size: 14px;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 12px;
+      background-color: #0f172a;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      color: var(--text-light);
+      font-size: 15px;
+      box-sizing: border-box;
+      outline: none;
+    }
+
+    input:focus, select:focus {
+      border-color: var(--accent-orange);
+    }
+
+    .btn-submit {
+      width: 100%;
+      background-color: var(--accent-orange);
+      color: white;
+      padding: 14px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: background 0.2s;
+    }
+
+    .btn-submit:hover {
+      background-color: #ea580c;
+    }
+
+    #alert-box {
+      margin-top: 15px;
+      padding: 12px;
+      border-radius: 8px;
+      font-weight: bold;
+      font-size: 14px;
+      display: none;
+    }
+
+    #results-panel {
+      margin-top: 20px;
+      background-color: #0f172a;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 15px;
+      display: none;
+    }
+
+    .setting-item {
+      background-color: var(--panel-bg);
+      border-right: 4px solid var(--accent-orange);
+      padding: 10px 14px;
+      margin-bottom: 10px;
+      border-radius: 4px;
+      font-size: 14px;
+      line-height: 1.5;
+    }
   </style>
 </head>
 <body>
 
-<div class="card">
-  <h2>💻 المبرمج الذكي لإنفرترات الطاقة الشمسية</h2>
-  
-  <div class="form-group">
-    <label>قدرة الألواح (System kW):</label>
-    <input type="number" id="sysKw" placeholder="مثال: 6">
+<div class="container">
+  <div class="header">
+    <h1>💻 المبرمج الذكي لإنفرترات الطاقة الشمسية</h1>
   </div>
 
   <div class="form-group">
-    <label>قدرة الإنفرتر (Inverter kW):</label>
-    <input type="number" id="invKw" placeholder="مثال: 5">
+    <label>قدرة الألواح الإجمالية (kW):</label>
+    <input type="number" id="sysKw" step="0.1" placeholder="مثال: 6.5">
+  </div>
+
+  <div class="form-group">
+    <label>قدرة الإنفرتر (kW):</label>
+    <input type="number" id="invKw" step="0.1" placeholder="مثال: 5.5">
   </div>
 
   <div class="form-group">
     <label>ماركة الإنفرتر:</label>
     <select id="brand">
-      <option value="voltronic">Voltronic (Axpert / Must)</option>
-      <option value="deye">Deye / Sol-Ark</option>
+      <option value="voltronic">Voltronic / Must / Felicity (Axpert)</option>
+      <option value="deye">Deye / Sol-Ark (Hybrid)</option>
+      <option value="growatt">Growatt (Off-Grid / Hybrid)</option>
       <option value="huawei">Huawei (SUN2000)</option>
-      <option value="growatt">Growatt</option>
     </select>
   </div>
 
   <div class="form-group">
-    <label>نوع البطارية:</label>
+    <label>نوع بنك البطاريات:</label>
     <select id="battery">
-      <option value="lithium">ليثيوم (Lithium-Ion / LiFePO4)</option>
-      <option value="gel">جل (Gel Battery)</option>
+      <option value="lithium">ليثيوم (LiFePO4)</option>
+      <option value="gel">جل مغلق (Gel Battery)</option>
       <option value="tubular">أنبوبية سائلة (Tubular Acid)</option>
     </select>
   </div>
 
-  <button onclick="processProgramming()">🚀 استخراج كافة البرمجيات والإعدادات</button>
+  <button class="btn-submit" onclick="generateSettings()">🚀 توليد الإعدادات التلقائية</button>
 
-  <div id="warning"></div>
-  <div id="output">أدخل البيانات واضغط على الزر لاستخراج الدليل...</div>
+  <div id="alert-box"></div>
+
+  <div id="results-panel">
+    <h3 style="color: var(--accent-green); margin-top: 0;">📋 قائمة الإعدادات والتوصيات البرمجية:</h3>
+    <div id="settings-list"></div>
+  </div>
 </div>
 
 <script>
-function processProgramming() {
+function generateSettings() {
   const sysKw = parseFloat(document.getElementById('sysKw').value);
   const invKw = parseFloat(document.getElementById('invKw').value);
   const brand = document.getElementById('brand').value;
   const battery = document.getElementById('battery').value;
-  const warnDiv = document.getElementById('warning');
-  const outDiv = document.getElementById('output');
+  
+  const alertBox = document.getElementById('alert-box');
+  const resultsPanel = document.getElementById('results-panel');
+  const settingsList = document.getElementById('settings-list');
 
   if (!sysKw || !invKw || sysKw <= 0 || invKw <= 0) {
-    alert('الرجاء إدخال قيم صحيحة لحجم الألواح والإنفرتر');
+    alert('الرجاء إدخال أرقام صحيحة لقدرة الألواح والإنفرتر!');
     return;
   }
 
-  // التحقق من نسبة التحميل الفوقي
+  // 1. التحقق من التوافقية (DC Overloading Ratio)
   const ratio = sysKw / invKw;
-  warnDiv.style.display = 'block';
-  if (ratio > 1.30) {
-    warnDiv.style.background = '#f8d7da';
-    warnDiv.style.color = '#721c24';
-    warnDiv.innerHTML = `⚠️ تحذير: حجم الألواح (${sysKw}kW) ضخم بالنسبة للإنفرتر (${invKw}kW). قد يحصل فقدان طاقة (Clipping).`;
-  } else if (ratio < 0.5) {
-    warnDiv.style.background = '#fff3cd';
-    warnDiv.style.color = '#856404';
-    warnDiv.innerHTML = '⚠️ تنبيه: كمية الألواح قليلة جداً مقارنة بقدرة الإنفرتر.';
+  alertBox.style.display = 'block';
+  
+  if (ratio > 1.35) {
+    alertBox.style.backgroundColor = '#451a1a';
+    alertBox.style.color = '#fca5a5';
+    alertBox.style.border = '1px solid #7f1d1d';
+    alertBox.innerHTML = `⚠️ تحذير: حجم الألواح (${sysKw}kW) مرتفع جداً بالنسبة للإنفرتر (${invKw}kW). ستخسر طاقة زائدة (Clipping).`;
+  } else if (ratio < 0.6) {
+    alertBox.style.backgroundColor = '#422006';
+    alertBox.style.color = '#fde047';
+    alertBox.style.border = '1px solid #713f12';
+    alertBox.innerHTML = `⚠️ تنبيه: حقل الألواح قليل نسبياً مقارنة بقدرة الإنفرتر الاستيعابية.`;
   } else {
-    warnDiv.style.background = '#d4edda';
-    warnDiv.style.color = '#155724';
-    warnDiv.innerHTML = '✅ التوافق ممتاز: حجم الألواح متناسق مع قدرة الإنفرتر.';
+    alertBox.style.backgroundColor = '#064e3b';
+    alertBox.style.color = '#6ee7b7';
+    alertBox.style.border = '1px solid #047857';
+    alertBox.innerHTML = `✅ التوافق ممتاز: نسبة التحميل (${(ratio * 100).toFixed(0)}%) مثالية للعمل بكفاءة عالية.`;
   }
 
-  // إنشاء التعليمات حسب الماركة
+  // 2. تيار الشحن الأقصى الموصى به
+  const recommendedAmp = Math.min(100, Math.max(10, Math.round((sysKw * 1000) / 48)));
+
+  // 3. بناء قائمة الإعدادات البرمجية
   let steps = [];
-  const maxAmp = Math.min(100, Math.round((sysKw * 1000) / 48));
 
   if (brand === 'voltronic') {
     steps = [
-      "📍 [برنامج 01]: اضبط على SBU (طاقة شمسية ثم بطارية ثم شبكة).",
-      `📍 [برنامج 02]: أقصى تيار شحن مقترح = ${maxAmp} أمبير.`,
-      `📍 [برنامج 05]: نوع البطارية = ${battery === 'lithium' ? 'LI (ليثيوم مع BMS)' : 'USE (مخصص لضبط الفولتية)'}`,
-      `📍 [برنامج 26]: Bulk Voltage = ${battery === 'lithium' ? '54.0V' : '56.4V'}`,
-      `📍 [برنامج 27]: Float Voltage = ${battery === 'lithium' ? '53.5V' : '54.0V'}`,
-      `📍 [برنامج 29]: Low Cut-off = ${battery === 'lithium' ? '44.5V' : '42.0V'}`
+      "📍 <b>[برنامج 01] Output Source Priority:</b> اضبط على SBU (الطاقة الشمسية أولاً ثم البطارية ثم الشبكة).",
+      `📍 <b>[برنامج 02] Max Charge Current:</b> حدد الشحن الأقصى بقيمة <b>${recommendedAmp}A</b>.`,
+      `📍 <b>[برنامج 05] Battery Type:</b> ${battery === 'lithium' ? 'اختر <b>LI</b> (مع كابل BMS) أو <b>USE</b> للضبط اليدوي.' : 'اختر <b>USE</b> أو GEL.'}`,
+      `📍 <b>[برنامج 26] Bulk Charging Voltage:</b> اضبط على <b>${battery === 'lithium' ? '56.8V' : battery === 'gel' ? '56.4V' : '58.4V'}</b>.`,
+      `📍 <b>[برنامج 27] Floating Charging Voltage:</b> اضبط على <b>${battery === 'lithium' ? '54.0V' : '54.0V'}</b>.`,
+      `📍 <b>[برنامج 29] Low Cut-off Voltage:</b> اضبط قطع الفولت عند <b>${battery === 'lithium' ? '48.0V' : '42.0V'}</b> لحماية البطارية.`
     ];
   } else if (brand === 'deye') {
     steps = [
-      "📍 [Battery Setup]: اختر Lithium واضبط بروتوكول الـ BMS المناسب.",
-      `📍 [Max Charge]: حدد تيار الشحن الأقصى بقيمة ${Math.min(120, maxAmp)}A.`,
-      "📍 [System Work Mode]: تفعيل Time of Use وتحديد نسبة الـ SoC المستهدفة ليلاً.",
-      "📍 [Zero Export]: فعّل خيار Limit to Load إذا كنت لا تضخ للشبكة العامة."
-    ];
-  } else if (brand === 'huawei') {
-    steps = [
-      "📍 [Quick Setup]: اختيار الـ Grid Code المحلي المطابق لبلدك.",
-      "📍 [AFCI]: تفعيل الحماية من القوس الكهربائي لزيادة الأمان.",
-      "📍 [Energy Storage]: ضبط mode البطارية على Max Self-Consumption."
+      "📍 <b>[Battery Setup]:</b> اختر نوع Lithium واضبط رقم بروتوكول BMS المطابق للبطارية (مثال: Mode 00 / 12).",
+      `📍 <b>[Max Charge]:</b> حدد أقصى أمبير شحن بقيمة <b>${Math.min(120, recommendedAmp)}A</b>.`,
+      "📍 <b>[System Work Mode]:</b> فعّل Time of Use وحدد نسبة Discharge SoC المستهدفة ليلاً (مثلاً 20% - 30%).",
+      "📍 <b>[Zero Export]:</b> فعّل خيار Limit to Load لمنع ضخ الطاقة إلى الشبكة العامة."
     ];
   } else if (brand === 'growatt') {
     steps = [
-      "📍 [Program 01]: اضبط الأولوية على SOL.",
-      "📍 [Program 05]: اختر LI ثم رقم بروتوكول BMS للبطارية.",
-      "📍 [Program 11]: حدد الشحن من الشبكة/المولد بـ 30A للحفاظ على المولد."
+      "📍 <b>[Program 01]:</b> اضبط الأولوية على <b>SOL</b> للاستفادة القصوى من الشمس نهاراً.",
+      "📍 <b>[Program 05]:</b> حدد <b>LI</b> مع اختيار بروتوكول الاتصال (L51 / L52) مع الـ BMS.",
+      "📍 <b>[Program 11]:</b> حدد تيار الشحن من الكهرباء العامة/المولد بحدود <b>20A - 30A</b> لتفادي إجهاد المولد."
+    ];
+  } else if (brand === 'huawei') {
+    steps = [
+      "📍 <b>[Quick Setup]:</b> اضبط الـ Grid Code المحلي المطابق للمنطقة في تطبيق FusionSolar.",
+      "📍 <b>[AFCI]:</b> تفعيل ميزة الحماية من القوس الكهربائي (Arc Fault) لرفع معايير الأمان.",
+      "📍 <b>[Energy Storage]:</b> اضبط وضع التحكم بالبطارية على Max Self-Consumption."
     ];
   }
 
-  outDiv.innerHTML = `<b>📋 المخرجات والتوصيات:</b><br><br>` + steps.join('<br><br>');
+  // عرض المخرجات داخل الصفحة
+  settingsList.innerHTML = steps.map(s => `<div class="setting-item">${s}</div>`).join('');
+  resultsPanel.style.display = 'block';
 }
 </script>
 
