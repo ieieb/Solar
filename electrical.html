@@ -1,1 +1,346 @@
 
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مصمم التابلوهات ودوائر التحكم الكهربائية</title>
+    <style>
+        :root {
+            --bg-dark: #0f172a;
+            --panel-bg: #1e293b;
+            --accent-orange: #f97316;
+            --accent-blue: #38bdf8;
+            --accent-green: #22c55e;
+            --text-light: #f8fafc;
+            --border-color: #334155;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            margin: 0;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            border-bottom: 2px solid var(--accent-orange);
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+        }
+
+        .header h1 { margin: 0; color: var(--accent-orange); font-size: 24px; }
+        .header p { margin: 5px 0 0 0; color: #94a3b8; font-size: 14px; }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        @media (max-width: 900px) {
+            .grid-container { grid-template-columns: 1fr; }
+        }
+
+        .card {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+        }
+
+        .card h2 {
+            margin-top: 0;
+            color: var(--accent-blue);
+            font-size: 18px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #cbd5e1;
+            font-size: 14px;
+        }
+
+        select, input, button {
+            width: 100%;
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            background: #0f172a;
+            color: #fff;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+
+        button.btn-add {
+            background: var(--accent-orange);
+            color: #fff;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+            border: none;
+            transition: 0.2s;
+        }
+
+        button.btn-add:hover { background: #ea580c; }
+
+        .tableau-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .tableau-item {
+            background: #0f172a;
+            border: 1px solid var(--border-color);
+            border-right: 4px solid var(--accent-green);
+            padding: 12px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .btn-del {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            width: auto;
+            cursor: pointer;
+        }
+
+        .wiring-guide {
+            background: #09101d;
+            border: 1px dashed var(--accent-blue);
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            font-size: 13px;
+            line-height: 1.7;
+        }
+
+        .wiring-guide h3 { color: var(--accent-orange); margin-top: 0; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>مكتبة التجهيزات الكهربائية ومصمم التابلوهات</h1>
+        <p>اختر القطع، الحجوم، ورتب دائرة التحكم والتغذية الخاصة بك مع دليل التوصيل</p>
+    </div>
+
+    <div class="grid-container">
+        <!-- قسم اختيار القطع -->
+        <div class="card">
+            <h2>1. اختيار وتحديد القطع الكهربائية</h2>
+            
+            <div class="form-group">
+                <label>الفئة الرئيسية (Category):</label>
+                <select id="categorySelect" onchange="updateSubCategories()">
+                    <option value="breakers">القواطع وحماية الدوائر (MCB / MCCB / RCCB)</option>
+                    <option value="contactors">الكونتاكتورات والأنفرسور (Contactors & Changeovers)</option>
+                    <option value="protection">قطع الحماية الفائقة (Overload / Phase Failure / SPD)</option>
+                    <option value="timers_relays">التايمرات والريليات (Timers & Control Relays)</option>
+                    <option value="busbars">البسبارات ونقاط التجميع (Busbars & Terminals)</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>نوع القطعة بالتحديد:</label>
+                <select id="typeSelect" onchange="updateRatings()">
+                    <!-- يتم التعبئة تلقائياً بالفانكشن -->
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>سعة / حجم القطعة (Rating / Capacity):</label>
+                <select id="ratingSelect">
+                    <!-- يتم التعبئة تلقائياً بالفانكشن -->
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>الكمية المطلوب إضافتها:</label>
+                <input type="number" id="itemQty" value="1" min="1" max="50">
+            </div>
+
+            <button class="btn-add" onclick="addToTableau()">+ إضافة القطعة إلى التابلوه</button>
+        </div>
+
+        <!-- قسم التابلوه ودليل التوصيل -->
+        <div class="card">
+            <h2>2. محتويات التابلوه (Panel Assembly)</h2>
+            <ul id="tableauList" class="tableau-list">
+                <!-- القطع المضافة تظهر هنا -->
+            </ul>
+
+            <div class="wiring-guide" id="wiringInstructions">
+                <h3>دليل الربط والتوصيل السلكي (Wiring Instructions):</h3>
+                <p>قم بإضافة القطع إلى التابلوه لعرض خطوات التوصيل التسلسلي والأسلاك المطلوبة للدائرة.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const catalog = {
+            breakers: {
+                types: [
+                    "قاطع مينيور أحادي (MCB 1-Pole)",
+                    "قاطع مينيور ثنائي (MCB 2-Pole)",
+                    "قاطع مينيور ثلاثي (MCB 3-Pole)",
+                    "قاطع مذكر / مسبوك (MCCB 3-Pole)",
+                    "قاطع تفاضلي / تسريب أرضي (RCCB / ELCB 30mA)"
+                ],
+                ratings: ["6A", "10A", "16A", "20A", "25A", "32A", "40A", "50A", "63A", "80A", "100A", "125A", "160A", "250A", "400A"]
+            },
+            contactors: {
+                types: [
+                    "كونتاكتور تشغيل أحادي 220V Coil (AC-3)",
+                    "كونتاكتور قوة ثلاثي 220V/380V Coil (AC-3)",
+                    "كونتاكتور عكس حركة / انفرسور ميكانيكي (Reversing Contactor)",
+                    "كونتاكتور موديلاري للتابلوهات المنزلية (Modular Contactor)"
+                ],
+                ratings: ["9A", "12A", "18A", "25A", "32A", "40A", "50A", "65A", "80A", "95A", "115A", "150A", "205A"]
+            },
+            protection: {
+                types: [
+                    "أوفرلود حراري (Thermal Overload Relay)",
+                    "جهاز حماية فازات وتتابع (Phase Failure / Phase Sequence)",
+                    "فاصل مانع الصواعق وتفريغ الجهد (Surge Protection Device - SPD)",
+                    "جهاز حماية ارتفاع وانخفاض الجهد والتحكم بالأمبير (Over/Under Voltage)"
+                ],
+                ratings: ["قابلة للضبط (0.6 - 1A)", "قابلة للضبط (4 - 6A)", "قابلة للضبط (7 - 10A)", "قابلة للضبط (12 - 18A)", "40A Direct", "63A Direct", "Class II / 20-40kA"]
+            },
+            timers_relays: {
+                types: [
+                    "تايمر تأخير تشغيل (On-Delay Timer 220V)",
+                    "تايمر أوف دلاي (Off-Delay Timer)",
+                    "تايمر أسبوعي رقمي (Digital Weekly Timer)",
+                    "ريليه مساعد (Auxiliary Relay 8-Pin / 14-Pin + Base)"
+                ],
+                ratings: ["5A Contacts", "10A Contacts", "16A Contacts"]
+            },
+            busbars: {
+                types: [
+                    "بسبار نحاس تمشيط أحادي (Comb Busbar 1-Phase)",
+                    "بسبار نحاس تمشيط ثلاثي (Comb Busbar 3-Phase)",
+                    "روزيتات تجميع نيوترال / أرضي (Neutral/Earth Terminal Block)",
+                    "ترمينال ريل توزيغ (DIN-Rail Terminal Blocks)"
+                ],
+                ratings: ["63A Max", "100A Max", "125A Max", "2.5 mm²", "4 mm²", "6 mm²", "10 mm²", "16 mm²"]
+            }
+        };
+
+        let currentTableau = [];
+
+        function updateSubCategories() {
+            const cat = document.getElementById('categorySelect').value;
+            const typeSelect = document.getElementById('typeSelect');
+            typeSelect.innerHTML = '';
+            
+            catalog[cat].types.forEach(type => {
+                let opt = document.createElement('option');
+                opt.value = type;
+                opt.innerText = type;
+                typeSelect.appendChild(opt);
+            });
+            updateRatings();
+        }
+
+        function updateRatings() {
+            const cat = document.getElementById('categorySelect').value;
+            const ratingSelect = document.getElementById('ratingSelect');
+            ratingSelect.innerHTML = '';
+            
+            catalog[cat].ratings.forEach(rating => {
+                let opt = document.createElement('option');
+                opt.value = rating;
+                opt.innerText = rating;
+                ratingSelect.appendChild(opt);
+            });
+        }
+
+        function addToTableau() {
+            const type = document.getElementById('typeSelect').value;
+            const rating = document.getElementById('ratingSelect').value;
+            const qty = document.getElementById('itemQty').value;
+
+            currentTableau.push({ type, rating, qty });
+            renderTableau();
+        }
+
+        function removeFromTableau(index) {
+            currentTableau.splice(index, 1);
+            renderTableau();
+        }
+
+        function renderTableau() {
+            const list = document.getElementById('tableauList');
+            list.innerHTML = '';
+
+            if (currentTableau.length === 0) {
+                list.innerHTML = '<li style="color:#64748b; text-align:center;">التابلوه فارغ حالياً</li>';
+                document.getElementById('wiringInstructions').innerHTML = '<h3>دليل الربط والتوصيل السلكي:</h3><p>أضف قطعاً للتابلوه لمشاهدة المخطط والتوصيل.</p>';
+                return;
+            }
+
+            currentTableau.forEach((item, idx) => {
+                let li = document.createElement('li');
+                li.className = 'tableau-item';
+                li.innerHTML = `
+                    <div>
+                        <strong>${item.type}</strong><br>
+                        <small style="color: var(--accent-orange)">السعة: ${item.rating} | الكمية: ${item.qty}</small>
+                    </div>
+                    <button class="btn-del" onclick="removeFromTableau(${idx})">حذف</button>
+                `;
+                list.appendChild(li);
+            });
+
+            generateWiringGuide();
+        }
+
+        function generateWiringGuide() {
+            const guide = document.getElementById('wiringInstructions');
+            let html = '<h3>دليل الربط والتوصيل السلكي للتابلوه المختار:</h3><ul>';
+            
+            html += '<li><strong>خط الدخول الرئيسي:</strong> يدخل كابل التغذية إلى القاطع الرئيسي الأول مباشرة.</li>';
+            html += '<li><strong>توزيع النيوترال (Neutral):</strong> يتم ربط النيوترال بـ (روزيتة النيوترال) ومنها يوزع لملفات الكويل (A2) للكونتاكتورات والتايمرات وجهاز حماية الفازات.</li>';
+            
+            currentTableau.forEach(item => {
+                if (item.type.includes("MCB") || item.type.includes("MCCB")) {
+                    html += `<li><strong>${item.type} (${item.rating}):</strong> يخرج منه سلك الفاز (L) مغذياً الـ Comb Busbar أو مدخل الكونتاكتورات مباشرة.</li>`;
+                }
+                if (item.type.includes("Phase Failure")) {
+                    html += `<li><strong>جهاز Phase Failure:</strong> يتم أخذ 3 فازات من بعد القاطع الرئيسي إلى المداخل (L1, L2, L3)، والنقطة المقفولة (NC 11-14) تدخل في سلسلة حماية كويل الكونتاكتورات.</li>`;
+                }
+                if (item.type.includes("كونتاكتور")) {
+                    html += `<li><strong>${item.type} (${item.rating}):</strong> تدخل نقاط القوة (L1, L2, L3)، وتخرج (T1, T2, T3) إلى الحمل أو الأوفرلود. ملف الكويل (A1) يأخذ خط التحكم من التايمر أو الفاز فيلير.</li>`;
+                }
+                if (item.type.includes("Overload")) {
+                    html += `<li><strong>الأوفرلود:</strong> يركب ميكانيكياً تحت الكونتاكتور، ونقطة التحكم (NC 95-96) توصل على التوالي مع ملف الكويل قطعاً للتغذية عند ارتفاع الأمبير.</li>`;
+                }
+            });
+
+            html += '</ul>';
+            guide.innerHTML = html;
+        }
+
+        // Initialize defaults
+        updateSubCategories();
+    </script>
+</body>
+</html>
