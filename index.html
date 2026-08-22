@@ -1,48 +1,25 @@
-<!-- حاسبة برمجة الإنفرتر الذكية -->
-<div style="background: #ffffff; padding: 22px; border-radius: 10px; border: 1px solid #cbd5e1; max-width: 600px; margin: 20px auto; font-family: system-ui, sans-serif; direction: rtl; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);">
-    <h3 style="color: #0f172a; margin-top: 0; border-bottom: 2px solid #3b82f6; padding-bottom: 8px;">مولّد إعدادات الإنفرتر الذكي</h3>
-    
-    <div style="margin-bottom: 12px;">
-        <label style="font-weight: bold; display: block; margin-bottom: 5px;">أدخل قدرة الإنفرتر (بالكيلوواط kW):</label>
-        <!-- الحقل فارغ تماماً والمستخدم يدخل أي قيمة -->
-        <input type="number" id="kwInput" step="0.1" value="" placeholder="أدخل القدرة هنا (مثال: 1.2 أو 2.2 أو 5)" style="width: 100%; padding: 10px; border: 1px solid #94a3b8; border-radius: 6px; box-sizing: border-box;">
-    </div>
-
-    <div style="margin-bottom: 12px;">
-        <label style="font-weight: bold; display: block; margin-bottom: 5px;">نوع البطارية:</label>
-        <select id="batTypeSelect" style="width: 100%; padding: 10px; border: 1px solid #94a3b8; border-radius: 6px; box-sizing: border-box;">
-            <option value="tubular">أنبوبية سائلة (Tubular / Flooded)</option>
-            <option value="gel">جل / AGM (Gel / Sealed)</option>
-            <option value="lithium">ليثيوم (LiFePO4)</option>
-        </select>
-    </div>
-
-    <div style="margin-bottom: 18px;">
-        <label style="font-weight: bold; display: block; margin-bottom: 5px;">سعة بنك البطاريات (أمبير Ah):</label>
-        <input type="number" id="ahInput" value="" placeholder="أدخل السعة هنا (مثال: 200)" style="width: 100%; padding: 10px; border: 1px solid #94a3b8; border-radius: 6px; box-sizing: border-box;">
-    </div>
-
-    <button onclick="autoCalculateSettings()" style="width: 100%; padding: 12px; background: #1e3a8a; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 11pt;">توليد الإعدادات تلقائياً</button>
-
-    <div id="settingsResult" style="margin-top: 20px;"></div>
-</div>
-
 <script>
 function autoCalculateSettings() {
     const kwInputVal = document.getElementById('kwInput').value;
     const ahInputVal = document.getElementById('ahInput').value;
 
-    // تنبيه المستخدم في حال عدم إدخال الرقم
     if (!kwInputVal || kwInputVal <= 0) {
-        alert("يرجى إدخال قدرة الإنفرتر بالكيلوواط (kW) أولاً.");
+        alert("يرجى إدخال قدرة الإنفرتر أولاً.");
         return;
     }
 
-    const kw = parseFloat(kwInputVal);
-    const type = document.getElementById('batTypeSelect').value;
-    const ah = parseInt(ahInputVal) || 200; // قيمة افتراضية للبطارية إذا تركها فارغة
+    let rawVal = parseFloat(kwInputVal);
+    let kw = rawVal;
 
-    // 1. الاكتشاف التلقائي لفولتية النظام بناءً على الرقم المدخل من المستخدم
+    // تمييز تلقائي: إذا أدخل المستخدم الرقم بالآلاف (واط W) يتم تحويله فوراً إلى كيلوواط (kW)
+    if (rawVal >= 50) {
+        kw = rawVal / 1000;
+    }
+
+    const type = document.getElementById('batTypeSelect').value;
+    const ah = parseInt(ahInputVal) || 200;
+
+    // 1. الاكتشاف التلقائي لفولتية النظام
     let sysVolt = 24;
     if (kw <= 1.5) {
         sysVolt = 12;
@@ -52,12 +29,12 @@ function autoCalculateSettings() {
         sysVolt = 48;
     }
 
-    // 2. حساب تيار الشحن (الإعداد 02)
+    // 2. حساب تيار الشحن الأقصى
     let maxCharge = Math.round(ah * (type === 'lithium' ? 0.30 : 0.15));
     if (maxCharge < 10) maxCharge = 10;
     if (maxCharge > 100) maxCharge = 100;
 
-    // 3. احتساب القيم بناءً على الرقم المدخل ونوع البطارية
+    // 3. الفولتيات الثابتة القديمة
     let bulk, floatV, cutoff, backUtl, backBat;
 
     if (sysVolt === 12) {
@@ -74,32 +51,38 @@ function autoCalculateSettings() {
         else                        { bulk = 56.8; floatV = 54.0; cutoff = 48.0; backUtl = 50.0; backBat = 53.6; }
     }
 
-    // 4. عرض النتيجة
+    // 4. عرض النتائج الشاملة مع التمييز الواضح للقدرة المدخلة
     const html = `
-        <div style="background: #f8fafc; padding: 12px; border-radius: 6px; border: 1px solid #e2e8f0; margin-bottom: 12px; font-size: 10pt;">
-            <strong>الفولتية المكتشفة للنظام:</strong> <span style="color: #1e3a8a; font-weight: bold;">${sysVolt} Volt</span> (بناءً على قدرة ${kw} kW)
+        <div class="info-box" style="margin-top: 20px;">
+            <strong>الفولتية المكتشفة للنظام:</strong> <span style="color: #1e3a8a; font-weight: bold;">${sysVolt} Volt</span> 
+            <span style="color: #64748b; font-size: 0.85em;">(القدرة المحسوبة: ${kw} kW / ${kw * 1000} W)</span>
         </div>
-        <table style="width: 100%; border-collapse: collapse; text-align: right; border: 1px solid #cbd5e1; font-size: 9.5pt;">
+        <table>
             <thead>
-                <tr style="background: #0f172a; color: white;">
-                    <th style="padding: 8px; border: 1px solid #cbd5e1;">الرمز</th>
-                    <th style="padding: 8px; border: 1px solid #cbd5e1;">اسم الإعداد</th>
-                    <th style="padding: 8px; border: 1px solid #cbd5e1;">القيمة المطلوبة</th>
+                <tr>
+                    <th style="width: 15%;">الرمز</th>
+                    <th style="width: 55%;">اسم الإعداد</th>
+                    <th style="width: 30%;">القيمة المطلوبة</th>
                 </tr>
             </thead>
             <tbody>
-                <tr><td style="padding: 8px; border: 1px solid #e2e8f0;"><b>01</b></td><td style="padding: 8px; border: 1px solid #e2e8f0;">Output Source Priority</td><td style="padding: 8px; border: 1px solid #e2e8f0; color: #d97706;"><b>SOL / SBU</b></td></tr>
-                <tr><td style="padding: 8px; border: 1px solid #e2e8f0;"><b>02</b></td><td style="padding: 8px; border: 1px solid #e2e8f0;">Max Charge Current</td><td style="padding: 8px; border: 1px solid #e2e8f0; color: #d97706;"><b>${maxCharge} A</b></td></tr>
-                <tr><td style="padding: 8px; border: 1px solid #e2e8f0;"><b>05</b></td><td style="padding: 8px; border: 1px solid #e2e8f0;">Battery Type</td><td style="padding: 8px; border: 1px solid #e2e8f0; color: #d97706;"><b>USE</b></td></tr>
-                <tr><td style="padding: 8px; border: 1px solid #e2e8f0;"><b>06</b></td><td style="padding: 8px; border: 1px solid #e2e8f0;">Auto Restart Overload</td><td style="padding: 8px; border: 1px solid #e2e8f0; color: #d97706;"><b>LRE</b></td></tr>
-                <tr><td style="padding: 8px; border: 1px solid #e2e8f0;"><b>07</b></td><td style="padding: 8px; border: 1px solid #e2e8f0;">Auto Restart Overtemp</td><td style="padding: 8px; border: 1px solid #e2e8f0; color: #d97706;"><b>tRE</b></td></tr>
-                <tr><td style="padding: 8px; border: 1px solid #e2e8f0;"><b>11</b></td><td style="padding: 8px; border: 1px solid #e2e8f0;">Max Utility Charge Current</td><td style="padding: 8px; border: 1px solid #e2e8f0; color: #d97706;"><b>10 A</b></td></tr>
-                <tr><td style="padding: 8px; border: 1px solid #e2e8f0;"><b>12</b></td><td style="padding: 8px; border: 1px solid #e2e8f0;">Back to Utility Voltage</td><td style="padding: 8px; border: 1px solid #e2e8f0; color: #d97706;"><b>${backUtl} V</b></td></tr>
-                <tr><td style="padding: 8px; border: 1px solid #e2e8f0;"><b>13</b></td><td style="padding: 8px; border: 1px solid #e2e8f0;">Back to Battery Voltage</td><td style="padding: 8px; border: 1px solid #e2e8f0; color: #d97706;"><b>${backBat} V</b></td></tr>
-                <tr><td style="padding: 8px; border: 1px solid #e2e8f0;"><b>16</b></td><td style="padding: 8px; border: 1px solid #e2e8f0;">Charger Source Priority</td><td style="padding: 8px; border: 1px solid #e2e8f0; color: #d97706;"><b>CSO</b></td></tr>
-                <tr><td style="padding: 8px; border: 1px solid #e2e8f0;"><b>26</b></td><td style="padding: 8px; border: 1px solid #e2e8f0;">Bulk Charging Voltage</td><td style="padding: 8px; border: 1px solid #e2e8f0; color: #d97706;"><b>${bulk} V</b></td></tr>
-                <tr><td style="padding: 8px; border: 1px solid #e2e8f0;"><b>27</b></td><td style="padding: 8px; border: 1px solid #e2e8f0;">Floating Charging Voltage</td><td style="padding: 8px; border: 1px solid #e2e8f0; color: #d97706;"><b>${floatV} V</b></td></tr>
-                <tr><td style="padding: 8px; border: 1px solid #e2e8f0;"><b>29</b></td><td style="padding: 8px; border: 1px solid #e2e8f0;">Low Cut-off Voltage</td><td style="padding: 8px; border: 1px solid #e2e8f0; color: #d97706;"><b>${cutoff} V</b></td></tr>
+                <tr><td class="setting-code">01</td><td>Output Source Priority</td><td class="setting-val">SOL / SBU</td></tr>
+                <tr><td class="setting-code">02</td><td>Max Charge Current</td><td class="setting-val">${maxCharge} A</td></tr>
+                <tr><td class="setting-code">03</td><td>AC Input Voltage Range</td><td class="setting-val">APL</td></tr>
+                <tr><td class="setting-code">05</td><td>Battery Type</td><td class="setting-val">USE</td></tr>
+                <tr><td class="setting-code">06</td><td>Auto Restart Overload</td><td class="setting-val">LRE</td></tr>
+                <tr><td class="setting-code">07</td><td>Auto Restart Overtemp</td><td class="setting-val">tRE</td></tr>
+                <tr><td class="setting-code">09</td><td>Output Frequency</td><td class="setting-val">50 Hz</td></tr>
+                <tr><td class="setting-code">11</td><td>Max Utility Charge Current</td><td class="setting-val">10 A</td></tr>
+                <tr><td class="setting-code">12</td><td>Back to Utility Voltage</td><td class="setting-val">${backUtl} V</td></tr>
+                <tr><td class="setting-code">13</td><td>Back to Battery Voltage</td><td class="setting-val">${backBat} V</td></tr>
+                <tr><td class="setting-code">16</td><td>Charger Source Priority</td><td class="setting-val">CSO</td></tr>
+                <tr><td class="setting-code">18</td><td>Alarm Control (Buzzer)</td><td class="setting-val">BON</td></tr>
+                <tr><td class="setting-code">22</td><td>Backlight Control</td><td class="setting-val">LON</td></tr>
+                <tr><td class="setting-code">23</td><td>Overload Bypass</td><td class="setting-val">BYE</td></tr>
+                <tr><td class="setting-code">26</td><td>Bulk Charging Voltage</td><td class="setting-val">${bulk} V</td></tr>
+                <tr><td class="setting-code">27</td><td>Floating Charging Voltage</td><td class="setting-val">${floatV} V</td></tr>
+                <tr><td class="setting-code">29</td><td>Low Cut-off Voltage</td><td class="setting-val">${cutoff} V</td></tr>
             </tbody>
         </table>
     `;
