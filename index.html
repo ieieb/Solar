@@ -67,6 +67,19 @@
             border-color: var(--accent-color);
         }
 
+        .input-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .input-group input {
+            flex: 2;
+        }
+
+        .input-group select {
+            flex: 1;
+        }
+
         .btn-calc {
             width: 100%;
             padding: 12px;
@@ -139,8 +152,8 @@
     <h2>مولّد إعدادات الإنفرتر الذكي</h2>
 
     <div class="form-group">
-        <label for="kwInput">أدخل قدرة الإنفرتر (بالواط W أو بالكيلوواط kW):</label>
-        <input type="number" id="kwInput" step="0.1" value="" placeholder="مثال: 2.2 أو 2200 أو 3000">
+        <label for="kwInput">قدرة الإنفرتر (W أو kW):</label>
+        <input type="number" id="kwInput" step="0.1" value="" placeholder="مثال: 3 أو 3000">
     </div>
 
     <div class="form-group">
@@ -153,8 +166,24 @@
     </div>
 
     <div class="form-group">
-        <label for="ahInput">سعة بنك البطاريات (أمبير Ah):</label>
-        <input type="number" id="ahInput" value="" placeholder="مثال: 200">
+        <label for="batValueInput">سعة/حجم بنك البطاريات:</label>
+        <div class="input-group">
+            <input type="number" id="batValueInput" step="0.1" value="" placeholder="أدخل القيمة هنا">
+            <select id="batUnitSelect">
+                <option value="ah">أمبير (Ah)</option>
+                <option value="kwh">كيلوواط (kWh)</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="chargePrioritySelect">أولوية مصدر الشحن (الإعداد 16):</label>
+        <select id="chargePrioritySelect">
+            <option value="CSO">الشمس أولاً (CSO - Solar First)</option>
+            <option value="CUB">الشبكة / المولد أولاً (CUB - Utility First)</option>
+            <option value="SNU">الشمس والشبكة معاً (SNU - Solar & Utility)</option>
+            <option value="OSO">الشمس فقط (OSO - Only Solar)</option>
+        </select>
     </div>
 
     <button class="btn-calc" onclick="autoCalculateSettings()">توليد الإعدادات تلقائياً</button>
@@ -165,25 +194,22 @@
 <script>
 function autoCalculateSettings() {
     const kwInputVal = document.getElementById('kwInput').value;
-    const ahInputVal = document.getElementById('ahInput').value;
+    const batValueVal = document.getElementById('batValueInput').value;
+    const batUnit = document.getElementById('batUnitSelect').value;
+    const chargePriority = document.getElementById('chargePrioritySelect').value;
 
     if (!kwInputVal || kwInputVal <= 0) {
         alert("يرجى إدخال قدرة الإنفرتر أولاً.");
         return;
     }
 
-    let rawVal = parseFloat(kwInputVal);
-    let kw = rawVal;
-
-    // تمييز تلقائي: إذا أدخل الرقم بالآلاف (واط W) يتم تحويله فوراً إلى كيلوواط (kW)
-    if (rawVal >= 50) {
-        kw = rawVal / 1000;
-    }
+    let rawKw = parseFloat(kwInputVal);
+    let kw = rawKw >= 50 ? rawKw / 1000 : rawKw;
 
     const type = document.getElementById('batTypeSelect').value;
-    const ah = parseInt(ahInputVal) || 200;
+    let rawBatVal = parseFloat(batValueVal) || (batUnit === 'kwh' ? 4.8 : 200);
 
-    // 1. الاكتشاف التلقائي لفولتية النظام
+    // 1. تحديد فولتية النظام تلقائياً
     let sysVolt = 24;
     if (kw <= 1.5) {
         sysVolt = 12;
@@ -193,12 +219,18 @@ function autoCalculateSettings() {
         sysVolt = 48;
     }
 
-    // 2. حساب تيار الشحن
+    // 2. حساب السعة بالأمبير بناءً على الوحدة المختارة
+    let ah = rawBatVal;
+    if (batUnit === 'kwh') {
+        ah = Math.round((rawBatVal * 1000) / sysVolt);
+    }
+
+    // 3. حساب تيار الشحن الأقصى
     let maxCharge = Math.round(ah * (type === 'lithium' ? 0.30 : 0.15));
     if (maxCharge < 10) maxCharge = 10;
     if (maxCharge > 100) maxCharge = 100;
 
-    // 3. الفولتيات القديمة والإعدادات الثابتة
+    // 4. الفولتيات الثابتة
     let bulk, floatV, cutoff, backUtl, backBat;
 
     if (sysVolt === 12) {
@@ -215,11 +247,10 @@ function autoCalculateSettings() {
         else                        { bulk = 56.8; floatV = 54.0; cutoff = 48.0; backUtl = 50.0; backBat = 53.6; }
     }
 
-    // 4. عرض كافة النتائج
     const html = `
         <div class="info-box" style="margin-top: 20px;">
-            <strong>الفولتية المكتشفة للنظام:</strong> <span style="color: #1e3a8a; font-weight: bold;">${sysVolt} Volt</span> 
-            <span style="color: #64748b; font-size: 0.85em;">(القدرة: ${kw} kW)</span>
+            <strong>فولتية النظام المكتشفة:</strong> <span style="color: #1e3a8a; font-weight: bold;">${sysVolt}&nbsp;Volt</span> 
+            <br><span style="color: #64748b; font-size: 0.85em;">(الإنفرتر: ${kw}&nbsp;kW | سعة البطارية المحسوبة: ${ah}&nbsp;Ah)</span>
         </div>
         <table>
             <thead>
@@ -231,22 +262,22 @@ function autoCalculateSettings() {
             </thead>
             <tbody>
                 <tr><td class="setting-code">01</td><td>Output Source Priority</td><td class="setting-val">SOL / SBU</td></tr>
-                <tr><td class="setting-code">02</td><td>Max Charge Current</td><td class="setting-val">${maxCharge} A</td></tr>
+                <tr><td class="setting-code">02</td><td>Max Charge Current</td><td class="setting-val">${maxCharge}&nbsp;A</td></tr>
                 <tr><td class="setting-code">03</td><td>AC Input Voltage Range</td><td class="setting-val">APL</td></tr>
                 <tr><td class="setting-code">05</td><td>Battery Type</td><td class="setting-val">USE</td></tr>
                 <tr><td class="setting-code">06</td><td>Auto Restart Overload</td><td class="setting-val">LRE</td></tr>
                 <tr><td class="setting-code">07</td><td>Auto Restart Overtemp</td><td class="setting-val">tRE</td></tr>
-                <tr><td class="setting-code">09</td><td>Output Frequency</td><td class="setting-val">50 Hz</td></tr>
-                <tr><td class="setting-code">11</td><td>Max Utility Charge Current</td><td class="setting-val">10 A</td></tr>
-                <tr><td class="setting-code">12</td><td>Back to Utility Voltage</td><td class="setting-val">${backUtl} V</td></tr>
-                <tr><td class="setting-code">13</td><td>Back to Battery Voltage</td><td class="setting-val">${backBat} V</td></tr>
-                <tr><td class="setting-code">16</td><td>Charger Source Priority</td><td class="setting-val">CSO</td></tr>
+                <tr><td class="setting-code">09</td><td>Output Frequency</td><td class="setting-val">50&nbsp;Hz</td></tr>
+                <tr><td class="setting-code">11</td><td>Max Utility Charge Current</td><td class="setting-val">10&nbsp;A</td></tr>
+                <tr><td class="setting-code">12</td><td>Back to Utility Voltage</td><td class="setting-val">${backUtl}&nbsp;V</td></tr>
+                <tr><td class="setting-code">13</td><td>Back to Battery Voltage</td><td class="setting-val">${backBat}&nbsp;V</td></tr>
+                <tr><td class="setting-code">16</td><td>Charger Source Priority</td><td class="setting-val">${chargePriority}</td></tr>
                 <tr><td class="setting-code">18</td><td>Alarm Control (Buzzer)</td><td class="setting-val">BON</td></tr>
                 <tr><td class="setting-code">22</td><td>Backlight Control</td><td class="setting-val">LON</td></tr>
                 <tr><td class="setting-code">23</td><td>Overload Bypass</td><td class="setting-val">BYE</td></tr>
-                <tr><td class="setting-code">26</td><td>Bulk Charging Voltage</td><td class="setting-val">${bulk} V</td></tr>
-                <tr><td class="setting-code">27</td><td>Floating Charging Voltage</td><td class="setting-val">${floatV} V</td></tr>
-                <tr><td class="setting-code">29</td><td>Low Cut-off Voltage</td><td class="setting-val">${cutoff} V</td></tr>
+                <tr><td class="setting-code">26</td><td>Bulk Charging Voltage</td><td class="setting-val">${bulk}&nbsp;V</td></tr>
+                <tr><td class="setting-code">27</td><td>Floating Charging Voltage</td><td class="setting-val">${floatV}&nbsp;V</td></tr>
+                <tr><td class="setting-code">29</td><td>Low Cut-off Voltage</td><td class="setting-val">${cutoff}&nbsp;V</td></tr>
             </tbody>
         </table>
     `;
