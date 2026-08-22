@@ -1,147 +1,130 @@
-import tkinter as tk
-from tkinter import ttk, messagebox
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>حاسبة التوافق وإعدادات الإنفرتر الذكية</title>
+  <style>
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f4f6f9; margin: 0; padding: 20px; direction: rtl; }
+    .card { max-width: 600px; margin: auto; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+    h2 { color: #1a2a3a; text-align: center; margin-top: 0; }
+    .form-group { margin-bottom: 15px; }
+    label { display: block; margin-bottom: 6px; font-weight: bold; color: #333; }
+    input, select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; font-size: 14px; }
+    button { width: 100%; background: #27ae60; color: white; padding: 12px; border: none; border-radius: 6px; font-size: 16px; font-weight: bold; cursor: pointer; }
+    button:hover { background: #219150; }
+    #warning { margin-top: 15px; padding: 10px; border-radius: 6px; font-weight: bold; display: none; }
+    #output { margin-top: 20px; background: #f8f9fa; padding: 15px; border-radius: 6px; border: 1px solid #ddd; white-space: pre-line; line-height: 1.6; }
+  </style>
+</head>
+<body>
 
-# =====================================================================
-# 1. قاعدة البيانات البرمجية الشاملة (لضمان دقة 100% حسب المصنع)
-# =====================================================================
-INVERTER_DATABASE = {
-    "Voltronic (Axpert/Must)": {
-        "type": "Off-Grid / Hybrid",
-        "voltage_modes": [24, 48],
-        "get_settings": lambda sys_kw, inv_kw, bat: [
-            "📍 [برنامج 01]: اضبط على SBU (الطاقة الشمسية أولاً ثم البطارية ثم الشبكة).",
-            f"📍 [برنامج 02]: أقصى تيار شحن إجمالي = {min(100, max(10, int((sys_kw * 1000) / 48)))} أمبير.",
-            "📍 [برنامج 05]: نوع البطارية = " + ("LI (ليثيوم) مع بروتوكول BMS" if "ليثيوم" in bat else "USE (مخصص) لضبط الفولتيات يدوياً."),
-            "📍 [برنامج 26]: فولت الشحن السريع (Bulk) = " + ("54.0V" if "ليثيوم" in bat else "56.4V (للجل/الأسيد)."),
-            "📍 [برنامج 27]: فولت الشحن العائم (Float) = " + ("53.5V" if "ليثيوم" in bat else "54.0V."),
-            "📍 [برنامج 29]: قطع الجهد المنخفض (Cut-off) = " + ("44.5V لحماية الخلايا" if "ليثيوم" in bat else "42.0V.")
-        ]
-    },
-    "Deye / Sol-Ark": {
-        "type": "Hybrid الذكي",
-        "voltage_modes": [48, "High Voltage"],
-        "get_settings": lambda sys_kw, inv_kw, bat: [
-            "📍 [Battery Setup]: اختر خيار Lithium واضبط رقم بروتوكول الـ BMS الخاص بالبطارية (مثال: 00 أو 12).",
-            f"📍 [Max Charge]: حدد تيار الشحن الأقصى بقيمة {min(120, max(10, int((sys_kw * 1000) / 48)))}A (حسب قدرة تفريغ خلايا {bat}).",
-            "📍 [System Work Mode]: تفعيل خيار Time of Use وتحديد نسبة الـ SoC المستهدفة ليلاً (مثلاً 30%).",
-            "📍 [Zero Export]: إذا كان النظام بدون عداد صافي، فعّل خيار Limit to Load لمنع التصدير للشبكة الكهربائية العامة.",
-            "📍 [Solar Input]: تأكد أن الجهد الكلي للسلاسل (Strings) لا يتجاوز 450V على كل مدخل MPPT."
-        ]
-    },
-    "Huawei (SUN2000)": {
-        "type": "On-Grid / Hybrid",
-        "voltage_modes": ["High Voltage"],
-        "get_settings": lambda sys_kw, inv_kw, bat: [
-            "📍 [Quick Setup]: من تطبيق FusionSolar، اختر الـ Grid Code المحلي المطابق لبلدك (مهم جداً للإقلاع).",
-            "📍 [AFCI]: تفعيل ميزة الحماية من القوس الكهربائي (Arc Fault) لرفع معايير الأمان ضد الحريق.",
-            "📍 [Energy Storage]: في حال وجود بطارية Luna2000، اضبط وضع التشغيل على TOU أو Max Self-Consumption.",
-            "📍 [Grid Export]: اضبط حد التصدير (Export Limitation) على 0kW إذا كانت شركة الكهرباء تمنع ضخ الطاقة للطاقة الشمسية.",
-            f"📍 [Capacity Check]: حجم الألواح الحالي {sys_kw}kW متوافق مع الموديل {inv_kw}kW (نسبة تحميل آمنة)."
-        ]
-    },
-    "Growatt": {
-        "type": "Off-Grid / Hybrid",
-        "voltage_modes": [24, 48],
-        "get_settings": lambda sys_kw, inv_kw, bat: [
-            "📍 [Program 01]: اضبط الأولوية على SOL للحفاظ على عمر البطاريات نهاراً.",
-            f"📍 [Program 05]: اختر نوع البطارية LI، ثم حدد رقم البروتوكول (L51 أو L52) ليتوافق مع الـ BMS للبطارية.",
-            "📍 [Program 11]: حدد الحد الأقصى للشحن من المولد/الشبكة بقيمة 30 أمبير لحماية المولد من الأحمال الزائدة.",
-            f"📍 [Program 21]: عتبة التحويل إلى الكهرباء العامة عند انخفاض البطارية، اضبطها على 20% للـ {bat}."
-        ]
-    }
+<div class="card">
+  <h2>💻 المبرمج الذكي لإنفرترات الطاقة الشمسية</h2>
+  
+  <div class="form-group">
+    <label>قدرة الألواح (System kW):</label>
+    <input type="number" id="sysKw" placeholder="مثال: 6">
+  </div>
+
+  <div class="form-group">
+    <label>قدرة الإنفرتر (Inverter kW):</label>
+    <input type="number" id="invKw" placeholder="مثال: 5">
+  </div>
+
+  <div class="form-group">
+    <label>ماركة الإنفرتر:</label>
+    <select id="brand">
+      <option value="voltronic">Voltronic (Axpert / Must)</option>
+      <option value="deye">Deye / Sol-Ark</option>
+      <option value="huawei">Huawei (SUN2000)</option>
+      <option value="growatt">Growatt</option>
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label>نوع البطارية:</label>
+    <select id="battery">
+      <option value="lithium">ليثيوم (Lithium-Ion / LiFePO4)</option>
+      <option value="gel">جل (Gel Battery)</option>
+      <option value="tubular">أنبوبية سائلة (Tubular Acid)</option>
+    </select>
+  </div>
+
+  <button onclick="processProgramming()">🚀 استخراج كافة البرمجيات والإعدادات</button>
+
+  <div id="warning"></div>
+  <div id="output">أدخل البيانات واضغط على الزر لاستخراج الدليل...</div>
+</div>
+
+<script>
+function processProgramming() {
+  const sysKw = parseFloat(document.getElementById('sysKw').value);
+  const invKw = parseFloat(document.getElementById('invKw').value);
+  const brand = document.getElementById('brand').value;
+  const battery = document.getElementById('battery').value;
+  const warnDiv = document.getElementById('warning');
+  const outDiv = document.getElementById('output');
+
+  if (!sysKw || !invKw || sysKw <= 0 || invKw <= 0) {
+    alert('الرجاء إدخال قيم صحيحة لحجم الألواح والإنفرتر');
+    return;
+  }
+
+  // التحقق من نسبة التحميل الفوقي
+  const ratio = sysKw / invKw;
+  warnDiv.style.display = 'block';
+  if (ratio > 1.30) {
+    warnDiv.style.background = '#f8d7da';
+    warnDiv.style.color = '#721c24';
+    warnDiv.innerHTML = `⚠️ تحذير: حجم الألواح (${sysKw}kW) ضخم بالنسبة للإنفرتر (${invKw}kW). قد يحصل فقدان طاقة (Clipping).`;
+  } else if (ratio < 0.5) {
+    warnDiv.style.background = '#fff3cd';
+    warnDiv.style.color = '#856404';
+    warnDiv.innerHTML = '⚠️ تنبيه: كمية الألواح قليلة جداً مقارنة بقدرة الإنفرتر.';
+  } else {
+    warnDiv.style.background = '#d4edda';
+    warnDiv.style.color = '#155724';
+    warnDiv.innerHTML = '✅ التوافق ممتاز: حجم الألواح متناسق مع قدرة الإنفرتر.';
+  }
+
+  // إنشاء التعليمات حسب الماركة
+  let steps = [];
+  const maxAmp = Math.min(100, Math.round((sysKw * 1000) / 48));
+
+  if (brand === 'voltronic') {
+    steps = [
+      "📍 [برنامج 01]: اضبط على SBU (طاقة شمسية ثم بطارية ثم شبكة).",
+      `📍 [برنامج 02]: أقصى تيار شحن مقترح = ${maxAmp} أمبير.`,
+      `📍 [برنامج 05]: نوع البطارية = ${battery === 'lithium' ? 'LI (ليثيوم مع BMS)' : 'USE (مخصص لضبط الفولتية)'}`,
+      `📍 [برنامج 26]: Bulk Voltage = ${battery === 'lithium' ? '54.0V' : '56.4V'}`,
+      `📍 [برنامج 27]: Float Voltage = ${battery === 'lithium' ? '53.5V' : '54.0V'}`,
+      `📍 [برنامج 29]: Low Cut-off = ${battery === 'lithium' ? '44.5V' : '42.0V'}`
+    ];
+  } else if (brand === 'deye') {
+    steps = [
+      "📍 [Battery Setup]: اختر Lithium واضبط بروتوكول الـ BMS المناسب.",
+      `📍 [Max Charge]: حدد تيار الشحن الأقصى بقيمة ${Math.min(120, maxAmp)}A.`,
+      "📍 [System Work Mode]: تفعيل Time of Use وتحديد نسبة الـ SoC المستهدفة ليلاً.",
+      "📍 [Zero Export]: فعّل خيار Limit to Load إذا كنت لا تضخ للشبكة العامة."
+    ];
+  } else if (brand === 'huawei') {
+    steps = [
+      "📍 [Quick Setup]: اختيار الـ Grid Code المحلي المطابق لبلدك.",
+      "📍 [AFCI]: تفعيل الحماية من القوس الكهربائي لزيادة الأمان.",
+      "📍 [Energy Storage]: ضبط mode البطارية على Max Self-Consumption."
+    ];
+  } else if (brand === 'growatt') {
+    steps = [
+      "📍 [Program 01]: اضبط الأولوية على SOL.",
+      "📍 [Program 05]: اختر LI ثم رقم بروتوكول BMS للبطارية.",
+      "📍 [Program 11]: حدد الشحن من الشبكة/المولد بـ 30A للحفاظ على المولد."
+    ];
+  }
+
+  outDiv.innerHTML = `<b>📋 المخرجات والتوصيات:</b><br><br>` + steps.join('<br><br>');
 }
+</script>
 
-# =====================================================================
-# 2. منطق الحساب البرمجي والتحقق من البيانات
-# =====================================================================
-def calculate_programming():
-    try:
-        sys_kw = float(entry_sys_kw.get())
-        inv_kw = float(entry_inv_kw.get())
-        brand = combo_brand.get()
-        battery = combo_battery.get()
-        
-        if sys_kw <= 0 or inv_kw <= 0:
-            raise ValueError
-            
-    except ValueError:
-        messagebox.showerror("خطأ في البيانات", "الرجاء إدخال أرقام صحيحة لحجم النظام والإنفرتر (مثال: 5.5 أو 10)")
-        return
-
-    # التحقق من نسبة التحميل الفوقي للألواح (DC Overloading)
-    overloading_ratio = sys_kw / inv_kw
-    if overloading_ratio > 1.30:
-        warn_text = f"⚠️ تحذير: حجم الألواح ({sys_kw}kW) ضخم جداً على هذا الإنفرتر ({inv_kw}kW). قد يتسبب هذا في تلف الجهاز أو ضياع طاقة (Clipping)."
-        lbl_warning.config(text=warn_text, fg="red")
-    elif overloading_ratio < 0.5:
-        warn_text = "⚠️ تنبيه: حجم الألواح قليل جداً مقارنة بقدرة الإنفرتر، قد لا يقلع الإنفرتر بكفاءة."
-        lbl_warning.config(text=warn_text, fg="orange")
-    else:
-        lbl_warning.config(text="✅ التوافق ممتاز: حجم الألواح متناسق تماماً مع قدرة الإنفرتر الاستيعابية.", fg="green")
-
-    # جلب الإعدادات من قاعدة البيانات
-    inverter_data = INVERTER_DATABASE[brand]
-    settings = inverter_data["get_settings"](sys_kw, inv_kw, battery)
-    
-    # عرض النتائج في واجهة المستخدم
-    text_output.delete("1.0", tk.END)
-    text_output.insert(tk.END, f"📋 نوع النظام: {inverter_data['type']}\n")
-    text_output.insert(tk.END, f"📊 حجم الألواح: {sys_kw} kW | حجم الإنفرتر: {inv_kw} kW\n")
-    text_output.insert(tk.END, f"🔋 نوع التخزين: {battery}\n")
-    text_output.insert(tk.END, "="*60 + "\n\n")
-    text_output.insert(tk.END, f"⚙️ الإعدادات البرمجية المطلوبة داخل شاشة وجهاز الـ {brand}:\n\n")
-    
-    for step in settings:
-        text_output.insert(tk.END, f"{step}\n\n")
-
-# =====================================================================
-# 3. بناء واجهة المستخدم الرسومية (GUI)
-# =====================================================================
-root = tk.Tk()
-root.title("مساعد فنيي الطاقة الشمسية الذكي - المبرمج الشامل")
-root.geometry("650x700")
-root.configure(bg="#f4f6f9")
-
-# العنوان الرئيسي
-lbl_title = tk.Label(root, text="💻 المبرمج الذكي لإنفرترات الطاقة الشمسية", font=("Arial", 14, "bold"), bg="#1a2a3a", fg="white", py=10)
-lbl_title.pack(fill=tk.X)
-
-frame_inputs = tk.LabelFrame(root, text=" إدخال بيانات النظام والموقع ", font=("Arial", 11, "bold"), bg="#f4f6f9", padx=15, pady=15)
-frame_inputs.pack(fill=tk.X, padx=15, pady=15)
-
-# الحقول والخيارات
-tk.Label(frame_inputs, text="كم كيلو الألواح (System kW):", bg="#f4f6f9", font=("Arial", 10)).grid(row=0, column=0, sticky="w", pady=5)
-entry_sys_kw = tk.Entry(frame_inputs, font=("Arial", 10), width=15)
-entry_sys_kw.grid(row=0, column=1, pady=5, padx=5)
-
-tk.Label(frame_inputs, text="كم كيلو الإنفرتر (Inverter kW):", bg="#f4f6f9", font=("Arial", 10)).grid(row=1, column=0, sticky="w", pady=5)
-entry_inv_kw = tk.Entry(frame_inputs, font=("Arial", 10), width=15)
-entry_inv_kw.grid(row=1, column=1, pady=5, padx=5)
-
-tk.Label(frame_inputs, text="نوع وماركة الإنفرتر:", bg="#f4f6f9", font=("Arial", 10)).grid(row=2, column=0, sticky="w", pady=5)
-combo_brand = ttk.Combobox(frame_inputs, values=list(INVERTER_DATABASE.keys()), state="readonly", font=("Arial", 10), width=25)
-combo_brand.current(0)
-combo_brand.grid(row=2, column=1, pady=5, padx=5)
-
-tk.Label(frame_inputs, text="نوع البطاريات المستخدمة:", bg="#f4f6f9", font=("Arial", 10)).grid(row=3, column=0, sticky="w", pady=5)
-combo_battery = ttk.Combobox(frame_inputs, values=["ليثيوم (Lithium-Ion / LiFePO4)", "جيل (Gel Battery)", "أنبوبية سائلة (Tubular Acid)"], state="readonly", font=("Arial", 10), width=25)
-combo_battery.current(0)
-combo_battery.grid(row=3, column=1, pady=5, padx=5)
-
-# زر الحساب والبرمجة
-btn_calc = tk.Button(root, text="🚀 استخراج كافة البرمجيات والإعدادات اللازمة", font=("Arial", 11, "bold"), bg="#27ae60", fg="white", cursor="hand2", command=calculate_programming, py=6)
-btn_calc.pack(fill=tk.X, padx=15, pady=5)
-
-# منطقة التحذيرات والتنبيهات الذكية
-lbl_warning = tk.Label(root, text="", font=("Arial", 10, "bold"), bg="#f4f6f9", wraplength=600)
-lbl_warning.pack(pady=5)
-
-# نافذة إخراج النتائج النهائية
-frame_output = tk.LabelFrame(root, text=" 📜 دليل البرمجة الدقيق المطابق للمصنع ", font=("Arial", 11, "bold"), bg="#f4f6f9", padx=10, pady=10)
-frame_output.pack(fill=tk.BOTH, expand=True, padx=15, pady=10)
-
-text_output = tk.Text(frame_output, font=("Arial", 11), bg="white", fg="#2c3e50", wrap=tk.WORD)
-text_output.pack(fill=tk.BOTH, expand=True)
-
-root.mainloop()
-        
+</body>
+</html>
