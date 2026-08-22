@@ -1,3 +1,167 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>حاسبة برمجة الإنفرتر الذكية</title>
+    <style>
+        :root {
+            --primary-color: #0f172a;
+            --accent-color: #1e3a8a;
+            --highlight-color: #d97706;
+            --bg-color: #f8fafc;
+            --border-color: #cbd5e1;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-color);
+            color: #334155;
+            margin: 0;
+            padding: 20px;
+            direction: rtl;
+        }
+
+        .container {
+            max-width: 650px;
+            margin: 0 auto;
+            background: #ffffff;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            border: 1px solid var(--border-color);
+        }
+
+        h2 {
+            color: var(--primary-color);
+            margin-top: 0;
+            border-bottom: 3px solid var(--accent-color);
+            padding-bottom: 10px;
+            font-size: 1.4rem;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 6px;
+            color: var(--primary-color);
+            font-size: 0.95rem;
+        }
+
+        input[type="number"], select {
+            width: 100%;
+            padding: 11px;
+            border: 1px solid #94a3b8;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 1rem;
+            background-color: #fff;
+        }
+
+        input[type="number"]:focus, select:focus {
+            outline: none;
+            border-color: var(--accent-color);
+        }
+
+        .btn-calc {
+            width: 100%;
+            padding: 12px;
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 1.05rem;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background-color 0.2s;
+        }
+
+        .btn-calc:hover {
+            background-color: #1d4ed8;
+        }
+
+        .info-box {
+            background-color: #f1f5f9;
+            padding: 12px 15px;
+            border-radius: 8px;
+            border-right: 4px solid var(--accent-color);
+            margin-bottom: 15px;
+            font-size: 0.95rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            background: #ffffff;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+
+        th {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 10px;
+            text-align: right;
+            font-size: 0.9rem;
+        }
+
+        td {
+            padding: 10px;
+            border-bottom: 1px solid #e2e8f0;
+            font-size: 0.9rem;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f8fafc;
+        }
+
+        .setting-code {
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .setting-val {
+            font-weight: bold;
+            color: var(--highlight-color);
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>مولّد إعدادات الإنفرتر الذكي</h2>
+
+    <div class="form-group">
+        <label for="kwInput">أدخل قدرة الإنفرتر (بالواط W أو بالكيلوواط kW):</label>
+        <input type="number" id="kwInput" step="0.1" value="" placeholder="مثال: 2.2 أو 2200 أو 3000">
+    </div>
+
+    <div class="form-group">
+        <label for="batTypeSelect">نوع البطارية:</label>
+        <select id="batTypeSelect">
+            <option value="tubular">أنبوبية سائلة (Tubular / Flooded)</option>
+            <option value="gel">جل / AGM (Gel / Sealed)</option>
+            <option value="lithium">ليثيوم (LiFePO4)</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="ahInput">سعة بنك البطاريات (أمبير Ah):</label>
+        <input type="number" id="ahInput" value="" placeholder="مثال: 200">
+    </div>
+
+    <button class="btn-calc" onclick="autoCalculateSettings()">توليد الإعدادات تلقائياً</button>
+
+    <div id="settingsResult"></div>
+</div>
+
 <script>
 function autoCalculateSettings() {
     const kwInputVal = document.getElementById('kwInput').value;
@@ -11,7 +175,7 @@ function autoCalculateSettings() {
     let rawVal = parseFloat(kwInputVal);
     let kw = rawVal;
 
-    // تمييز تلقائي: إذا أدخل المستخدم الرقم بالآلاف (واط W) يتم تحويله فوراً إلى كيلوواط (kW)
+    // تمييز تلقائي: إذا أدخل الرقم بالآلاف (واط W) يتم تحويله فوراً إلى كيلوواط (kW)
     if (rawVal >= 50) {
         kw = rawVal / 1000;
     }
@@ -29,12 +193,12 @@ function autoCalculateSettings() {
         sysVolt = 48;
     }
 
-    // 2. حساب تيار الشحن الأقصى
+    // 2. حساب تيار الشحن
     let maxCharge = Math.round(ah * (type === 'lithium' ? 0.30 : 0.15));
     if (maxCharge < 10) maxCharge = 10;
     if (maxCharge > 100) maxCharge = 100;
 
-    // 3. الفولتيات الثابتة القديمة
+    // 3. الفولتيات القديمة والإعدادات الثابتة
     let bulk, floatV, cutoff, backUtl, backBat;
 
     if (sysVolt === 12) {
@@ -51,11 +215,11 @@ function autoCalculateSettings() {
         else                        { bulk = 56.8; floatV = 54.0; cutoff = 48.0; backUtl = 50.0; backBat = 53.6; }
     }
 
-    // 4. عرض النتائج الشاملة مع التمييز الواضح للقدرة المدخلة
+    // 4. عرض كافة النتائج
     const html = `
         <div class="info-box" style="margin-top: 20px;">
             <strong>الفولتية المكتشفة للنظام:</strong> <span style="color: #1e3a8a; font-weight: bold;">${sysVolt} Volt</span> 
-            <span style="color: #64748b; font-size: 0.85em;">(القدرة المحسوبة: ${kw} kW / ${kw * 1000} W)</span>
+            <span style="color: #64748b; font-size: 0.85em;">(القدرة: ${kw} kW)</span>
         </div>
         <table>
             <thead>
@@ -90,3 +254,6 @@ function autoCalculateSettings() {
     document.getElementById('settingsResult').innerHTML = html;
 }
 </script>
+
+</body>
+</html>
