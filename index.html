@@ -7,45 +7,45 @@ from tkinter import ttk, messagebox
 INVERTER_DATABASE = {
     "Voltronic (Axpert/Must)": {
         "type": "Off-Grid / Hybrid",
-        "voltage_modes":,
+        "voltage_modes": [24, 48],
         "get_settings": lambda sys_kw, inv_kw, bat: [
-            f"📍 [برنامج 01]: اضبط على SBU (الطاقة الشمسية أولاً ثم البطارية ثم الشبكة).",
-            f"📍 [برنامج 02]: أقصى تيار شحن إجمالي = {min(100, int((sys_kw*1000)/48))} أمبير.",
-            f"📍 [برنامج 05]: نوع البطارية = " + ("LI (ليثيوم) مع بروتوكول BMS" if "ليثيوم" in bat else "USE (مخصص) لضبط الفولتيات يدوياً."),
-            f"📍 [برنامج 26]: فولت الشحن السريع (Bulk) = " + ("54.0V" if "ليثيوم" in bat else "56.4V (للجل/الأسيد)."),
-            f"📍 [برنامج 27]: فولت الشحن العائم (Float) = " + ("53.5V" if "ليثيوم" in bat else "54.0V."),
-            f"📍 [برنامج 29]: قطع الجهد المنخفض (Cut-off) = " + ("44.5V لحماية الخلايا" if "ليثيوم" in bat else "42.0V.")
+            "📍 [برنامج 01]: اضبط على SBU (الطاقة الشمسية أولاً ثم البطارية ثم الشبكة).",
+            f"📍 [برنامج 02]: أقصى تيار شحن إجمالي = {min(100, max(10, int((sys_kw * 1000) / 48)))} أمبير.",
+            "📍 [برنامج 05]: نوع البطارية = " + ("LI (ليثيوم) مع بروتوكول BMS" if "ليثيوم" in bat else "USE (مخصص) لضبط الفولتيات يدوياً."),
+            "📍 [برنامج 26]: فولت الشحن السريع (Bulk) = " + ("54.0V" if "ليثيوم" in bat else "56.4V (للجل/الأسيد)."),
+            "📍 [برنامج 27]: فولت الشحن العائم (Float) = " + ("53.5V" if "ليثيوم" in bat else "54.0V."),
+            "📍 [برنامج 29]: قطع الجهد المنخفض (Cut-off) = " + ("44.5V لحماية الخلايا" if "ليثيوم" in bat else "42.0V.")
         ]
     },
     "Deye / Sol-Ark": {
         "type": "Hybrid الذكي",
         "voltage_modes": [48, "High Voltage"],
         "get_settings": lambda sys_kw, inv_kw, bat: [
-            f"📍 [Battery Setup]: اختر خيار Lithium واضبط رقم بروتوكول الـ BMS الخاص بالبطارية (مثال: 00 أو 12).",
-            f"📍 [Max Charge]: حدد تيار الشحن الأقصى بقيمة {min(120, int((sys_kw*1000)/48))}A (حسب قدرة تفريغ خلايا {bat}).",
-            f"📍 [System Work Mode]: تفعيل خيار Time of Use وتحديد نسبة الـ SoC المستهدفة ليلاً (مثلاً 30%).",
-            f"📍 [Zero Export]: إذا كان النظام بدون عداد صافي، فعّل خيار Limit to Load لمنع التصدير للشبكة الكهربائية العامة.",
-            f"📍 [Solar Input]: تأكد أن الجهد الكلي للسلاسل (Strings) لا يتجاوز 450V على كل مدخل MPPT."
+            "📍 [Battery Setup]: اختر خيار Lithium واضبط رقم بروتوكول الـ BMS الخاص بالبطارية (مثال: 00 أو 12).",
+            f"📍 [Max Charge]: حدد تيار الشحن الأقصى بقيمة {min(120, max(10, int((sys_kw * 1000) / 48)))}A (حسب قدرة تفريغ خلايا {bat}).",
+            "📍 [System Work Mode]: تفعيل خيار Time of Use وتحديد نسبة الـ SoC المستهدفة ليلاً (مثلاً 30%).",
+            "📍 [Zero Export]: إذا كان النظام بدون عداد صافي، فعّل خيار Limit to Load لمنع التصدير للشبكة الكهربائية العامة.",
+            "📍 [Solar Input]: تأكد أن الجهد الكلي للسلاسل (Strings) لا يتجاوز 450V على كل مدخل MPPT."
         ]
     },
     "Huawei (SUN2000)": {
         "type": "On-Grid / Hybrid",
         "voltage_modes": ["High Voltage"],
         "get_settings": lambda sys_kw, inv_kw, bat: [
-            f"📍 [Quick Setup]: من تطبيق FusionSolar، اختر الـ Grid Code المحلي المطابق لبلدك (مهم جداً للإقلاع).",
-            f"📍 [AFCI]: تفعيل ميزة الحماية من القوس الكهربائي (Arc Fault) لرفع معايير الأمان ضد الحريق.",
-            f"📍 [Energy Storage]: في حال وجود بطارية Luna2000، اضبط وضع التشغيل على TOU أو Max Self-Consumption.",
-            f"📍 [Grid Export]: اضبط حد التصدير (Export Limitation) على 0kW إذا كانت شركة الكهرباء تمنع ضخ الطاقة للطاقة الشمسية.",
+            "📍 [Quick Setup]: من تطبيق FusionSolar، اختر الـ Grid Code المحلي المطابق لبلدك (مهم جداً للإقلاع).",
+            "📍 [AFCI]: تفعيل ميزة الحماية من القوس الكهربائي (Arc Fault) لرفع معايير الأمان ضد الحريق.",
+            "📍 [Energy Storage]: في حال وجود بطارية Luna2000، اضبط وضع التشغيل على TOU أو Max Self-Consumption.",
+            "📍 [Grid Export]: اضبط حد التصدير (Export Limitation) على 0kW إذا كانت شركة الكهرباء تمنع ضخ الطاقة للطاقة الشمسية.",
             f"📍 [Capacity Check]: حجم الألواح الحالي {sys_kw}kW متوافق مع الموديل {inv_kw}kW (نسبة تحميل آمنة)."
         ]
     },
     "Growatt": {
         "type": "Off-Grid / Hybrid",
-        "voltage_modes":,
+        "voltage_modes": [24, 48],
         "get_settings": lambda sys_kw, inv_kw, bat: [
-            f"📍 [Program 01]: اضبط الأولوية على SOL للحفاظ على عمر البطاريات نهاراً.",
+            "📍 [Program 01]: اضبط الأولوية على SOL للحفاظ على عمر البطاريات نهاراً.",
             f"📍 [Program 05]: اختر نوع البطارية LI، ثم حدد رقم البروتوكول (L51 أو L52) ليتوافق مع الـ BMS للبطارية.",
-            f"📍 [Program 11]: حدد الحد الأقصى للشحن من المولد/الشبكة بقيمة 30 أمبير لحماية المولد من الأحمال الزائدة.",
+            "📍 [Program 11]: حدد الحد الأقصى للشحن من المولد/الشبكة بقيمة 30 أمبير لحماية المولد من الأحمال الزائدة.",
             f"📍 [Program 21]: عتبة التحويل إلى الكهرباء العامة عند انخفاض البطارية، اضبطها على 20% للـ {bat}."
         ]
     }
@@ -98,16 +98,15 @@ def calculate_programming():
 # 3. بناء واجهة المستخدم الرسومية (GUI)
 # =====================================================================
 root = tk.Tk()
-root = tk.Tk()
 root.title("مساعد فنيي الطاقة الشمسية الذكي - المبرمج الشامل")
 root.geometry("650x700")
 root.configure(bg="#f4f6f9")
 
 # العنوان الرئيسي
-lbl_title = tk.Label(root, text="💻 المبرمج الذكي لإنفرترات الطاقة الشمسية", font=("Arial", 16, "bold"), bg="#1a2a3a", fg="white", padding=10)
+lbl_title = tk.Label(root, text="💻 المبرمج الذكي لإنفرترات الطاقة الشمسية", font=("Arial", 14, "bold"), bg="#1a2a3a", fg="white", py=10)
 lbl_title.pack(fill=tk.X)
 
-frame_inputs = tk.LabelFrame(root, text=" إدخال بيانات النظام والموقع ", font=("Arial", 11, "bold"), bg="#f4f6f9", padding=15)
+frame_inputs = tk.LabelFrame(root, text=" إدخال بيانات النظام والموقع ", font=("Arial", 11, "bold"), bg="#f4f6f9", padx=15, pady=15)
 frame_inputs.pack(fill=tk.X, padx=15, pady=15)
 
 # الحقول والخيارات
@@ -130,7 +129,7 @@ combo_battery.current(0)
 combo_battery.grid(row=3, column=1, pady=5, padx=5)
 
 # زر الحساب والبرمجة
-btn_calc = tk.Button(root, text="🚀 استخراج كافة البرمجيات والإعدادات اللازمة", font=("Arial", 12, "bold"), bg="#27ae60", fg="white", cursor="hand2", command=calculate_programming, padding=8)
+btn_calc = tk.Button(root, text="🚀 استخراج كافة البرمجيات والإعدادات اللازمة", font=("Arial", 11, "bold"), bg="#27ae60", fg="white", cursor="hand2", command=calculate_programming, py=6)
 btn_calc.pack(fill=tk.X, padx=15, pady=5)
 
 # منطقة التحذيرات والتنبيهات الذكية
@@ -138,7 +137,7 @@ lbl_warning = tk.Label(root, text="", font=("Arial", 10, "bold"), bg="#f4f6f9", 
 lbl_warning.pack(pady=5)
 
 # نافذة إخراج النتائج النهائية
-frame_output = tk.LabelFrame(root, text=" 📜 دليل البرمجة الدقيق المطابق للمصنع ", font=("Arial", 11, "bold"), bg="#f4f6f9", padding=10)
+frame_output = tk.LabelFrame(root, text=" 📜 دليل البرمجة الدقيق المطابق للمصنع ", font=("Arial", 11, "bold"), bg="#f4f6f9", padx=10, pady=10)
 frame_output.pack(fill=tk.BOTH, expand=True, padx=15, pady=10)
 
 text_output = tk.Text(frame_output, font=("Arial", 11), bg="white", fg="#2c3e50", wrap=tk.WORD)
