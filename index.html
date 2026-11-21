@@ -1,290 +1,184 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>حاسبة برمجة الإنفرتر الذكية</title>
-    <style>
-        :root {
-            --primary-color: #0f172a;
-            --accent-color: #1e3a8a;
-            --highlight-color: #d97706;
-            --bg-color: #f8fafc;
-            --border-color: #cbd5e1;
-        }
-
-        body {
-            font-family: system-ui, -apple-system, sans-serif;
-            background-color: var(--bg-color);
-            color: #334155;
-            margin: 0;
-            padding: 20px;
-            direction: rtl;
-        }
-
-        .container {
-            max-width: 650px;
-            margin: 0 auto;
-            background: #ffffff;
-            padding: 25px;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-            border: 1px solid var(--border-color);
-        }
-
-        h2 {
-            color: var(--primary-color);
-            margin-top: 0;
-            border-bottom: 3px solid var(--accent-color);
-            padding-bottom: 10px;
-            font-size: 1.4rem;
-        }
-
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        label {
-            display: block;
-            font-weight: bold;
-            margin-bottom: 6px;
-            color: var(--primary-color);
-            font-size: 0.95rem;
-        }
-
-        input[type="number"], select {
-            width: 100%;
-            padding: 11px;
-            border: 1px solid #94a3b8;
-            border-radius: 8px;
-            box-sizing: border-box;
-            font-size: 1rem;
-            background-color: #fff;
-        }
-
-        input[type="number"]:focus, select:focus {
-            outline: none;
-            border-color: var(--accent-color);
-        }
-
-        .input-group {
-            display: flex;
-            gap: 10px;
-        }
-
-        .input-group input {
-            flex: 2;
-        }
-
-        .input-group select {
-            flex: 1;
-        }
-
-        .btn-calc {
-            width: 100%;
-            padding: 12px;
-            background-color: var(--accent-color);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-weight: bold;
-            font-size: 1.05rem;
-            cursor: pointer;
-            margin-top: 10px;
-            transition: background-color 0.2s;
-        }
-
-        .btn-calc:hover {
-            background-color: #1d4ed8;
-        }
-
-        .info-box {
-            background-color: #f1f5f9;
-            padding: 12px 15px;
-            border-radius: 8px;
-            border-right: 4px solid var(--accent-color);
-            margin-bottom: 15px;
-            font-size: 0.95rem;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 15px;
-            background: #ffffff;
-            border-radius: 8px;
-            overflow: hidden;
-            border: 1px solid var(--border-color);
-        }
-
-        th {
-            background-color: var(--primary-color);
-            color: white;
-            padding: 10px;
-            text-align: right;
-            font-size: 0.9rem;
-        }
-
-        td {
-            padding: 10px;
-            border-bottom: 1px solid #e2e8f0;
-            font-size: 0.9rem;
-        }
-
-        tr:nth-child(even) {
-            background-color: #f8fafc;
-        }
-
-        .setting-code {
-            font-weight: bold;
-            color: var(--primary-color);
-        }
-
-        .setting-val {
-            font-weight: bold;
-            color: var(--highlight-color);
-        }
-    </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>مساعد مشروع كهربا الشقة</title>
+<style>
+:root{--bg:#eef2f4;--card:#fff;--ink:#14232b;--mute:#5b6b74;--line:#d3dce1;--acc:#0b6e99;--warn:#b57a00;--ok:#1f8a4c;--warnbg:#fff4d6}
+@media (prefers-color-scheme:dark){:root{--bg:#0f1a20;--card:#17262e;--ink:#e6eef2;--mute:#93a5ae;--line:#2a3d47;--acc:#4cb4e0;--warn:#e6b341;--ok:#4cc27f;--warnbg:#2f2710}}
+*{box-sizing:border-box}
+html{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Tajawal","Noto Naskh Arabic",Tahoma,sans-serif;line-height:1.7;font-size:17px}
+header{padding:20px 16px 12px;max-width:720px;margin:auto}
+h1{font-size:26px;margin:0 0 4px}
+.sub{color:var(--mute);margin:0 0 14px;font-size:15px}
+.bar{height:12px;background:var(--line);border-radius:6px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--acc);transition:width .3s}
+#pct{font-size:14px;color:var(--mute);margin-top:6px}
+main{max-width:720px;margin:auto;padding:0 12px 40px}
+details{background:var(--card);border:1px solid var(--line);border-radius:10px;margin:10px 0}
+summary{cursor:pointer;padding:14px;font-weight:700;font-size:18px;display:flex;justify-content:space-between;gap:8px;list-style:none}
+summary::-webkit-details-marker{display:none}
+summary span{color:var(--mute);font-weight:400;font-size:14px;white-space:nowrap}
+summary:focus-visible,input:focus-visible,button:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+ul{list-style:none;margin:0;padding:0 14px 8px}
+li{padding:9px 0;border-top:1px solid var(--line)}
+label{display:flex;gap:10px;align-items:flex-start;cursor:pointer}
+input[type=checkbox]{width:22px;height:22px;margin-top:4px;flex:none;accent-color:var(--ok)}
+li.done label>div{color:var(--mute);text-decoration:line-through}
+.note{margin:4px 32px 0 0;font-size:14px;color:var(--mute)}
+.warn{background:var(--warnbg);color:var(--warn);border-radius:6px;padding:6px 10px;margin:6px 32px 0 0;font-size:14px}
+.tools{display:flex;gap:8px;margin:14px 0}
+button{font:inherit;font-size:15px;padding:8px 14px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer}
+.disc{font-size:14px;color:var(--mute);margin-top:18px}
+.tabs{display:flex;gap:8px;max-width:720px;margin:0 auto 6px;padding:0 12px}
+.tabs button{flex:1}
+.tabs button.on{background:var(--acc);color:var(--bg);border-color:var(--acc)}
+.tw{overflow-x:auto;padding:0 8px 8px}
+table{border-collapse:collapse;width:100%;font-size:15px}
+th,td{border-top:1px solid var(--line);padding:6px 4px;text-align:center}
+td:first-child,th:first-child{text-align:right;white-space:nowrap}
+input[type=number]{width:58px;font:inherit;padding:5px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink);text-align:center}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.verdict{margin:0 14px 12px;padding:10px;border-radius:8px;background:var(--warnbg);color:var(--warn)}
+.res p{margin:0 14px 12px;font-size:14px;color:var(--mute)}
+</style>
 </head>
 <body>
+<header>
+<h1>مساعد مشروع كهربا الشقة</h1>
+<p class="sub">٣ غرف نوم لكل وحدة حمام + صالون كبير + مطبخ، فاز واحد، لبنان</p>
+<div class="bar"><i id="fill"></i></div>
+<div id="pct"></div>
+<div class="tools"><button id="openAll">فتح الكل</button><button id="reset">تصفير التقدم</button></div>
+</header>
+<nav class="tabs"><button data-t="plan" class="on">الخطة والحسابات</button><button data-t="steps">الخطوات</button></nav>
+<main id="plan"></main>
+<main id="app" hidden></main>
 
-<div class="container">
-    <h2>مولّد إعدادات الإنفرتر الذكي</h2>
-
-    <div class="form-group">
-        <label for="kwInput">قدرة الإنفرتر (W أو kW):</label>
-        <input type="number" id="kwInput" step="0.1" value="" placeholder="مثال: 3 أو 3000">
-    </div>
-
-    <div class="form-group">
-        <label for="batTypeSelect">نوع البطارية:</label>
-        <select id="batTypeSelect">
-            <option value="tubular">أنبوبية سائلة (Tubular / Flooded)</option>
-            <option value="gel">جل / AGM (Gel / Sealed)</option>
-            <option value="lithium">ليثيوم (LiFePO4)</option>
-        </select>
-    </div>
-
-    <div class="form-group">
-        <label for="batValueInput">سعة/حجم بنك البطاريات:</label>
-        <div class="input-group">
-            <input type="number" id="batValueInput" step="0.1" value="" placeholder="أدخل القيمة هنا">
-            <select id="batUnitSelect">
-                <option value="ah">أمبير (Ah)</option>
-                <option value="kwh">كيلوواط (kWh)</option>
-            </select>
-        </div>
-    </div>
-
-    <div class="form-group">
-        <label for="chargePrioritySelect">أولوية مصدر الشحن (الإعداد 16):</label>
-        <select id="chargePrioritySelect">
-            <option value="CSO">الشمس أولاً (CSO - Solar First)</option>
-            <option value="CUB">الشبكة / المولد أولاً (CUB - Utility First)</option>
-            <option value="SNU">الشمس والشبكة معاً (SNU - Solar & Utility)</option>
-            <option value="OSO">الشمس فقط (OSO - Only Solar)</option>
-        </select>
-    </div>
-
-    <button class="btn-calc" onclick="autoCalculateSettings()">توليد الإعدادات تلقائياً</button>
-
-    <div id="settingsResult"></div>
-</div>
-
+<main><p class="disc">هذا دفتر تذكير وليس بديلاً عن المعايير والقوانين. الشغل على التيار بعد فصل القاطع وفحصه بجهاز. اللوحة الرئيسية والتوصيل بعداد الدولة يفحصهم فني مرخص أو الجهة المختصة.</p></main>
 <script>
-function autoCalculateSettings() {
-    const kwInputVal = document.getElementById('kwInput').value;
-    const batValueVal = document.getElementById('batValueInput').value;
-    const batUnit = document.getElementById('batUnitSelect').value;
-    const chargePriority = document.getElementById('chargePrioritySelect').value;
-
-    if (!kwInputVal || kwInputVal <= 0) {
-        alert("يرجى إدخال قدرة الإنفرتر أولاً.");
-        return;
-    }
-
-    let rawKw = parseFloat(kwInputVal);
-    let kw = rawKw >= 50 ? rawKw / 1000 : rawKw;
-
-    const type = document.getElementById('batTypeSelect').value;
-    let rawBatVal = parseFloat(batValueVal) || (batUnit === 'kwh' ? 4.8 : 200);
-
-    // 1. تحديد فولتية النظام تلقائياً
-    let sysVolt = 24;
-    if (kw <= 1.5) {
-        sysVolt = 12;
-    } else if (kw > 1.5 && kw <= 3.6) {
-        sysVolt = 24;
-    } else {
-        sysVolt = 48;
-    }
-
-    // 2. حساب السعة بالأمبير بناءً على الوحدة المختارة
-    let ah = rawBatVal;
-    if (batUnit === 'kwh') {
-        ah = Math.round((rawBatVal * 1000) / sysVolt);
-    }
-
-    // 3. حساب تيار الشحن الأقصى
-    let maxCharge = Math.round(ah * (type === 'lithium' ? 0.30 : 0.15));
-    if (maxCharge < 10) maxCharge = 10;
-    if (maxCharge > 100) maxCharge = 100;
-
-    // 4. الفولتيات الثابتة
-    let bulk, floatV, cutoff, backUtl, backBat;
-
-    if (sysVolt === 12) {
-        if (type === 'tubular')     { bulk = 14.4; floatV = 13.6; cutoff = 10.8; backUtl = 11.5; backBat = 13.2; }
-        else if (type === 'gel')    { bulk = 14.2; floatV = 13.5; cutoff = 11.0; backUtl = 11.8; backBat = 13.0; }
-        else                        { bulk = 14.2; floatV = 13.5; cutoff = 12.0; backUtl = 12.5; backBat = 13.3; }
-    } else if (sysVolt === 24) {
-        if (type === 'tubular')     { bulk = 28.8; floatV = 27.2; cutoff = 21.5; backUtl = 23.0; backBat = 26.5; }
-        else if (type === 'gel')    { bulk = 28.4; floatV = 27.0; cutoff = 22.0; backUtl = 23.5; backBat = 26.0; }
-        else                        { bulk = 28.4; floatV = 27.0; cutoff = 24.0; backUtl = 25.0; backBat = 26.8; }
-    } else if (sysVolt === 48) {
-        if (type === 'tubular')     { bulk = 57.6; floatV = 54.4; cutoff = 43.0; backUtl = 46.0; backBat = 53.0; }
-        else if (type === 'gel')    { bulk = 56.8; floatV = 54.0; cutoff = 44.0; backUtl = 47.0; backBat = 52.0; }
-        else                        { bulk = 56.8; floatV = 54.0; cutoff = 48.0; backUtl = 50.0; backBat = 53.6; }
-    }
-
-    const html = `
-        <div class="info-box" style="margin-top: 20px;">
-            <strong>فولتية النظام المكتشفة:</strong> <span style="color: #1e3a8a; font-weight: bold;">${sysVolt}&nbsp;Volt</span> 
-            <br><span style="color: #64748b; font-size: 0.85em;">(الإنفرتر: ${kw}&nbsp;kW | سعة البطارية المحسوبة: ${ah}&nbsp;Ah)</span>
-        </div>
-        <table>
-            <thead>
-                <tr>
-                    <th style="width: 15%;">الرمز</th>
-                    <th style="width: 55%;">اسم الإعداد</th>
-                    <th style="width: 30%;">القيمة المطلوبة</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr><td class="setting-code">01</td><td>Output Source Priority</td><td class="setting-val">SOL / SBU</td></tr>
-                <tr><td class="setting-code">02</td><td>Max Charge Current</td><td class="setting-val">${maxCharge}&nbsp;A</td></tr>
-                <tr><td class="setting-code">03</td><td>AC Input Voltage Range</td><td class="setting-val">APL</td></tr>
-                <tr><td class="setting-code">05</td><td>Battery Type</td><td class="setting-val">USE</td></tr>
-                <tr><td class="setting-code">06</td><td>Auto Restart Overload</td><td class="setting-val">LRE</td></tr>
-                <tr><td class="setting-code">07</td><td>Auto Restart Overtemp</td><td class="setting-val">tRE</td></tr>
-                <tr><td class="setting-code">09</td><td>Output Frequency</td><td class="setting-val">50&nbsp;Hz</td></tr>
-                <tr><td class="setting-code">11</td><td>Max Utility Charge Current</td><td class="setting-val">10&nbsp;A</td></tr>
-                <tr><td class="setting-code">12</td><td>Back to Utility Voltage</td><td class="setting-val">${backUtl}&nbsp;V</td></tr>
-                <tr><td class="setting-code">13</td><td>Back to Battery Voltage</td><td class="setting-val">${backBat}&nbsp;V</td></tr>
-                <tr><td class="setting-code">16</td><td>Charger Source Priority</td><td class="setting-val">${chargePriority}</td></tr>
-                <tr><td class="setting-code">18</td><td>Alarm Control (Buzzer)</td><td class="setting-val">BON</td></tr>
-                <tr><td class="setting-code">22</td><td>Backlight Control</td><td class="setting-val">LON</td></tr>
-                <tr><td class="setting-code">23</td><td>Overload Bypass</td><td class="setting-val">BYE</td></tr>
-                <tr><td class="setting-code">26</td><td>Bulk Charging Voltage</td><td class="setting-val">${bulk}&nbsp;V</td></tr>
-                <tr><td class="setting-code">27</td><td>Floating Charging Voltage</td><td class="setting-val">${floatV}&nbsp;V</td></tr>
-                <tr><td class="setting-code">29</td><td>Low Cut-off Voltage</td><td class="setting-val">${cutoff}&nbsp;V</td></tr>
-            </tbody>
-        </table>
-    `;
-
-    document.getElementById('settingsResult').innerHTML = html;
-}
+var PHASES=[
+{t:"١. التخطيط والحسابات",items:[
+["اشتراك الدولة والمولد بالأمبير، وتحديد القاطع الرئيسي","القاطع الرئيسي لازم يناسب الاشتراك ومقطع الخط الداخل"],
+["مخطط لكل غرفة: مفاتيح، بريزات، نقاط إنارة، مكيف، سخان"],
+["لا تنسى المطبخ، الممر، المدخل، البلكون، غرفة الغسيل",null,"المطبخ بدو بريزات كتيرة ودارتين مستقلتين على الأقل"],
+["قائمة الدارات: إنارة (على الأقل دارتين)، بريزات لكل غرفة، دارة مستقلة لكل مكيف وسخان وغسالة وفرن"],
+["حساب الأحمال وتحديد الدارات اللي بتتحمل الفصل (سخانات، مكيفات)","فاز واحد: ما بتشتغل كل الأحمال التقيلة سوا"],
+["مكان اللوحة، ومبدّل الدولة/المولد (changeover) قبلها",null,"ممنوع تتوصل الدولة والمولد سوا بدون مبدّل"],
+["ارتفاعات: مفاتيح حوالي 120 سم، بريزات حوالي 30 سم، فوق الرخام حسب التصميم"],
+["مواسير تيار ضعيف منفصلة: إنترنت، تلفزيون، انتركوم، جرس"],
+["ماسورة فاضية للسطح والمستقبل (طاقة شمسية، شحن)"],
+["قائمة المشتريات: أسلاك (1.5 / 2.5 / 4 / 6)، مواسير، علب، قواطع، RCD، قضيب تأريض"]]},
+{t:"٢. التكسير والمواسير",items:[
+["تعليم المسارات على الحيطان والأرض"],
+["تكسير القنوات بدون قطع حديد الأعمدة أو البلاطة",null,"ما تقطع حديد إنشائي أبداً"],
+["مواسير الأرض قبل الفرشة والحيطان والسقف"],
+["مسافات بين مواسير القوي والضعيف"],
+["مواسير مستقلة للحمامات، وبعيدة عن مواسير المي"],
+["ماسورة تأريض من اللوحة لمكان حفرة التأريض"]]},
+{t:"٣. العلب والقصارة",items:[
+["تثبيت العلب بمستواها وعلى ارتفاعاتها"],
+["علب تفريع يمكن الوصول إليها (ما تنطمر)"],
+["تغطية فتحات العلب قبل القصارة"],
+["تصوير كل الحيطان قبل القصارة لتعرف مكان المواسير",null,"الصور بتحميك من الحفر بالمسامير لاحقاً"],
+["الانتظار حتى جفاف القصارة قبل سحب الأسلاك"]]},
+{t:"٤. سحب الأسلاك",items:[
+["إنارة 1.5 مم²، بريزات 2.5 مم²، مكيف وسخان وفرن وغسالة 4 مم²"],
+["ألوان: فاز، نيوترال، أرضي أخضر/أصفر، بشكل ثابت بكل الشقة"],
+["سلك أرضي لكل دارة، حتى الإنارة"],
+["ما تحط وصلات داخل المواسير، الوصل فقط بالعلب"],
+["ترقيم كل دارة على الطرفين (علبة ولوحة)"],
+["ربط جميع الدارات بدون مفاتيح لحد اللوحة"]]},
+{t:"٥. اللوحة والتأريض",items:[
+["حفرة تأريض: قضيب نحاس، وقياس المقاومة","الأرضي بكتير شقق عندنا موجود على الورق بس"],
+["لوحة بقواطع صغيرة لكل دارة بالمقطع المناسب"],
+["RCD 30mA لدارات البريزات والحمامات"],
+["ربط معدني (equipotential) بالحمامات: مواسير ومعادن"],
+["مبدّل الدولة/المولد وتجربته",null,"لازم فني مرخص يراجع هذا الجزء"],
+["تأشير كل قاطع بالاسم على اللوحة"]]},
+{t:"٦. تركيب المفاتيح والبريزات والإنارة",items:[
+["بريزات ومفاتيح كل غرفة بالارتفاعات المحددة"],
+["بريزة السخان بالحمام بعيدة عن الدوش، مع RCD"],
+["إنارة الحمامات بدرجة حماية مناسبة للمنطقة"],
+["إنارة خارجية على البلكون IP44"],
+["مفاتيح مضاءة أو إشارة للأجهزة التقيلة"],
+["تركيب المكيفات والسخانات على دارات مستقلة"]]},
+{t:"٧. الفحص قبل التشغيل",items:[
+["قياس العزل بين الفاز والنيوترال والأرضي (megger)"],
+["استمرارية سلك الأرضي بكل دارة"],
+["تجربة الـ RCD بزر الاختبار وبجهاز"],
+["اختبار كل دارة لحالها قبل التشغيل الكامل"],
+["مراجعة فني مرخص قبل التوصيل النهائي بالدولة"],
+["حفظ المخطط والصور وأوراق الفحص"]]}
+];
+var KEY="wiring-progress-v1",state={};
+try{state=JSON.parse(localStorage.getItem(KEY)||"{}")}catch(e){state={}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(state))}catch(e){}}
+function id(p,i){return p+"-"+i}
+var app=document.getElementById("app");
+PHASES.forEach(function(ph,p){
+ var d=document.createElement("details");if(p===0)d.open=true;
+ var s=document.createElement("summary");s.innerHTML=ph.t+"<span></span>";d.appendChild(s);
+ var ul=document.createElement("ul");
+ ph.items.forEach(function(it,i){
+  var li=document.createElement("li"),k=id(p,i);
+  var lb=document.createElement("label"),cb=document.createElement("input");
+  cb.type="checkbox";cb.checked=!!state[k];
+  cb.onchange=function(){state[k]=cb.checked;li.classList.toggle("done",cb.checked);save();update()};
+  var dv=document.createElement("div");dv.textContent=it[0];
+  lb.appendChild(cb);lb.appendChild(dv);li.appendChild(lb);
+  if(state[k])li.classList.add("done");
+  if(it[1]){var n=document.createElement("div");n.className="note";n.textContent=it[1];li.appendChild(n)}
+  if(it[2]){var w=document.createElement("div");w.className="warn";w.textContent="تنبيه: "+it[2];li.appendChild(w)}
+  ul.appendChild(li)});
+ d.appendChild(ul);app.appendChild(d)});
+function update(){
+ var tot=0,done=0,ds=app.querySelectorAll("details");
+ PHASES.forEach(function(ph,p){var c=0;ph.items.forEach(function(_,i){tot++;if(state[id(p,i)]){done++;c++}});
+  ds[p].querySelector("summary span").textContent=c+" / "+ph.items.length});
+ var pc=Math.round(done*100/tot);
+ document.getElementById("fill").style.width=pc+"%";
+ document.getElementById("pct").textContent="تم "+done+" من "+tot+" ("+pc+"%)"}
+document.getElementById("openAll").onclick=function(){app.querySelectorAll("details").forEach(function(d){d.open=true})};
+document.getElementById("reset").onclick=function(){if(confirm("تصفير كل التقدم؟")){state={};save();location.reload()}};
+update();
+var RK="wiring-plan-v1",pl=document.getElementById("plan");
+var P={sub:"",rooms:[["غرفة نوم ١",4,6,1,0,0,0],["حمام ١",3,1,0,1,0,1],["غرفة نوم ٢",4,6,1,0,0,0],["حمام ٢",3,1,0,1,0,1],["غرفة نوم ٣",4,6,1,0,0,0],["حمام ٣",3,1,0,1,0,1],["صالون",10,12,2,0,0,0],["مطبخ",5,10,0,0,3,0],["ممر ومدخل",6,3,0,0,0,0],["بلكون وغسيل",3,2,0,0,0,0]]};
+try{var q=JSON.parse(localStorage.getItem(RK));if(q&&q.rooms)P=q}catch(e){}
+function sv(){try{localStorage.setItem(RK,JSON.stringify(P))}catch(e){}}
+var h='<details open><summary>اشتراكك</summary><div style="padding:0 14px 14px"><label class="row">اشتراك الدولة أو المولد (أمبير) <input type="number" min="0" id="sub" value="'+P.sub+'"></label></div></details>';
+h+='<details open><summary>الغرف <span>عدّل الأرقام حسب شقتك</span></summary><div class="tw"><table><tr><th>الغرفة</th><th>نقاط إنارة</th><th>بريزات</th><th>مكيف</th><th>سخان</th><th>جهاز كبير</th></tr>';
+P.rooms.forEach(function(r,i){h+="<tr><td>"+r[0]+"</td>";for(var c=1;c<=5;c++)h+='<td><input type="number" min="0" data-r="'+i+'" data-c="'+c+'" value="'+r[c]+'"></td>';h+="</tr>"});
+h+='</table></div><p class="note" style="margin:0 14px 12px">جهاز كبير: فرن، غسالة، جلاية، مضخة. لكل واحد دارة مستقلة.</p></details><div class="res" id="res"></div>';
+pl.innerHTML=h;
+pl.addEventListener("input",function(e){var t=e.target;if(t.id==="sub")P.sub=t.value;else if(t.dataset.r!==undefined)P.rooms[+t.dataset.r][+t.dataset.c]=Math.max(0,+t.value||0);sv();calc()});
+function calc(){
+var L=0,S=0,A=0,H=0,E=0,sc=0,bs=0;
+P.rooms.forEach(function(r){L+=r[1];S+=r[2];A+=r[3];H+=r[4];E+=r[5];if(r[6])bs+=r[2];else sc+=Math.ceil(r[2]/8)});
+sc+=Math.ceil(bs/8);
+var lc=Math.max(2,Math.ceil(L/10)),D=A+H+E;
+var C=[["إنارة",lc,"1.5","10"],["بريزات",sc,"2.5","16"],["مكيفات",A,"4","20"],["سخانات",H,"4","20"],["أجهزة كبيرة",E,"4","20"]],n=0,t1="";
+C.forEach(function(c){n+=c[1];t1+="<tr><td>"+c[0]+"</td><td>"+c[1]+"</td><td>"+c[2]+"</td><td>"+c[3]+"</td></tr>"});
+var W=[["إنارة",L*20],["بريزات",S*100],["مكيفات",A*1200],["سخانات",H*2000],["أجهزة كبيرة",E*2000]],tw=0,t2="";
+W.forEach(function(w){tw+=w[1];t2+="<tr><td>"+w[0]+"</td><td>"+w[1]+"</td><td>"+(w[1]/220).toFixed(1)+"</td></tr>"});
+var amps=tw/220,heavy=(A*1200+H*2000+E*2000)/220,base=(L*20+S*100)/220,sub=+P.sub,msg="";
+if(sub>0){if(amps<=sub)msg="المجموع ("+amps.toFixed(0)+" أمبير) داخل اشتراكك.";
+else if(base>=sub)msg="حتى بدون الأحمال التقيلة الاشتراك قليل، زيّده.";
+else msg="المجموع ("+amps.toFixed(0)+" أمبير) أكبر من اشتراكك ("+sub+"). الأحمال التقيلة لحالها "+heavy.toFixed(0)+" أمبير، فما تشغّلها كلها سوا. وزّع التشغيل أو ركّب فصل أحمال تلقائي."}
+else msg="اكتب اشتراكك بالأمبير فوق لتشوف المقارنة.";
+var f=function(m){return Math.ceil(m*1.15)},rl=function(m){return "≈ "+Math.ceil(f(m)/100)+" لفة (100م)"};
+var cd=(L+S)*4+D*12;
+var B=[["سلك 1.5 مم²",f(L*20)+" م",rl(L*20)],["سلك 2.5 مم²",f(S*15)+" م",rl(S*15)],["سلك 4 مم²",f(D*36)+" م",rl(D*36)],["ماسورة PVC 20 مم",f(cd)+" م","≈ "+Math.ceil(f(cd)/3)+" عود (3م)"],["قواطع صغيرة",n,"+ القاطع الرئيسي"],["RCD 30mA",2,"واحد للحمامات والسخانات، وواحد للبريزات"],["علب مفاتيح وبريزات",S+Math.ceil(L/2),""],["علب إنارة",L,""]],t3="";
+B.forEach(function(b){t3+="<tr><td>"+b[0]+"</td><td>"+b[1]+"</td><td style='text-align:right'>"+b[2]+"</td></tr>"});
+document.getElementById("res").innerHTML=
+'<details open><summary>الدارات والقواطع <span>'+n+' دارة</span></summary><div class="tw"><table><tr><th>النوع</th><th>العدد</th><th>سلك مم²</th><th>قاطع A</th></tr>'+t1+'</table></div><p>القاطع الرئيسي والخط الرئيسي (6 مم² أو أكبر) حسب اشتراكك وبعد مراجعة فني مرخص.</p></details>'+
+'<details open><summary>الأحمال <span>'+amps.toFixed(0)+' أمبير مركّب</span></summary><div class="tw"><table><tr><th>النوع</th><th>واط</th><th>أمبير</th></tr>'+t2+'</table></div><div class="verdict">'+msg+'</div><p>افتراضات: إنارة 20 واط للنقطة، بريزات 100 واط (بعد معامل تزامن)، مكيف 1200، سخان 2000، جهاز كبير 2000. 220 فولت.</p></details>'+
+'<details open><summary>المواد <span>تقدير +15% هدر</span></summary><div class="tw"><table><tr><th>المادة</th><th>الكمية</th><th>ملاحظة</th></tr>'+t3+'</table></div><p>تقدير تقريبي. قيّس الشقة بنفسك قبل الشراء.</p></details>'}
+var tb=document.querySelectorAll(".tabs button");
+tb.forEach(function(b){b.onclick=function(){tb.forEach(function(x){x.classList.toggle("on",x===b)});pl.hidden=b.dataset.t!=="plan";document.getElementById("app").hidden=b.dataset.t!=="steps"}});
+calc();
 </script>
-
 </body>
 </html>
